@@ -53,7 +53,7 @@ export const cars: Car[] = [
   },
   {
     id: 'kia-sonet-gtx-plus',
-    make: 'KIA',
+    make: 'Kia',
     model: 'SONET',
     variant: 'G1.0T 7DCT GTX PLUS',
     year: 2024,
@@ -259,7 +259,7 @@ export const cars: Car[] = [
   },
   {
     id: 'honda-amaze-v-cvt',
-    make: 'HONDA',
+    make: 'Honda',
     model: 'AMAZE',
     variant: '1.2 V CVT',
     year: 2021,

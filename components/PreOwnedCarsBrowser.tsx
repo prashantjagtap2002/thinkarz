@@ -6,41 +6,46 @@ import { Car as CarIcon } from 'lucide-react';
 import CarCard from './CarCard';
 import { Car, cars } from '@/lib/cars';
 
-const ALL = 'All';
-
 function uniqueValues<K extends keyof Car>(key: K) {
-  return [ALL, ...Array.from(new Set(cars.map((c) => String(c[key]))))];
+  return Array.from(new Set(cars.map((c) => String(c[key])))).sort();
+}
+
+function countsFor<K extends keyof Car>(key: K) {
+  const counts = new Map<string, number>();
+  cars.forEach((c) => {
+    const value = String(c[key]);
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+  });
+  return counts;
 }
 
 const PAGE_SIZE = 6;
 
 export default function PreOwnedCarsBrowser() {
   const searchParams = useSearchParams();
-  const bodyTypeOptions = uniqueValues('bodyType');
+  const bodyTypeOptions = useMemo(() => uniqueValues('bodyType'), []);
   const requestedBodyType = searchParams.get('bodyType');
-  const initialBodyType =
-    requestedBodyType && bodyTypeOptions.includes(requestedBodyType) ? requestedBodyType : ALL;
+  const initialBodyType: string[] =
+    requestedBodyType && bodyTypeOptions.includes(requestedBodyType) ? [requestedBodyType] : [];
 
-  const [make, setMake] = useState(ALL);
-  const [sellerType, setSellerType] = useState(ALL);
-  const [city, setCity] = useState(ALL);
-  const [fuel, setFuel] = useState(ALL);
-  const [transmission, setTransmission] = useState(ALL);
-  const [bodyType, setBodyType] = useState(initialBodyType);
-  const [owners, setOwners] = useState(ALL);
+  const [make, setMake] = useState<string[]>([]);
+  const [sellerType, setSellerType] = useState<string[]>([]);
+  const [fuel, setFuel] = useState<string[]>([]);
+  const [transmission, setTransmission] = useState<string[]>([]);
+  const [bodyType, setBodyType] = useState<string[]>(initialBodyType);
+  const [owners, setOwners] = useState<string[]>([]);
   const [certifiedOnly, setCertifiedOnly] = useState(false);
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     let result = cars.filter((c) => {
-      if (make !== ALL && c.make !== make) return false;
-      if (sellerType !== ALL && c.sellerType !== sellerType) return false;
-      if (city !== ALL && c.city !== city) return false;
-      if (fuel !== ALL && c.fuel !== fuel) return false;
-      if (transmission !== ALL && c.transmission !== transmission) return false;
-      if (bodyType !== ALL && c.bodyType !== bodyType) return false;
-      if (owners !== ALL && String(c.owners) !== owners) return false;
+      if (make.length && !make.includes(c.make)) return false;
+      if (sellerType.length && !sellerType.includes(c.sellerType)) return false;
+      if (fuel.length && !fuel.includes(c.fuel)) return false;
+      if (transmission.length && !transmission.includes(c.transmission)) return false;
+      if (bodyType.length && !bodyType.includes(c.bodyType)) return false;
+      if (owners.length && !owners.includes(String(c.owners))) return false;
       if (certifiedOnly && !c.certified) return false;
       return true;
     });
@@ -53,28 +58,25 @@ export default function PreOwnedCarsBrowser() {
     });
 
     return result;
-  }, [make, sellerType, city, fuel, transmission, bodyType, owners, certifiedOnly, sortBy]);
+  }, [make, sellerType, fuel, transmission, bodyType, owners, certifiedOnly, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   function resetFilters() {
-    setMake(ALL);
-    setSellerType(ALL);
-    setCity(ALL);
-    setFuel(ALL);
-    setTransmission(ALL);
-    setBodyType(ALL);
-    setOwners(ALL);
+    setMake([]);
+    setSellerType([]);
+    setFuel([]);
+    setTransmission([]);
+    setBodyType([]);
+    setOwners([]);
     setCertifiedOnly(false);
     setPage(1);
   }
 
-  function updateAndReset(setter: (v: string) => void) {
-    return (v: string) => {
-      setter(v);
-      setPage(1);
-    };
+  function toggleValue(setter: (updater: (prev: string[]) => string[]) => void, value: string) {
+    setter((prev) => (prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]));
+    setPage(1);
   }
 
   return (
@@ -107,47 +109,41 @@ export default function PreOwnedCarsBrowser() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
         {/* Filters */}
         <aside className="h-fit rounded-xl border border-slate-200 bg-white p-6">
-          <FilterSelect
-            label="Make / Model"
-            value={make}
-            options={uniqueValues('make')}
-            onChange={updateAndReset(setMake)}
+          <MultiSelectFilter
+            label="Make"
+            selected={make}
+            counts={countsFor('make')}
+            onToggle={(v) => toggleValue(setMake, v)}
           />
-          <FilterSelect
+          <MultiSelectFilter
             label="Seller Type"
-            value={sellerType}
-            options={uniqueValues('sellerType')}
-            onChange={updateAndReset(setSellerType)}
+            selected={sellerType}
+            counts={countsFor('sellerType')}
+            onToggle={(v) => toggleValue(setSellerType, v)}
           />
-          <FilterSelect
-            label="City"
-            value={city}
-            options={uniqueValues('city')}
-            onChange={updateAndReset(setCity)}
-          />
-          <FilterSelect
+          <MultiSelectFilter
             label="Fuel"
-            value={fuel}
-            options={uniqueValues('fuel')}
-            onChange={updateAndReset(setFuel)}
+            selected={fuel}
+            counts={countsFor('fuel')}
+            onToggle={(v) => toggleValue(setFuel, v)}
           />
-          <FilterSelect
+          <MultiSelectFilter
             label="Transmission"
-            value={transmission}
-            options={uniqueValues('transmission')}
-            onChange={updateAndReset(setTransmission)}
+            selected={transmission}
+            counts={countsFor('transmission')}
+            onToggle={(v) => toggleValue(setTransmission, v)}
           />
-          <FilterSelect
+          <MultiSelectFilter
             label="Body Type"
-            value={bodyType}
-            options={bodyTypeOptions}
-            onChange={updateAndReset(setBodyType)}
+            selected={bodyType}
+            counts={countsFor('bodyType')}
+            onToggle={(v) => toggleValue(setBodyType, v)}
           />
-          <FilterSelect
+          <MultiSelectFilter
             label="Owners"
-            value={owners}
-            options={uniqueValues('owners')}
-            onChange={updateAndReset(setOwners)}
+            selected={owners}
+            counts={countsFor('owners')}
+            onToggle={(v) => toggleValue(setOwners, v)}
           />
 
           <div className="mb-5">
@@ -161,6 +157,7 @@ export default function PreOwnedCarsBrowser() {
                   setPage(1);
                 }}
                 className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
+                suppressHydrationWarning
               />
               Certified Cars
             </label>
@@ -211,27 +208,44 @@ export default function PreOwnedCarsBrowser() {
   );
 }
 
-function FilterSelect({
+function MultiSelectFilter({
   label,
-  value,
-  options,
-  onChange,
+  selected,
+  counts,
+  onToggle,
 }: {
   label: string;
-  value: string;
-  options: string[];
-  onChange: (v: string) => void;
+  selected: string[];
+  counts: Map<string, number>;
+  onToggle: (value: string) => void;
 }) {
+  const options = Array.from(counts.keys()).sort();
+
   return (
-    <div className="mb-5">
-      <label className="field-label">{label}</label>
-      <select className="field-input" value={value} onChange={(e) => onChange(e.target.value)}>
+    <div className="mb-5 border-b border-slate-100 pb-5 last:border-0 last:pb-0">
+      <p className="field-label">
+        {label}
+        {selected.length > 0 && (
+          <span className="ml-1.5 font-normal text-brand-red">({selected.length})</span>
+        )}
+      </p>
+      <div className="space-y-2">
         {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt === ALL ? `Select ${label}` : opt}
-          </option>
+          <label key={opt} className="flex items-center justify-between gap-2 text-sm text-slate-700">
+            <span className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={selected.includes(opt)}
+                onChange={() => onToggle(opt)}
+                className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
+                suppressHydrationWarning
+              />
+              {opt}
+            </span>
+            <span className="text-xs text-slate-400">{counts.get(opt)}</span>
+          </label>
         ))}
-      </select>
+      </div>
     </div>
   );
 }
