@@ -1,0 +1,185 @@
+import Image from 'next/image';
+import { Search, UserSearch, Wallet, ShieldCheck, FileCheck2, Clock, Lock, Banknote, CalendarClock } from 'lucide-react';
+import SubmittableForm from '@/components/forms/SubmittableForm';
+
+export const metadata = { title: 'Sell Your Car | ThinkArz' };
+
+const steps = [
+  { icon: Search, title: '1. Get Valuation', desc: 'Get instant price for your car.' },
+  { icon: UserSearch, title: '2. Book Inspection', desc: 'Schedule a free inspection.' },
+  { icon: Wallet, title: '3. Get Paid', desc: 'Get instant payment on the spot.' },
+];
+
+const reasons = [
+  { icon: ShieldCheck, title: 'Best Price Assurance', desc: 'Get the best market price for your car.' },
+  { icon: FileCheck2, title: 'Free Inspection', desc: '100% free inspection at your doorstep.' },
+  { icon: Clock, title: 'Quick Process', desc: 'Sell your car in just a few hours.' },
+  { icon: Lock, title: 'Secure & Safe', desc: 'Hassle-free and transparent process.' },
+  { icon: Banknote, title: 'Instant Payment', desc: 'Get paid instantly via secure transfer.' },
+];
+
+export default function SellYourCarPage() {
+  return (
+    <>
+      <section className="py-14 sm:py-20">
+        <div className="container-page grid grid-cols-1 items-start gap-10 lg:grid-cols-2">
+          <div>
+            <span className="section-eyebrow">Sell Your Car</span>
+            <h1 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+              Sell Your Car.
+              <br />
+              Fast, Easy &amp; Hassle-Free.
+            </h1>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-600">
+              Get the best value for your car with a quick, transparent and secure process.
+            </p>
+            <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-2xl">
+              <Image
+                src="https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.13.41-PM-1024x768.jpeg"
+                alt="Sell your car with ThinkArz"
+                fill
+                priority
+                className="object-cover"
+              />
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <h2 className="text-lg font-bold text-slate-900">Get Instant Valuation</h2>
+            <p className="mb-6 text-sm text-slate-500">
+              Enter your car details to get a free, no-obligation valuation.
+            </p>
+            <SubmittableForm
+              submitLabel="Get Valuation"
+              successTitle="Valuation Request Received!"
+              successMessage="Our team will get back to you shortly with your car's estimated value."
+              className="space-y-5"
+            >
+              <div>
+                <label className="field-label">Registration Number</label>
+                <input required className="field-input" placeholder="e.g. MH01AB1234" />
+              </div>
+              <div>
+                <label className="field-label">Car Model</label>
+                <select required className="field-input" defaultValue="">
+                  <option value="" disabled>
+                    Select Model
+                  </option>
+                  <option>Hatchback</option>
+                  <option>Sedan</option>
+                  <option>SUV</option>
+                  <option>Electric</option>
+                </select>
+              </div>
+              <div>
+                <label className="field-label">Manufacturing Year</label>
+                <select required className="field-input" defaultValue="">
+                  <option value="" disabled>
+                    Select Year
+                  </option>
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <option key={i}>{2024 - i}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="field-label">Kilometer Driven</label>
+                <input required type="number" className="field-input" placeholder="Enter KMs Driven" />
+              </div>
+            </SubmittableForm>
+          </div>
+        </div>
+      </section>
+
+      {/* 3-step process */}
+      <section className="bg-slate-50 py-16 sm:py-20">
+        <div className="container-page">
+          <h2 className="mb-2 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
+            Our Simple 3-Step Process
+          </h2>
+          <span className="mx-auto mb-12 block h-1 w-12 bg-brand-red" />
+
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {steps.map(({ icon: Icon, title, desc }, i) => (
+              <div key={title} className="relative text-center">
+                {i < steps.length - 1 && (
+                  <div className="absolute right-[-1rem] top-8 hidden h-px w-8 bg-slate-300 sm:block" />
+                )}
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
+                  <Icon size={26} />
+                </div>
+                <h3 className="mb-1 font-bold text-slate-900">{title}</h3>
+                <p className="text-sm text-slate-600">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 flex flex-col items-center justify-between gap-4 rounded-xl bg-white p-6 shadow-sm sm:flex-row">
+            <div className="flex items-center gap-3">
+              <CalendarClock className="text-brand-blue" size={22} />
+              <p className="text-sm font-medium text-slate-700">
+                Book a free inspection at your convenience.
+              </p>
+            </div>
+            <a href="#" className="btn btn-primary">
+              Book Free Inspection
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Why sell to us */}
+      <section className="py-16 sm:py-20">
+        <div className="container-page">
+          <h2 className="mb-2 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
+            Why Sell Your Car to ThinkArz?
+          </h2>
+          <span className="mx-auto mb-12 block h-1 w-12 bg-brand-red" />
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+            {reasons.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="rounded-xl border border-slate-200 p-6 text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
+                  <Icon size={22} />
+                </div>
+                <h3 className="mb-1.5 text-sm font-bold text-slate-900">{title}</h3>
+                <p className="text-xs leading-relaxed text-slate-600">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="container-page pb-16 sm:pb-20">
+        <div className="relative overflow-hidden rounded-2xl bg-brand-navy">
+          <div className="absolute inset-0">
+            <Image
+              src="https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.04.01-PM-1-768x1024.jpeg"
+              alt=""
+              fill
+              className="object-cover opacity-20"
+            />
+          </div>
+          <div className="relative flex flex-col items-start gap-6 p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+            <div>
+              <h3 className="text-xl font-bold text-white sm:text-2xl">Ready to sell your car?</h3>
+              <p className="mt-2 max-w-md text-sm text-slate-300">
+                Get the best value for your car with ThinkArz. It&apos;s quick, easy and
+                hassle-free.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a href="#" className="btn btn-primary">
+                Get Free Valuation
+              </a>
+              <a href="/contact-us" className="btn btn-outline-white">
+                Talk to Expert
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

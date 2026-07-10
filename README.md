@@ -1,16 +1,35 @@
-# React + Vite
+# ThinkArz
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Marketing website for ThinkArz, the pre-owned car venture of Gautam Modi Group. Built with Next.js (App Router), TypeScript and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Pages
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- `/` — Home
+- `/about-us` — About Us
+- `/pre-owned-cars` — Pre-owned car listings with filters, and `/pre-owned-cars/[id]` detail pages
+- `/sell-your-car` — Instant valuation form
+- `/book-a-test-drive` — Test drive booking form
+- `/blogs` — Blog listing and `/blogs/[slug]` detail pages
+- `/contact-us` — Contact form, map and FAQs
 
-## React Compiler
+## Development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the Oxlint configuration
+Open [http://localhost:3000](http://localhost:3000).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Build
+
+```bash
+npm run build
+npm start
+```
+
+## Notes
+
+- Car listing data and photos in `lib/cars.ts` are sourced from thinkarz.com's live inventory. Pricing/EMI for a few units without published prices are estimated.
+- Pages that don't yet exist on the live site (About, Sell, Test Drive, Blogs) use stock placeholder imagery until real photography is available.
+- Forms are front-end only for now (no backend wired up) — submitting shows a success state locally.
