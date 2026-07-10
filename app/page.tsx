@@ -17,6 +17,7 @@ import {
   Star,
 } from 'lucide-react';
 import CarCard from '@/components/CarCard';
+import HeroSearchWidget from '@/components/HeroSearchWidget';
 import { cars } from '@/lib/cars';
 import { testimonials } from '@/lib/content';
 
@@ -87,41 +88,7 @@ export default function HomePage() {
           </div>
 
           {/* Search widget */}
-          <div className="mt-8 rounded-xl bg-white p-5 shadow-xl sm:p-6">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div>
-                <label className="field-label">Budget</label>
-                <select className="field-input">
-                  <option>Select Budget</option>
-                  <option>Under 5 Lakh</option>
-                  <option>5 - 10 Lakh</option>
-                  <option>10 - 15 Lakh</option>
-                  <option>15 Lakh+</option>
-                </select>
-              </div>
-              <div>
-                <label className="field-label">City</label>
-                <select className="field-input">
-                  <option>Select City</option>
-                  <option>Mumbai</option>
-                  <option>Malad West</option>
-                </select>
-              </div>
-              <div>
-                <label className="field-label">Car Age</label>
-                <select className="field-input">
-                  <option>Select Year</option>
-                  <option>Under 1 Year</option>
-                  <option>1 - 3 Years</option>
-                  <option>3 - 5 Years</option>
-                  <option>5+ Years</option>
-                </select>
-              </div>
-            </div>
-            <Link href="/pre-owned-cars" className="btn btn-primary mt-4 w-full sm:w-auto">
-              Search Cars
-            </Link>
-          </div>
+          <HeroSearchWidget />
 
           <div className="mt-6 flex flex-wrap gap-4">
             <Link href="/pre-owned-cars" className="btn btn-primary">
@@ -164,7 +131,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {cars.slice(0, 6).map((car) => (
+            {cars.slice(0, 4).map((car) => (
               <CarCard key={car.id} car={car} />
             ))}
           </div>

@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { faqs } from '@/lib/content';
+import { faqs as defaultFaqs } from '@/lib/content';
 
-export default function FaqAccordion() {
+type Faq = { question: string; answer: string };
+
+export default function FaqAccordion({ faqs = defaultFaqs }: { faqs?: Faq[] }) {
   const [open, setOpen] = useState<number | null>(0);
 
   return (

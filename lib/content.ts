@@ -58,3 +58,36 @@ export const faqs = [
       'All certified cars come with a warranty package, and extended warranty plans are available for added peace of mind.',
   },
 ];
+
+export const carFaqs = [
+  {
+    question: "Is this car's ownership and accident history verified?",
+    answer:
+      "Yes. Every ThinkArz car goes through a documentation check covering RC, ownership transfer history, and accident/insurance claim records before it's listed.",
+  },
+  {
+    question: 'What does the 140-point inspection cover?',
+    answer:
+      'Our inspection covers engine and transmission health, electricals, AC, suspension, brakes, tyres, body and paint condition, and interior fittings — every certified car passes all checks before listing.',
+  },
+  {
+    question: 'Can I get a loan for this car?',
+    answer:
+      'Yes, we work with leading banks and NBFCs to arrange financing with quick approvals. Use the EMI calculator on this page for an estimate, or talk to our team for the best rate.',
+  },
+  {
+    question: 'Can I exchange my current car against this one?',
+    answer:
+      'Absolutely. Get a free instant valuation for your current car and its value can be adjusted against the purchase price of this car.',
+  },
+  {
+    question: 'Is a test drive available before I buy?',
+    answer:
+      'Yes, you can book a free test drive at our Malad (West) showroom at a time that works for you, with no obligation to buy.',
+  },
+  {
+    question: "What is ThinkArz's return policy?",
+    answer:
+      "If you're not fully satisfied, certified cars come with a 7-day easy return window from the date of delivery, subject to standard terms.",
+  },
+];

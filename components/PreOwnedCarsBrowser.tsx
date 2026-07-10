@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Car as CarIcon } from 'lucide-react';
 import CarCard from './CarCard';
 import { Car, cars } from '@/lib/cars';
@@ -14,12 +15,18 @@ function uniqueValues<K extends keyof Car>(key: K) {
 const PAGE_SIZE = 6;
 
 export default function PreOwnedCarsBrowser() {
+  const searchParams = useSearchParams();
+  const bodyTypeOptions = uniqueValues('bodyType');
+  const requestedBodyType = searchParams.get('bodyType');
+  const initialBodyType =
+    requestedBodyType && bodyTypeOptions.includes(requestedBodyType) ? requestedBodyType : ALL;
+
   const [make, setMake] = useState(ALL);
   const [sellerType, setSellerType] = useState(ALL);
   const [city, setCity] = useState(ALL);
   const [fuel, setFuel] = useState(ALL);
   const [transmission, setTransmission] = useState(ALL);
-  const [bodyType, setBodyType] = useState(ALL);
+  const [bodyType, setBodyType] = useState(initialBodyType);
   const [owners, setOwners] = useState(ALL);
   const [certifiedOnly, setCertifiedOnly] = useState(false);
   const [sortBy, setSortBy] = useState('newest');
@@ -133,7 +140,7 @@ export default function PreOwnedCarsBrowser() {
           <FilterSelect
             label="Body Type"
             value={bodyType}
-            options={uniqueValues('bodyType')}
+            options={bodyTypeOptions}
             onChange={updateAndReset(setBodyType)}
           />
           <FilterSelect
