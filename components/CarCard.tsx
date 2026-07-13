@@ -4,14 +4,14 @@ import { Car, formatKms, formatPrice } from '@/lib/cars';
 
 export default function CarCard({ car }: { car: Car }) {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1.5 hover:border-brand-red/20 hover:shadow-xl">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
         <Image
           src={car.image}
           alt={`${car.make} ${car.model} ${car.variant}`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
         />
         {car.certified && (
           <span className="absolute left-3 top-3 rounded-full bg-brand-red px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import CarCard from '@/components/CarCard';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
+import Reveal from '@/components/Reveal';
 import { cars } from '@/lib/cars';
 import { testimonials } from '@/lib/content';
 
@@ -69,13 +70,13 @@ export default function HomePage() {
             alt="ThinkArz featured car"
             fill
             priority
-            className="object-cover opacity-60"
+            className="hero-image-drift object-cover opacity-60"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/70 to-brand-navy/20" />
         </div>
 
         <div className="container-page relative pb-16 pt-16 sm:pb-24 sm:pt-20">
-          <div className="max-w-xl">
+          <div className="animate-fade-up max-w-xl">
             <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
               Trusted Cars.
               <br />
@@ -88,9 +89,14 @@ export default function HomePage() {
           </div>
 
           {/* Search widget */}
-          <HeroSearchWidget />
+          <div className="animate-fade-up" style={{ animationDelay: '120ms' }}>
+            <HeroSearchWidget />
+          </div>
 
-          <div className="mt-6 flex flex-wrap gap-4">
+          <div
+            className="mt-6 flex flex-wrap gap-4 animate-fade-up"
+            style={{ animationDelay: '220ms' }}
+          >
             <Link href="/pre-owned-cars" className="btn btn-primary">
               Browse Cars
             </Link>
@@ -104,8 +110,8 @@ export default function HomePage() {
       {/* Trust badges */}
       <section className="border-b border-slate-100 bg-white py-10">
         <div className="container-page grid grid-cols-2 gap-6 sm:grid-cols-4">
-          {trustBadges.map(({ icon: Icon, value, label }) => (
-            <div key={label} className="flex items-center gap-3">
+          {trustBadges.map(({ icon: Icon, value, label }, i) => (
+            <Reveal key={label} className="flex items-center gap-3" delay={i * 80}>
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                 <Icon size={22} />
               </div>
@@ -113,7 +119,7 @@ export default function HomePage() {
                 <p className="text-lg font-bold text-slate-900">{value}</p>
                 <p className="text-xs text-slate-500">{label}</p>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -121,18 +127,20 @@ export default function HomePage() {
       {/* Featured cars */}
       <section className="bg-slate-50 py-16 sm:py-20">
         <div className="container-page">
-          <div className="mb-8 flex items-center justify-between">
+          <Reveal className="mb-8 flex items-center justify-between">
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">Featured Cars</h2>
             <Link
               href="/pre-owned-cars"
-              className="flex items-center gap-1 text-sm font-semibold text-brand-red hover:underline"
+              className="flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
             >
               View All Cars <ArrowRight size={16} />
             </Link>
-          </div>
+          </Reveal>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {cars.slice(0, 4).map((car) => (
-              <CarCard key={car.id} car={car} />
+            {cars.slice(0, 4).map((car, i) => (
+              <Reveal key={car.id} delay={i * 80}>
+                <CarCard car={car} />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -153,13 +161,16 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {whyChoose.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="rounded-xl border border-slate-200 p-6">
+              <Reveal
+                key={title}
+                className="rounded-xl border border-slate-200 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
+              >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                   <Icon size={22} />
                 </div>
                 <h3 className="mb-1.5 font-bold text-slate-900">{title}</h3>
                 <p className="text-sm text-slate-600">{desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -173,16 +184,16 @@ export default function HomePage() {
           </h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {howItWorks.map(({ icon: Icon, step, desc }, i) => (
-              <div key={step} className="relative text-center">
+              <Reveal key={step} className="relative text-center" delay={i * 100}>
                 {i < howItWorks.length - 1 && (
                   <div className="absolute right-[-1rem] top-8 hidden h-px w-8 bg-slate-300 lg:block" />
                 )}
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
+                <div className="animate-soft-pulse mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                   <Icon size={26} />
                 </div>
                 <h3 className="mb-1 font-bold text-slate-900">{step}</h3>
                 <p className="text-sm text-slate-600">{desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -190,7 +201,7 @@ export default function HomePage() {
 
       {/* Promo banner */}
       <section className="container-page py-16 sm:py-20">
-        <div className="flex flex-col items-start gap-6 rounded-2xl bg-brand-navy p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+        <Reveal className="flex flex-col items-start gap-6 rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:flex-row sm:items-center sm:justify-between sm:p-10">
           <div>
             <h3 className="text-xl font-bold text-white sm:text-2xl">Looking to sell your car?</h3>
             <p className="mt-2 max-w-md text-sm text-slate-300">
@@ -205,18 +216,24 @@ export default function HomePage() {
               Sell Your Car
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Testimonials */}
       <section className="bg-slate-50 py-16 sm:py-20">
         <div className="container-page">
-          <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
-            What Our Customers Say
-          </h2>
+          <Reveal>
+            <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
+              What Our Customers Say
+            </h2>
+          </Reveal>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {testimonials.map((t, i) => (
-              <div key={i} className="rounded-xl bg-white p-6 shadow-sm">
+              <Reveal
+                key={i}
+                delay={i * 90}
+                className="rounded-xl bg-white p-6 shadow-sm transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
                 <p className="mb-4 text-3xl font-serif text-brand-red">&ldquo;</p>
                 <p className="mb-4 text-sm leading-relaxed text-slate-600">{t.quote}</p>
                 <div className="mb-2 flex gap-0.5 text-brand-red">
@@ -225,7 +242,7 @@ export default function HomePage() {
                   ))}
                 </div>
                 <p className="text-sm font-semibold text-slate-900">{t.name}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>

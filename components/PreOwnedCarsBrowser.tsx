@@ -4,7 +4,14 @@ import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Car as CarIcon } from 'lucide-react';
 import CarCard from './CarCard';
-import { Car, cars } from '@/lib/cars';
+import {
+  Car,
+  ageOptions,
+  budgetOptions,
+  cars,
+  matchesAgeLabel,
+  matchesBudgetLabel,
+} from '@/lib/cars';
 
 function uniqueValues<K extends keyof Car>(key: K) {
   return Array.from(new Set(cars.map((c) => String(c[key])))).sort();
@@ -19,32 +26,58 @@ function countsFor<K extends keyof Car>(key: K) {
   return counts;
 }
 
+function countsForOptions(options: readonly string[], matcher: (car: Car, option: string) => boolean) {
+  const counts = new Map<string, number>();
+  options.forEach((option) => {
+    counts.set(option, cars.filter((car) => matcher(car, option)).length);
+  });
+  return counts;
+}
+
+function initialSelection(value: string | null, options: readonly string[]) {
+  return value && options.includes(value) ? [value] : [];
+}
+
 const PAGE_SIZE = 6;
 
 export default function PreOwnedCarsBrowser() {
   const searchParams = useSearchParams();
   const bodyTypeOptions = useMemo(() => uniqueValues('bodyType'), []);
-  const requestedBodyType = searchParams.get('bodyType');
-  const initialBodyType: string[] =
-    requestedBodyType && bodyTypeOptions.includes(requestedBodyType) ? [requestedBodyType] : [];
+  const budgetLabels = useMemo(() => budgetOptions.map((option) => option.label), []);
+  const ageLabels = useMemo(() => [...ageOptions], []);
+  const initialBudget = initialSelection(searchParams.get('budget'), budgetLabels);
+  const initialBodyType = initialSelection(searchParams.get('bodyType'), bodyTypeOptions);
+  const initialAge = initialSelection(searchParams.get('age'), ageLabels);
 
   const [make, setMake] = useState<string[]>([]);
+  const [budget, setBudget] = useState<string[]>(initialBudget);
   const [sellerType, setSellerType] = useState<string[]>([]);
   const [fuel, setFuel] = useState<string[]>([]);
   const [transmission, setTransmission] = useState<string[]>([]);
   const [bodyType, setBodyType] = useState<string[]>(initialBodyType);
+  const [age, setAge] = useState<string[]>(initialAge);
   const [owners, setOwners] = useState<string[]>([]);
   const [certifiedOnly, setCertifiedOnly] = useState(false);
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(1);
+  const budgetCounts = useMemo(
+    () => countsForOptions(budgetLabels, (car, option) => matchesBudgetLabel(car, option)),
+    [budgetLabels],
+  );
+  const ageCounts = useMemo(
+    () => countsForOptions(ageLabels, (car, option) => matchesAgeLabel(car, option)),
+    [ageLabels],
+  );
 
   const filtered = useMemo(() => {
     let result = cars.filter((c) => {
       if (make.length && !make.includes(c.make)) return false;
+      if (budget.length && !budget.some((option) => matchesBudgetLabel(c, option))) return false;
       if (sellerType.length && !sellerType.includes(c.sellerType)) return false;
       if (fuel.length && !fuel.includes(c.fuel)) return false;
       if (transmission.length && !transmission.includes(c.transmission)) return false;
       if (bodyType.length && !bodyType.includes(c.bodyType)) return false;
+      if (age.length && !age.some((option) => matchesAgeLabel(c, option))) return false;
       if (owners.length && !owners.includes(String(c.owners))) return false;
       if (certifiedOnly && !c.certified) return false;
       return true;
@@ -58,17 +91,24 @@ export default function PreOwnedCarsBrowser() {
     });
 
     return result;
-  }, [make, sellerType, fuel, transmission, bodyType, owners, certifiedOnly, sortBy]);
+  }, [make, budget, sellerType, fuel, transmission, bodyType, age, owners, certifiedOnly, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const activeFilters = [
+    ...budget.map((value) => `Budget: ${value}`),
+    ...bodyType.map((value) => `Type: ${value}`),
+    ...age.map((value) => `Age: ${value}`),
+  ];
 
   function resetFilters() {
     setMake([]);
+    setBudget([]);
     setSellerType([]);
     setFuel([]);
     setTransmission([]);
     setBodyType([]);
+    setAge([]);
     setOwners([]);
     setCertifiedOnly(false);
     setPage(1);
@@ -88,6 +128,18 @@ export default function PreOwnedCarsBrowser() {
             Explore our wide range of quality pre-owned cars. Find the perfect car that fits your
             needs and budget.
           </p>
+          {activeFilters.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {activeFilters.map((filter) => (
+                <span
+                  key={filter}
+                  className="rounded-full border border-brand-red/20 bg-brand-red/10 px-3 py-1 text-xs font-semibold text-brand-red"
+                >
+                  {filter}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <span className="flex items-center gap-2 rounded-full bg-brand-blueLight px-4 py-2 text-sm font-semibold text-brand-blue">
@@ -116,6 +168,13 @@ export default function PreOwnedCarsBrowser() {
             onToggle={(v) => toggleValue(setMake, v)}
           />
           <MultiSelectFilter
+            label="Budget"
+            selected={budget}
+            counts={budgetCounts}
+            orderedOptions={budgetLabels}
+            onToggle={(v) => toggleValue(setBudget, v)}
+          />
+          <MultiSelectFilter
             label="Seller Type"
             selected={sellerType}
             counts={countsFor('sellerType')}
@@ -138,6 +197,13 @@ export default function PreOwnedCarsBrowser() {
             selected={bodyType}
             counts={countsFor('bodyType')}
             onToggle={(v) => toggleValue(setBodyType, v)}
+          />
+          <MultiSelectFilter
+            label="Car Age"
+            selected={age}
+            counts={ageCounts}
+            orderedOptions={ageLabels}
+            onToggle={(v) => toggleValue(setAge, v)}
           />
           <MultiSelectFilter
             label="Owners"
@@ -212,14 +278,16 @@ function MultiSelectFilter({
   label,
   selected,
   counts,
+  orderedOptions,
   onToggle,
 }: {
   label: string;
   selected: string[];
   counts: Map<string, number>;
+  orderedOptions?: readonly string[];
   onToggle: (value: string) => void;
 }) {
-  const options = Array.from(counts.keys()).sort();
+  const options = orderedOptions ?? Array.from(counts.keys()).sort();
 
   return (
     <div className="mb-5 border-b border-slate-100 pb-5 last:border-0 last:pb-0">

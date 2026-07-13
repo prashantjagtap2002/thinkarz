@@ -17,12 +17,12 @@ export default function PageHero({
   return (
     <section className="relative overflow-hidden bg-brand-navy">
       <div className="absolute inset-0">
-        <Image src={image} alt="" fill priority className="object-cover opacity-40" />
+        <Image src={image} alt="" fill priority className="hero-image-drift object-cover opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/80 to-transparent" />
       </div>
       <div className="container-page relative py-20 sm:py-28">
-        <div className="max-w-2xl">
-          <span className="section-eyebrow bg-brand-red/10 rounded px-2 py-1">{eyebrow}</span>
+        <div className="max-w-2xl animate-fade-up">
+          <span className="section-eyebrow rounded bg-brand-red/10 px-2 py-1">{eyebrow}</span>
           <h1 className="mt-3 text-4xl font-extrabold leading-tight text-white sm:text-5xl">
             {title}
           </h1>
