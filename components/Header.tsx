@@ -39,7 +39,7 @@ export default function Header() {
           <a
             href="tel:02242125678"
             className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-blue text-white transition-[transform,background-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:bg-brand-red hover:shadow-md sm:flex"
-            aria-label="Call ThinkArz"
+            aria-label="Call Thinkarz"
           >
             <Phone size={18} />
           </a>

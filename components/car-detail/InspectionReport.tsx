@@ -29,7 +29,7 @@ export default function InspectionReport({ certified }: { certified?: boolean })
     <div className="rounded-2xl border border-slate-200 p-6 sm:p-8">
       <h2 className="mb-1 text-xl font-extrabold text-slate-900">140-Point Inspection Report</h2>
       <p className="mb-6 text-sm text-slate-500">
-        This car has passed ThinkArz&apos;s full quality certification across every category.
+        This car has passed Thinkarz&apos;s full quality certification across every category.
       </p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((c) => (

@@ -8,9 +8,9 @@ import PageTransition from '@/components/PageTransition';
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'ThinkArz | Your Ultimate Car Destination',
+  title: 'Thinkarz | Your Ultimate Car Destination',
   description:
-    'ThinkArz — trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
+    'Thinkarz - trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

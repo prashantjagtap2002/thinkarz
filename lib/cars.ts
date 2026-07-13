@@ -135,7 +135,7 @@ export const cars: Car[] = [
     model: 'NEXON EV',
     variant: 'XZ+',
     year: 2023,
-    fuel: 'Electric',
+    fuel: 'EV',
     kms: 20935,
     price: 1295000,
     emi: 22140,
@@ -212,7 +212,7 @@ export const cars: Car[] = [
     model: 'ZS EV',
     variant: 'EXCLUSIVE',
     year: 2023,
-    fuel: 'Electric',
+    fuel: 'EV',
     kms: 26971,
     price: 1550000,
     emi: 27930,
@@ -332,10 +332,10 @@ export function getHighlights(car: Car): string[] {
 
   if (car.owners === 1) highlights.push('Single owner vehicle with complete service history');
   if (car.kms < 20000) highlights.push(`Low odometer reading of just ${formatKms(car.kms)}`);
-  if (car.certified) highlights.push("Passed ThinkArz's 140-point quality inspection");
+  if (car.certified) highlights.push("Passed Thinkarz's 140-point quality inspection");
   if (car.transmission === 'Automatic')
     highlights.push('Comfortable automatic transmission, ideal for city driving');
-  if (car.fuel === 'EV' || car.fuel === 'Electric')
+  if (car.fuel === 'EV')
     highlights.push('Zero tailpipe emissions with low running costs');
   highlights.push('Comprehensive insurance active, all original documents available');
 

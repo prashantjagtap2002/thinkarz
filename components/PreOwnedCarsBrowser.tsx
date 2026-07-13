@@ -143,7 +143,7 @@ export default function PreOwnedCarsBrowser() {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <span className="flex items-center gap-2 rounded-full bg-brand-blueLight px-4 py-2 text-sm font-semibold text-brand-blue">
-            <CarIcon size={16} /> {filtered.length}+ Cars Available
+            <CarIcon size={16} /> {filtered.length} Cars Available
           </span>
           <select
             className="field-input w-auto"
@@ -160,7 +160,7 @@ export default function PreOwnedCarsBrowser() {
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
         {/* Filters */}
-        <aside className="h-fit rounded-xl border border-slate-200 bg-white p-6">
+        <aside className="h-fit rounded-xl border border-slate-200 bg-white p-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
           <MultiSelectFilter
             label="Make"
             selected={make}
@@ -213,7 +213,7 @@ export default function PreOwnedCarsBrowser() {
           />
 
           <div className="mb-5">
-            <p className="field-label">Show Cars With</p>
+            <p className="field-label">Certification Cars</p>
             <label className="flex items-center gap-2 text-sm text-slate-700">
               <input
                 type="checkbox"

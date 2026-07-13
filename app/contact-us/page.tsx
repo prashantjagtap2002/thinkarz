@@ -4,7 +4,7 @@ import SubmittableForm from '@/components/forms/SubmittableForm';
 import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
 
-export const metadata = { title: 'Contact Us | ThinkArz' };
+export const metadata = { title: 'Contact Us | Thinkarz' };
 
 const touchPoints = [
   { icon: MapPin, title: 'Visit Our Showroom', lines: contactInfo.address },
@@ -123,7 +123,7 @@ export default function ContactUsPage() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200">
             <iframe
-              title="ThinkArz showroom location"
+              title="Thinkarz showroom location"
               src="https://www.google.com/maps?q=Link+Road,+Malad+West,+Mumbai+400064&z=14&output=embed"
               className="h-full w-full"
               loading="lazy"
@@ -133,7 +133,7 @@ export default function ContactUsPage() {
             <div className="relative aspect-[16/10] w-full">
               <Image
                 src="https://picsum.photos/seed/thinkarz-showroom-front/1200/750"
-                alt="ThinkArz showroom"
+                alt="Thinkarz showroom"
                 fill
                 className="object-cover"
               />

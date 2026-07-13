@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Search, Clock, CalendarDays } from 'lucide-react';
 import { blogs, blogCategories } from '@/lib/blogs';
 
-export const metadata = { title: 'Blogs | ThinkArz' };
+export const metadata = { title: 'Blogs | Thinkarz' };
 
 export default function BlogsPage() {
   const [featured, ...rest] = blogs;

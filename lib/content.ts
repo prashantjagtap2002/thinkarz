@@ -2,13 +2,13 @@ export const testimonials = [
   {
     name: 'Happy Customer',
     quote:
-      'Amazing experience! The team at ThinkArz helped me find the perfect car. Transparent process and no hidden charges.',
+      'Amazing experience! The team at Thinkarz helped me find the perfect car. Transparent process and no hidden charges.',
     rating: 5,
   },
   {
     name: 'Happy Customer',
     quote:
-      'I sold my car through ThinkArz and got a great price. The inspection and payment process was quick and smooth.',
+      'I sold my car through Thinkarz and got a great price. The inspection and payment process was quick and smooth.',
     rating: 5,
   },
   {
@@ -30,7 +30,7 @@ export const navLinks = [
 ];
 
 export const contactInfo = {
-  address: ['ThinkArz, 5th Floor, Modi House,', 'Link Road, Malad (West),', 'Mumbai - 400064'],
+  address: ['Thinkarz, 5th Floor, Modi House,', 'Link Road, Malad (West),', 'Mumbai - 400064'],
   phone: '022 4212 5678',
   email: 'hello@thinkarz.com',
   hours: ['Mon - Sat: 10:00 AM - 7:00 PM', 'Sun: 10:00 AM - 5:00 PM'],
@@ -43,7 +43,7 @@ export const faqs = [
       'Our showroom is open Monday to Saturday from 10:00 AM to 7:00 PM, and Sunday from 10:00 AM to 5:00 PM.',
   },
   {
-    question: 'Can I sell my car to ThinkArz?',
+    question: 'Can I sell my car to Thinkarz?',
     answer:
       'Yes. Get an instant valuation online, book a free inspection, and receive payment the same day once the deal is finalized.',
   },
@@ -63,7 +63,7 @@ export const carFaqs = [
   {
     question: "Is this car's ownership and accident history verified?",
     answer:
-      "Yes. Every ThinkArz car goes through a documentation check covering RC, ownership transfer history, and accident/insurance claim records before it's listed.",
+      "Yes. Every Thinkarz car goes through a documentation check covering RC, ownership transfer history, and accident/insurance claim records before it's listed.",
   },
   {
     question: 'What does the 140-point inspection cover?',
@@ -86,7 +86,7 @@ export const carFaqs = [
       'Yes, you can book a free test drive at our Malad (West) showroom at a time that works for you, with no obligation to buy.',
   },
   {
-    question: "What is ThinkArz's return policy?",
+    question: "What is Thinkarz's return policy?",
     answer:
       "If you're not fully satisfied, certified cars come with a 7-day easy return window from the date of delivery, subject to standard terms.",
   },

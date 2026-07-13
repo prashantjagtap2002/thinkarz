@@ -1,38 +1,84 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import {
-  CalendarCheck,
+  CalendarHeart,
   MapPinned,
-  Car as CarIcon,
-  ClipboardCheck,
-  ShieldCheck,
-  Scale,
+  CarFront,
+  CircleHelp,
+  Sparkles,
+  BadgeDollarSign,
   Route,
-  Tag,
-  Headset,
+  GaugeCircle,
+  MessageCircleMore,
 } from 'lucide-react';
 import SubmittableForm from '@/components/forms/SubmittableForm';
+import AppointmentFields from '@/components/forms/AppointmentFields';
 
-export const metadata = { title: 'Book a Test Drive | ThinkArz' };
+export const metadata = { title: 'Book a Test Drive | Thinkarz' };
 
 const steps = [
-  { icon: CalendarCheck, title: '1. Choose Car & Slot', desc: 'Select your preferred car, date and time.' },
-  { icon: MapPinned, title: '2. Visit Our Location', desc: 'Reach our showroom at Malad (West) on time.' },
-  { icon: CarIcon, title: '3. Test Drive', desc: 'Experience the car and get all your questions answered.' },
-  { icon: ClipboardCheck, title: '4. Make the Right Choice', desc: 'Our experts help you choose the best fit.' },
+  {
+    icon: CalendarHeart,
+    title: '1. Choose Car & Slot',
+    desc: 'Select your preferred car, date and time.',
+  },
+  {
+    icon: MapPinned,
+    title: '2. Visit Our Location',
+    desc: 'Reach our showroom at Malad (West) on time.',
+  },
+  {
+    icon: CarFront,
+    title: '3. Test Drive',
+    desc: 'Experience the car and get all your questions answered.',
+  },
+  {
+    icon: CircleHelp,
+    title: '4. Make the Right Choice',
+    desc: 'Our experts help you choose the best fit.',
+  },
 ];
 
 const reasons = [
-  { icon: ShieldCheck, title: 'Real Experience', desc: 'Feel the performance, comfort and features firsthand.' },
-  { icon: Scale, title: 'Better Decision', desc: "Make a confident choice that's right for you." },
-  { icon: Route, title: 'Know the Drive', desc: 'Understand the handling, pickup and overall driving experience.' },
-  { icon: Tag, title: 'No Obligation', desc: "It's completely free with no commitment." },
-  { icon: Headset, title: 'Expert Guidance', desc: 'Get your queries answered by our product experts.' },
+  {
+    icon: Sparkles,
+    title: 'Real Experience',
+    desc: 'Feel the performance, comfort and features firsthand.',
+  },
+  {
+    icon: BadgeDollarSign,
+    title: 'Better Decision',
+    desc: "Make a confident choice that's right for you.",
+  },
+  {
+    icon: Route,
+    title: 'Know the Drive',
+    desc: 'Understand the handling, pickup and overall driving experience.',
+  },
+  {
+    icon: GaugeCircle,
+    title: 'No Obligation',
+    desc: "It's completely free with no commitment.",
+  },
+  {
+    icon: MessageCircleMore,
+    title: 'Expert Guidance',
+    desc: 'Get your queries answered by our product experts.',
+  },
 ];
 
 const popularCars = [
-  { name: 'Tata Nexon EV', image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.04.01-PM-1-768x1024.jpeg' },
+  {
+    name: 'Tata Nexon EV',
+    image:
+      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.04.01-PM-1-768x1024.jpeg',
+  },
   { name: 'Hyundai Creta', image: 'https://picsum.photos/seed/hyundai-creta/600/450' },
-  { name: 'Kia Seltos', image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.15.28-PM-1024x768.jpeg' },
+  {
+    name: 'Kia Seltos',
+    image:
+      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.15.28-PM-1024x768.jpeg',
+  },
   { name: 'Maruti Suzuki Grand Vitara', image: 'https://picsum.photos/seed/grand-vitara/600/450' },
   { name: 'MG Hector', image: 'https://picsum.photos/seed/mg-hector/600/450' },
 ];
@@ -83,12 +129,22 @@ export default function BookTestDrivePage() {
                 </div>
                 <div>
                   <label className="field-label">Mobile Number</label>
-                  <input required type="tel" className="field-input" placeholder="Enter your mobile number" />
+                  <input
+                    required
+                    type="tel"
+                    className="field-input"
+                    placeholder="Enter your mobile number"
+                  />
                 </div>
               </div>
               <div>
                 <label className="field-label">Email Address</label>
-                <input required type="email" className="field-input" placeholder="Enter your email address" />
+                <input
+                  required
+                  type="email"
+                  className="field-input"
+                  placeholder="Enter your email address"
+                />
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
@@ -97,8 +153,8 @@ export default function BookTestDrivePage() {
                     <option value="" disabled>
                       Select Car Model
                     </option>
-                    {popularCars.map((c) => (
-                      <option key={c.name}>{c.name}</option>
+                    {popularCars.map((car) => (
+                      <option key={car.name}>{car.name}</option>
                     ))}
                   </select>
                 </div>
@@ -114,47 +170,33 @@ export default function BookTestDrivePage() {
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="field-label">Preferred Date</label>
-                  <input required type="date" className="field-input" />
-                </div>
-                <div>
-                  <label className="field-label">Preferred Time</label>
-                  <select required className="field-input" defaultValue="">
-                    <option value="" disabled>
-                      Select Time
-                    </option>
-                    <option>10:00 AM</option>
-                    <option>12:00 PM</option>
-                    <option>2:00 PM</option>
-                    <option>4:00 PM</option>
-                  </select>
-                </div>
-              </div>
+              <AppointmentFields />
               <div>
                 <label className="field-label">Preferred Location</label>
                 <input className="field-input" defaultValue="Malad (West), Mumbai" readOnly />
               </div>
               <div>
                 <label className="field-label">Additional Notes (Optional)</label>
-                <textarea className="field-input" rows={3} placeholder="Tell us anything we should know" />
+                <textarea
+                  className="field-input"
+                  rows={3}
+                  placeholder="Tell us anything we should know"
+                />
               </div>
             </SubmittableForm>
           </div>
         </div>
       </section>
 
-      {/* How it works */}
       <section className="py-16 sm:py-20">
         <div className="container-page">
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             How It Works
           </h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map(({ icon: Icon, title, desc }, i) => (
+            {steps.map(({ icon: Icon, title, desc }, index) => (
               <div key={title} className="relative text-center">
-                {i < steps.length - 1 && (
+                {index < steps.length - 1 && (
                   <div className="absolute right-[-1rem] top-8 hidden h-px w-8 bg-slate-300 lg:block" />
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
@@ -168,7 +210,6 @@ export default function BookTestDrivePage() {
         </div>
       </section>
 
-      {/* Why test drive */}
       <section className="bg-slate-50 py-16 sm:py-20">
         <div className="container-page">
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
@@ -176,7 +217,10 @@ export default function BookTestDrivePage() {
           </h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {reasons.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="rounded-xl border border-slate-200 bg-white p-6 text-center">
+              <div
+                key={title}
+                className="rounded-xl border border-slate-200 bg-white p-6 text-center"
+              >
                 <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                   <Icon size={22} />
                 </div>
@@ -188,28 +232,30 @@ export default function BookTestDrivePage() {
         </div>
       </section>
 
-      {/* Popular cars */}
       <section className="py-16 sm:py-20">
         <div className="container-page">
           <div className="mb-8 flex items-center justify-between">
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
               Popular Cars for Test Drive
             </h2>
-            <a href="/pre-owned-cars" className="text-sm font-semibold text-brand-red hover:underline">
-              View All Cars →
-            </a>
+            <Link href="/pre-owned-cars" className="text-sm font-semibold text-brand-red hover:underline">
+              View All Cars
+            </Link>
           </div>
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-            {popularCars.map((c) => (
-              <div key={c.name} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {popularCars.map((car) => (
+              <div
+                key={car.name}
+                className="overflow-hidden rounded-xl border border-slate-200 bg-white"
+              >
                 <div className="relative aspect-[4/3] w-full bg-slate-100">
-                  <Image src={c.image} alt={c.name} fill className="object-cover" />
+                  <Image src={car.image} alt={car.name} fill className="object-cover" />
                 </div>
                 <div className="p-4">
-                  <p className="mb-3 text-sm font-bold text-slate-900">{c.name}</p>
-                  <a href="#" className="btn btn-primary w-full !px-3 !py-2 text-xs">
+                  <p className="mb-3 text-sm font-bold text-slate-900">{car.name}</p>
+                  <Link href="/contact-us" className="btn btn-primary w-full !px-3 !py-2 text-xs">
                     Book Test Drive
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -217,7 +263,6 @@ export default function BookTestDrivePage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="container-page pb-16 sm:pb-20">
         <div className="flex flex-col items-start gap-6 rounded-2xl bg-brand-navy p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
           <div>
@@ -226,9 +271,9 @@ export default function BookTestDrivePage() {
               Schedule your test drive at a time that suits you best. We&apos;ll make it happen!
             </p>
           </div>
-          <a href="#" className="btn btn-primary">
+          <Link href="/contact-us" className="btn btn-primary">
             Schedule Test Drive
-          </a>
+          </Link>
         </div>
       </section>
     </>

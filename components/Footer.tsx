@@ -13,12 +13,12 @@ const quickLinks = [
 ];
 
 const services = [
-  'Buy a Car',
-  'Sell Your Car',
-  'Car Inspection',
-  'Finance Options',
-  'Extended Warranty',
-  'Roadside Assistance',
+  { name: 'Buy a Car', href: '/pre-owned-cars' },
+  { name: 'Sell Your Car', href: '/sell-your-car' },
+  { name: 'Car Inspection', href: '/contact-us' },
+  { name: 'Finance Options', href: '/contact-us' },
+  { name: 'Extended Warranty', href: '/contact-us' },
+  { name: 'Roadside Assistance', href: '/contact-us' },
 ];
 
 const company = [
@@ -32,21 +32,21 @@ export default function Footer() {
   return (
     <footer className="bg-brand-navy text-slate-300">
       <div className="container-page grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
-        <div className="lg:col-span-1 sm:col-span-2">
+        <div className="sm:col-span-2 lg:col-span-1">
           <span className="text-2xl font-extrabold tracking-tight text-white">
-            THIN<span className="text-brand-red">K</span>ARZ
+            Thinkar<span className="text-brand-red">z</span>
           </span>
           <p className="mt-1 text-[10px] font-semibold tracking-wide text-slate-400">
             YOUR ULTIMATE CAR DESTINATION
           </p>
           <p className="mt-4 text-sm leading-relaxed text-slate-400">
-            ThinkArz is the pre-owned car venture of Gautam Modi Group, built on decades of
-            trust, customer first approach, and a passion for mobility.
+            Thinkarz is the pre-owned car venture of Gautam Modi Group, built on decades of trust,
+            customer first approach, and a passion for mobility.
           </p>
           <div className="mt-5 flex gap-3">
-            {[Facebook, Instagram, Youtube, Linkedin].map((Icon, i) => (
+            {[Facebook, Instagram, Youtube, Linkedin].map((Icon, index) => (
               <a
-                key={i}
+                key={index}
                 href="#"
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red"
                 aria-label="social link"
@@ -60,10 +60,10 @@ export default function Footer() {
         <div>
           <h4 className="mb-4 text-sm font-semibold text-white">Quick Links</h4>
           <ul className="space-y-2.5">
-            {quickLinks.map((l) => (
-              <li key={l.name}>
-                <Link href={l.href} className="text-sm text-slate-400 hover:text-brand-red">
-                  {l.name}
+            {quickLinks.map((link) => (
+              <li key={link.name}>
+                <Link href={link.href} className="text-sm text-slate-400 hover:text-brand-red">
+                  {link.name}
                 </Link>
               </li>
             ))}
@@ -73,9 +73,11 @@ export default function Footer() {
         <div>
           <h4 className="mb-4 text-sm font-semibold text-white">Our Services</h4>
           <ul className="space-y-2.5">
-            {services.map((s) => (
-              <li key={s} className="text-sm text-slate-400">
-                {s}
+            {services.map((service) => (
+              <li key={service.name}>
+                <Link href={service.href} className="text-sm text-slate-400 hover:text-brand-red">
+                  {service.name}
+                </Link>
               </li>
             ))}
           </ul>
@@ -84,10 +86,10 @@ export default function Footer() {
         <div>
           <h4 className="mb-4 text-sm font-semibold text-white">Company</h4>
           <ul className="space-y-2.5">
-            {company.map((c) => (
-              <li key={c.name}>
-                <Link href={c.href} className="text-sm text-slate-400 hover:text-brand-red">
-                  {c.name}
+            {company.map((item) => (
+              <li key={item.name}>
+                <Link href={item.href} className="text-sm text-slate-400 hover:text-brand-red">
+                  {item.name}
                 </Link>
               </li>
             ))}
@@ -123,7 +125,7 @@ export default function Footer() {
 
       <div className="border-t border-slate-700/60 py-5">
         <p className="container-page text-center text-xs text-slate-500">
-          © 2024 ThinkArz. All Rights Reserved.
+          © 2024 Thinkarz. All Rights Reserved.
         </p>
       </div>
     </footer>

@@ -67,7 +67,7 @@ export default function HomePage() {
         <div className="absolute inset-0">
           <Image
             src="https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg"
-            alt="ThinkArz featured car"
+            alt="Thinkarz featured car"
             fill
             priority
             className="hero-image-drift object-cover opacity-60"
@@ -150,12 +150,12 @@ export default function HomePage() {
       <section className="py-16 sm:py-20">
         <div className="container-page grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,320px)_1fr]">
           <div>
-            <span className="section-eyebrow">Why ThinkArz</span>
+            <span className="section-eyebrow">Why Thinkarz</span>
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
-              Why Choose ThinkArz?
+              Why Choose Thinkarz?
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-slate-600">
-              At ThinkArz, we are committed to delivering a seamless car buying experience with
+              At Thinkarz, we are committed to delivering a seamless car buying experience with
               trust, transparency and complete peace of mind.
             </p>
           </div>

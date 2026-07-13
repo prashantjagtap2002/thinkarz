@@ -1,21 +1,32 @@
 import Image from 'next/image';
-import { Search, UserSearch, Wallet, ShieldCheck, FileCheck2, Clock, Lock, Banknote, CalendarClock } from 'lucide-react';
+import Link from 'next/link';
+import {
+  ScanSearch,
+  ClipboardPenLine,
+  WalletCards,
+  BadgeIndianRupee,
+  FileBadge2,
+  TimerReset,
+  ShieldEllipsis,
+  Landmark,
+  CalendarClock,
+} from 'lucide-react';
 import SubmittableForm from '@/components/forms/SubmittableForm';
 
-export const metadata = { title: 'Sell Your Car | ThinkArz' };
+export const metadata = { title: 'Sell Your Car | Thinkarz' };
 
 const steps = [
-  { icon: Search, title: '1. Get Valuation', desc: 'Get instant price for your car.' },
-  { icon: UserSearch, title: '2. Book Inspection', desc: 'Schedule a free inspection.' },
-  { icon: Wallet, title: '3. Get Paid', desc: 'Get instant payment on the spot.' },
+  { icon: ScanSearch, title: '1. Get Valuation', desc: 'Get instant price for your car.' },
+  { icon: ClipboardPenLine, title: '2. Book Inspection', desc: 'Schedule a free inspection.' },
+  { icon: WalletCards, title: '3. Get Paid', desc: 'Get instant payment on the spot.' },
 ];
 
 const reasons = [
-  { icon: ShieldCheck, title: 'Best Price Assurance', desc: 'Get the best market price for your car.' },
-  { icon: FileCheck2, title: 'Free Inspection', desc: '100% free inspection at your doorstep.' },
-  { icon: Clock, title: 'Quick Process', desc: 'Sell your car in just a few hours.' },
-  { icon: Lock, title: 'Secure & Safe', desc: 'Hassle-free and transparent process.' },
-  { icon: Banknote, title: 'Instant Payment', desc: 'Get paid instantly via secure transfer.' },
+  { icon: BadgeIndianRupee, title: 'Best Price Assurance', desc: 'Get the best market price for your car.' },
+  { icon: FileBadge2, title: 'Free Inspection', desc: '100% free inspection at your doorstep.' },
+  { icon: TimerReset, title: 'Quick Process', desc: 'Sell your car in just a few hours.' },
+  { icon: ShieldEllipsis, title: 'Secure & Safe', desc: 'Hassle-free and transparent process.' },
+  { icon: Landmark, title: 'Instant Payment', desc: 'Get paid instantly via secure transfer.' },
 ];
 
 export default function SellYourCarPage() {
@@ -36,7 +47,7 @@ export default function SellYourCarPage() {
             <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
                 src="https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.13.41-PM-1024x768.jpeg"
-                alt="Sell your car with ThinkArz"
+                alt="Sell your car with Thinkarz"
                 fill
                 priority
                 className="object-cover"
@@ -84,7 +95,14 @@ export default function SellYourCarPage() {
               </div>
               <div>
                 <label className="field-label">Kilometer Driven</label>
-                <input required type="number" className="field-input" placeholder="Enter KMs Driven" />
+                <input
+                  required
+                  type="number"
+                  min={0}
+                  step={1}
+                  className="field-input"
+                  placeholder="Enter KMs Driven"
+                />
               </div>
             </SubmittableForm>
           </div>
@@ -121,9 +139,9 @@ export default function SellYourCarPage() {
                 Book a free inspection at your convenience.
               </p>
             </div>
-            <a href="#" className="btn btn-primary">
+            <Link href="/contact-us" className="btn btn-primary">
               Book Free Inspection
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -132,7 +150,7 @@ export default function SellYourCarPage() {
       <section className="py-16 sm:py-20">
         <div className="container-page">
           <h2 className="mb-2 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
-            Why Sell Your Car to ThinkArz?
+            Why Sell Your Car to Thinkarz?
           </h2>
           <span className="mx-auto mb-12 block h-1 w-12 bg-brand-red" />
 
@@ -165,17 +183,17 @@ export default function SellYourCarPage() {
             <div>
               <h3 className="text-xl font-bold text-white sm:text-2xl">Ready to sell your car?</h3>
               <p className="mt-2 max-w-md text-sm text-slate-300">
-                Get the best value for your car with ThinkArz. It&apos;s quick, easy and
+                Get the best value for your car with Thinkarz. It&apos;s quick, easy and
                 hassle-free.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="#" className="btn btn-primary">
+              <Link href="/contact-us" className="btn btn-primary">
                 Get Free Valuation
-              </a>
-              <a href="/contact-us" className="btn btn-outline-white">
+              </Link>
+              <Link href="/contact-us" className="btn btn-outline-white">
                 Talk to Expert
-              </a>
+              </Link>
             </div>
           </div>
         </div>
