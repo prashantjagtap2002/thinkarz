@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Clock, CalendarDays } from 'lucide-react';
 import { blogs, blogCategories } from '@/lib/blogs';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 export const metadata = { title: 'Blogs | Thinkarz' };
 
@@ -157,11 +158,7 @@ export default function BlogsPage() {
               <p className="mb-4 text-xs text-slate-300">
                 Subscribe to our newsletter and get the latest car news, tips and offers.
               </p>
-              <input
-                placeholder="Enter your email"
-                className="mb-3 w-full rounded-md border border-slate-600 bg-transparent px-3 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-red focus:outline-none"
-              />
-              <button className="btn btn-primary w-full">Subscribe</button>
+              <NewsletterSignup />
             </div>
           </aside>
         </div>

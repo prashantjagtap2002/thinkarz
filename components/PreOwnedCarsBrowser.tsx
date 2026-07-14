@@ -2,15 +2,18 @@
 
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Car as CarIcon } from 'lucide-react';
+import { Car as CarIcon, SlidersHorizontal, RotateCcw, X, ChevronDown } from 'lucide-react';
 import CarCard from './CarCard';
 import {
   Car,
   ageOptions,
   budgetOptions,
   cars,
+  kmOptions,
   matchesAgeLabel,
   matchesBudgetLabel,
+  matchesKmLabel,
+  formatPrice,
 } from '@/lib/cars';
 
 function uniqueValues<K extends keyof Car>(key: K) {
@@ -40,11 +43,17 @@ function initialSelection(value: string | null, options: readonly string[]) {
 
 const PAGE_SIZE = 6;
 
+// Price slider bounds derived from the inventory.
+const MIN_PRICE = 0;
+const MAX_PRICE = 2000000;
+const PRICE_STEP = 50000;
+
 export default function PreOwnedCarsBrowser() {
   const searchParams = useSearchParams();
   const bodyTypeOptions = useMemo(() => uniqueValues('bodyType'), []);
   const budgetLabels = useMemo(() => budgetOptions.map((option) => option.label), []);
   const ageLabels = useMemo(() => [...ageOptions], []);
+  const kmLabels = useMemo(() => [...kmOptions], []);
   const initialBudget = initialSelection(searchParams.get('budget'), budgetLabels);
   const initialBodyType = initialSelection(searchParams.get('bodyType'), bodyTypeOptions);
   const initialAge = initialSelection(searchParams.get('age'), ageLabels);
@@ -57,9 +66,13 @@ export default function PreOwnedCarsBrowser() {
   const [bodyType, setBodyType] = useState<string[]>(initialBodyType);
   const [age, setAge] = useState<string[]>(initialAge);
   const [owners, setOwners] = useState<string[]>([]);
+  const [kms, setKms] = useState<string[]>([]);
   const [certifiedOnly, setCertifiedOnly] = useState(false);
+  const [priceMin, setPriceMin] = useState(MIN_PRICE);
+  const [priceMax, setPriceMax] = useState(MAX_PRICE);
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(1);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const budgetCounts = useMemo(
     () => countsForOptions(budgetLabels, (car, option) => matchesBudgetLabel(car, option)),
     [budgetLabels],
@@ -68,6 +81,12 @@ export default function PreOwnedCarsBrowser() {
     () => countsForOptions(ageLabels, (car, option) => matchesAgeLabel(car, option)),
     [ageLabels],
   );
+  const kmCounts = useMemo(
+    () => countsForOptions(kmLabels, (car, option) => matchesKmLabel(car, option)),
+    [kmLabels],
+  );
+
+  const priceSliderActive = priceMin !== MIN_PRICE || priceMax !== MAX_PRICE;
 
   const filtered = useMemo(() => {
     let result = cars.filter((c) => {
@@ -79,7 +98,9 @@ export default function PreOwnedCarsBrowser() {
       if (bodyType.length && !bodyType.includes(c.bodyType)) return false;
       if (age.length && !age.some((option) => matchesAgeLabel(c, option))) return false;
       if (owners.length && !owners.includes(String(c.owners))) return false;
+      if (kms.length && !kms.some((option) => matchesKmLabel(c, option))) return false;
       if (certifiedOnly && !c.certified) return false;
+      if (c.price < priceMin || c.price > priceMax) return false;
       return true;
     });
 
@@ -91,15 +112,71 @@ export default function PreOwnedCarsBrowser() {
     });
 
     return result;
-  }, [make, budget, sellerType, fuel, transmission, bodyType, age, owners, certifiedOnly, sortBy]);
+  }, [make, budget, sellerType, fuel, transmission, bodyType, age, owners, kms, certifiedOnly, priceMin, priceMax, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  const activeFilters = [
-    ...budget.map((value) => `Budget: ${value}`),
-    ...bodyType.map((value) => `Type: ${value}`),
-    ...age.map((value) => `Age: ${value}`),
-  ];
+
+  const stringSetters: Record<string, React.Dispatch<React.SetStateAction<string[]>>> = {
+    make: setMake,
+    budget: setBudget,
+    sellerType: setSellerType,
+    fuel: setFuel,
+    transmission: setTransmission,
+    bodyType: setBodyType,
+    age: setAge,
+    owners: setOwners,
+    kms: setKms,
+  };
+
+  function toggleValue(field: string, value: string) {
+    const setter = stringSetters[field];
+    if (!setter) return;
+    setter((prev) => (prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]));
+    setPage(1);
+  }
+
+  // Build the active filter chip list so each can be removed individually.
+  const activeChips: { label: string; clear: () => void }[] = [];
+  budget.forEach((value) =>
+    activeChips.push({ label: `Budget: ${value}`, clear: () => toggleValue('budget', value) }),
+  );
+  bodyType.forEach((value) =>
+    activeChips.push({ label: `Type: ${value}`, clear: () => toggleValue('bodyType', value) }),
+  );
+  age.forEach((value) =>
+    activeChips.push({ label: `Age: ${value}`, clear: () => toggleValue('age', value) }),
+  );
+  kms.forEach((value) =>
+    activeChips.push({ label: `KMs: ${value}`, clear: () => toggleValue('kms', value) }),
+  );
+  make.forEach((value) =>
+    activeChips.push({ label: value, clear: () => toggleValue('make', value) }),
+  );
+  fuel.forEach((value) =>
+    activeChips.push({ label: value, clear: () => toggleValue('fuel', value) }),
+  );
+  transmission.forEach((value) =>
+    activeChips.push({ label: value, clear: () => toggleValue('transmission', value) }),
+  );
+  sellerType.forEach((value) =>
+    activeChips.push({ label: value, clear: () => toggleValue('sellerType', value) }),
+  );
+  owners.forEach((value) =>
+    activeChips.push({ label: `${value} Owner`, clear: () => toggleValue('owners', value) }),
+  );
+  if (certifiedOnly)
+    activeChips.push({ label: 'Certified', clear: () => setCertifiedOnly(false) });
+  if (priceSliderActive)
+    activeChips.push({
+      label: `${formatPrice(priceMin)} - ${formatPrice(priceMax)}`,
+      clear: () => {
+        setPriceMin(MIN_PRICE);
+        setPriceMax(MAX_PRICE);
+      },
+    });
+
+  const hasActiveFilters = activeChips.length > 0;
 
   function resetFilters() {
     setMake([]);
@@ -110,14 +187,51 @@ export default function PreOwnedCarsBrowser() {
     setBodyType([]);
     setAge([]);
     setOwners([]);
+    setKms([]);
     setCertifiedOnly(false);
+    setPriceMin(MIN_PRICE);
+    setPriceMax(MAX_PRICE);
     setPage(1);
   }
 
-  function toggleValue(setter: (updater: (prev: string[]) => string[]) => void, value: string) {
-    setter((prev) => (prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]));
+  // Clamp the dual thumbs so min never crosses max.
+  function onMinChange(value: number) {
+    setPriceMin(Math.min(value, priceMax - PRICE_STEP));
     setPage(1);
   }
+  function onMaxChange(value: number) {
+    setPriceMax(Math.max(value, priceMin + PRICE_STEP));
+    setPage(1);
+  }
+
+  const sidebar = (
+    <FilterSidebar
+      state={{
+        make,
+        budget,
+        sellerType,
+        fuel,
+        transmission,
+        bodyType,
+        age,
+        owners,
+        kms,
+        certifiedOnly,
+        priceMin,
+        priceMax,
+      }}
+      counts={{ budgetCounts, ageCounts, kmCounts }}
+      onToggle={toggleValue}
+      onCertifiedChange={(v) => {
+        setCertifiedOnly(v);
+        setPage(1);
+      }}
+      onMinChange={onMinChange}
+      onMaxChange={onMaxChange}
+      onReset={resetFilters}
+      hasActiveFilters={hasActiveFilters}
+    />
+  );
 
   return (
     <div className="container-page py-10 sm:py-14">
@@ -128,18 +242,6 @@ export default function PreOwnedCarsBrowser() {
             Explore our wide range of quality pre-owned cars. Find the perfect car that fits your
             needs and budget.
           </p>
-          {activeFilters.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {activeFilters.map((filter) => (
-                <span
-                  key={filter}
-                  className="rounded-full border border-brand-red/20 bg-brand-red/10 px-3 py-1 text-xs font-semibold text-brand-red"
-                >
-                  {filter}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <span className="flex items-center gap-2 rounded-full bg-brand-blueLight px-4 py-2 text-sm font-semibold text-brand-blue">
@@ -158,84 +260,46 @@ export default function PreOwnedCarsBrowser() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
-        {/* Filters */}
-        <aside className="h-fit rounded-xl border border-slate-200 bg-white p-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
-          <MultiSelectFilter
-            label="Make"
-            selected={make}
-            counts={countsFor('make')}
-            onToggle={(v) => toggleValue(setMake, v)}
-          />
-          <MultiSelectFilter
-            label="Budget"
-            selected={budget}
-            counts={budgetCounts}
-            orderedOptions={budgetLabels}
-            onToggle={(v) => toggleValue(setBudget, v)}
-          />
-          <MultiSelectFilter
-            label="Seller Type"
-            selected={sellerType}
-            counts={countsFor('sellerType')}
-            onToggle={(v) => toggleValue(setSellerType, v)}
-          />
-          <MultiSelectFilter
-            label="Fuel"
-            selected={fuel}
-            counts={countsFor('fuel')}
-            onToggle={(v) => toggleValue(setFuel, v)}
-          />
-          <MultiSelectFilter
-            label="Transmission"
-            selected={transmission}
-            counts={countsFor('transmission')}
-            onToggle={(v) => toggleValue(setTransmission, v)}
-          />
-          <MultiSelectFilter
-            label="Body Type"
-            selected={bodyType}
-            counts={countsFor('bodyType')}
-            onToggle={(v) => toggleValue(setBodyType, v)}
-          />
-          <MultiSelectFilter
-            label="Car Age"
-            selected={age}
-            counts={ageCounts}
-            orderedOptions={ageLabels}
-            onToggle={(v) => toggleValue(setAge, v)}
-          />
-          <MultiSelectFilter
-            label="Owners"
-            selected={owners}
-            counts={countsFor('owners')}
-            onToggle={(v) => toggleValue(setOwners, v)}
-          />
-
-          <div className="mb-5">
-            <p className="field-label">Certification Cars</p>
-            <label className="flex items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                checked={certifiedOnly}
-                onChange={(e) => {
-                  setCertifiedOnly(e.target.checked);
-                  setPage(1);
-                }}
-                className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
-                suppressHydrationWarning
-              />
-              Certified Cars
-            </label>
-          </div>
-
-          <button
-            onClick={resetFilters}
-            className="text-sm font-semibold text-brand-blue hover:underline"
-          >
-            Reset Filters
+      {/* Active filter chips — shown above the grid, full width */}
+      {hasActiveFilters && (
+        <div className="mb-6 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+            Active:
+          </span>
+          {activeChips.map((chip, i) => (
+            <button
+              key={i}
+              onClick={chip.clear}
+              className="flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-brand-red hover:text-brand-red"
+            >
+              {chip.label}
+              <X size={12} strokeWidth={2.5} />
+            </button>
+          ))}
+          <button onClick={resetFilters} className="ml-1 text-xs font-semibold text-brand-blue hover:underline">
+            Clear all
           </button>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
+        {/* Filters — desktop sticky sidebar */}
+        <aside className="hidden lg:block">
+          <div className="lg:sticky lg:top-24">{sidebar}</div>
         </aside>
+
+        {/* Mobile filter trigger */}
+        <button
+          onClick={() => setShowMobileFilters(true)}
+          className="flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 lg:hidden"
+        >
+          <SlidersHorizontal size={16} /> Filters
+          {hasActiveFilters && (
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-red px-1 text-[10px] text-white">
+              {activeChips.length}
+            </span>
+          )}
+        </button>
 
         {/* Results */}
         <div>
@@ -270,50 +334,374 @@ export default function PreOwnedCarsBrowser() {
           )}
         </div>
       </div>
+
+      {/* Mobile filter drawer */}
+      {showMobileFilters && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="absolute inset-0 bg-slate-900/50" onClick={() => setShowMobileFilters(false)} />
+          <div className="absolute left-0 top-0 h-full w-[85%] max-w-sm overflow-y-auto bg-white p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-extrabold text-slate-900">Filters</h2>
+              <button
+                onClick={() => setShowMobileFilters(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100"
+                aria-label="Close filters"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            {sidebar}
+            <button onClick={() => setShowMobileFilters(false)} className="btn btn-primary mt-6 w-full">
+              Show {filtered.length} Cars
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function MultiSelectFilter({
+/* ----------------------------- Filter sidebar ----------------------------- */
+
+type FilterState = {
+  make: string[];
+  budget: string[];
+  sellerType: string[];
+  fuel: string[];
+  transmission: string[];
+  bodyType: string[];
+  age: string[];
+  owners: string[];
+  kms: string[];
+  certifiedOnly: boolean;
+  priceMin: number;
+  priceMax: number;
+};
+
+type SidebarProps = {
+  state: FilterState;
+  counts: {
+    budgetCounts: Map<string, number>;
+    ageCounts: Map<string, number>;
+    kmCounts: Map<string, number>;
+  };
+  hasActiveFilters: boolean;
+  onToggle: (field: string, value: string) => void;
+  onCertifiedChange: (value: boolean) => void;
+  onMinChange: (value: number) => void;
+  onMaxChange: (value: number) => void;
+  onReset: () => void;
+};
+
+function FilterSidebar(props: SidebarProps) {
+  const { state, counts, hasActiveFilters, onToggle, onCertifiedChange, onMinChange, onMaxChange, onReset } = props;
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal size={18} className="text-brand-red" />
+          <h2 className="text-sm font-extrabold uppercase tracking-wide text-slate-900">Filters</h2>
+        </div>
+        {hasActiveFilters && (
+          <button onClick={onReset} className="text-xs font-semibold text-brand-red hover:underline">
+            Clear all
+          </button>
+        )}
+      </div>
+
+      <div className="px-5 py-2">
+        {/* Budget — quick buckets + range slider */}
+        <FilterSection title="Budget" defaultOpen>
+          <div className="space-y-2">
+            {budgetOptions.map((option) => (
+              <FilterCheckbox
+                key={option.label}
+                label={option.label}
+                checked={state.budget.includes(option.label)}
+                count={counts.budgetCounts.get(option.label) ?? 0}
+                onToggle={() => onToggle('budget', option.label)}
+              />
+            ))}
+          </div>
+          <div className="mt-4 rounded-lg bg-slate-50 p-4">
+            <div className="mb-3 flex items-center justify-between text-xs font-semibold text-slate-700">
+              <span>{formatPrice(state.priceMin)}</span>
+              <span>{formatPrice(state.priceMax)}</span>
+            </div>
+            <div className="px-2">
+              <DualRangeSlider
+                min={MIN_PRICE}
+                max={MAX_PRICE}
+                step={PRICE_STEP}
+                valueMin={state.priceMin}
+                valueMax={state.priceMax}
+                onMinChange={onMinChange}
+                onMaxChange={onMaxChange}
+              />
+            </div>
+          </div>
+        </FilterSection>
+
+        {/* Kilometers Driven */}
+        <FilterSection title="Kilometers Driven" defaultOpen>
+          <div className="space-y-2">
+            {kmOptions.map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                checked={state.kms.includes(option)}
+                count={counts.kmCounts.get(option) ?? 0}
+                onToggle={() => onToggle('kms', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Body Type */}
+        <FilterSection title="Body Type" defaultOpen>
+          <div className="space-y-2">
+            {uniqueValues('bodyType').map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                checked={state.bodyType.includes(option)}
+                count={countsFor('bodyType').get(option) ?? 0}
+                onToggle={() => onToggle('bodyType', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Make */}
+        <FilterSection title="Brand">
+          <div className="space-y-2">
+            {uniqueValues('make').map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                checked={state.make.includes(option)}
+                count={countsFor('make').get(option) ?? 0}
+                onToggle={() => onToggle('make', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Fuel */}
+        <FilterSection title="Fuel">
+          <div className="space-y-2">
+            {uniqueValues('fuel').map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                checked={state.fuel.includes(option)}
+                count={countsFor('fuel').get(option) ?? 0}
+                onToggle={() => onToggle('fuel', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Transmission */}
+        <FilterSection title="Transmission">
+          <div className="space-y-2">
+            {uniqueValues('transmission').map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                checked={state.transmission.includes(option)}
+                count={countsFor('transmission').get(option) ?? 0}
+                onToggle={() => onToggle('transmission', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Car Age */}
+        <FilterSection title="Car Age">
+          <div className="space-y-2">
+            {ageOptions.map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                checked={state.age.includes(option)}
+                count={counts.ageCounts.get(option) ?? 0}
+                onToggle={() => onToggle('age', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Owners */}
+        <FilterSection title="Owners">
+          <div className="space-y-2">
+            {uniqueValues('owners').map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                checked={state.owners.includes(option)}
+                count={countsFor('owners').get(option) ?? 0}
+                onToggle={() => onToggle('owners', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Seller Type */}
+        <FilterSection title="Seller Type">
+          <div className="space-y-2">
+            {uniqueValues('sellerType').map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                checked={state.sellerType.includes(option)}
+                count={countsFor('sellerType').get(option) ?? 0}
+                onToggle={() => onToggle('sellerType', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Certification */}
+        <FilterSection title="Certification" defaultOpen>
+          <label className="flex items-center gap-2 py-1.5 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={state.certifiedOnly}
+              onChange={(e) => onCertifiedChange(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
+              suppressHydrationWarning
+            />
+            Certified Cars
+          </label>
+        </FilterSection>
+      </div>
+
+      {/* Footer reset */}
+      <div className="border-t border-slate-100 p-4">
+        <button
+          onClick={onReset}
+          className="flex w-full items-center justify-center gap-2 rounded-md border border-slate-300 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-red hover:text-brand-red"
+        >
+          <RotateCcw size={15} /> Reset Filters
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------ Sub-components ----------------------------- */
+
+function FilterSection({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-slate-100 py-4 last:border-0 last:pb-2">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between text-left"
+      >
+        <span className="text-sm font-bold text-slate-900">{title}</span>
+        <ChevronDown
+          size={16}
+          className={`text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+      <div className={`overflow-hidden transition-all duration-200 ${open ? 'mt-3 max-h-[600px]' : 'max-h-0'}`}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function FilterCheckbox({
   label,
-  selected,
-  counts,
-  orderedOptions,
+  checked,
+  count,
   onToggle,
 }: {
   label: string;
-  selected: string[];
-  counts: Map<string, number>;
-  orderedOptions?: readonly string[];
-  onToggle: (value: string) => void;
+  checked: boolean;
+  count: number;
+  onToggle: () => void;
 }) {
-  const options = orderedOptions ?? Array.from(counts.keys()).sort();
-
   return (
-    <div className="mb-5 border-b border-slate-100 pb-5 last:border-0 last:pb-0">
-      <p className="field-label">
+    <label className="flex cursor-pointer items-center justify-between gap-2 py-1 text-sm text-slate-700">
+      <span className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={onToggle}
+          className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
+          suppressHydrationWarning
+        />
         {label}
-        {selected.length > 0 && (
-          <span className="ml-1.5 font-normal text-brand-red">({selected.length})</span>
-        )}
-      </p>
-      <div className="space-y-2">
-        {options.map((opt) => (
-          <label key={opt} className="flex items-center justify-between gap-2 text-sm text-slate-700">
-            <span className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={selected.includes(opt)}
-                onChange={() => onToggle(opt)}
-                className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
-                suppressHydrationWarning
-              />
-              {opt}
-            </span>
-            <span className="text-xs text-slate-400">{counts.get(opt)}</span>
-          </label>
-        ))}
-      </div>
+      </span>
+      <span className="text-xs text-slate-400">{count}</span>
+    </label>
+  );
+}
+
+function DualRangeSlider({
+  min,
+  max,
+  step,
+  valueMin,
+  valueMax,
+  onMinChange,
+  onMaxChange,
+}: {
+  min: number;
+  max: number;
+  step: number;
+  valueMin: number;
+  valueMax: number;
+  onMinChange: (value: number) => void;
+  onMaxChange: (value: number) => void;
+}) {
+  const minPct = ((valueMin - min) / (max - min)) * 100;
+  const maxPct = ((valueMax - min) / (max - min)) * 100;
+  return (
+    <div className="relative h-6 select-none">
+      {/* Track */}
+      <div className="absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-slate-200" />
+      {/* Active range */}
+      <div
+        className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-brand-red"
+        style={{ left: `${minPct}%`, right: `${100 - maxPct}%` }}
+      />
+      {/* Min thumb */}
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={valueMin}
+        onChange={(e) => onMinChange(Number(e.target.value))}
+        className="range-thumb range-thumb-min pointer-events-none absolute top-0 z-20 h-6 w-full appearance-none bg-transparent"
+        style={{ zIndex: valueMin > max - step ? 25 : 20 }}
+        aria-label="Minimum price"
+      />
+      {/* Max thumb */}
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={valueMax}
+        onChange={(e) => onMaxChange(Number(e.target.value))}
+        className="range-thumb range-thumb-max pointer-events-none absolute top-0 z-30 h-6 w-full appearance-none bg-transparent"
+        aria-label="Maximum price"
+      />
     </div>
   );
 }

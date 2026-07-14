@@ -10,8 +10,9 @@ import {
   ShieldEllipsis,
   Landmark,
   CalendarClock,
+  ChevronRight,
 } from 'lucide-react';
-import SubmittableForm from '@/components/forms/SubmittableForm';
+import SellValuationForm from '@/components/forms/SellValuationForm';
 
 export const metadata = { title: 'Sell Your Car | Thinkarz' };
 
@@ -60,51 +61,7 @@ export default function SellYourCarPage() {
             <p className="mb-6 text-sm text-slate-500">
               Enter your car details to get a free, no-obligation valuation.
             </p>
-            <SubmittableForm
-              submitLabel="Get Valuation"
-              successTitle="Valuation Request Received!"
-              successMessage="Our team will get back to you shortly with your car's estimated value."
-              className="space-y-5"
-            >
-              <div>
-                <label className="field-label">Registration Number</label>
-                <input required className="field-input" placeholder="e.g. MH01AB1234" />
-              </div>
-              <div>
-                <label className="field-label">Car Model</label>
-                <select required className="field-input" defaultValue="">
-                  <option value="" disabled>
-                    Select Model
-                  </option>
-                  <option>Hatchback</option>
-                  <option>Sedan</option>
-                  <option>SUV</option>
-                  <option>Electric</option>
-                </select>
-              </div>
-              <div>
-                <label className="field-label">Manufacturing Year</label>
-                <select required className="field-input" defaultValue="">
-                  <option value="" disabled>
-                    Select Year
-                  </option>
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <option key={i}>{2024 - i}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="field-label">Kilometer Driven</label>
-                <input
-                  required
-                  type="number"
-                  min={0}
-                  step={1}
-                  className="field-input"
-                  placeholder="Enter KMs Driven"
-                />
-              </div>
-            </SubmittableForm>
+            <SellValuationForm />
           </div>
         </div>
       </section>
@@ -121,7 +78,10 @@ export default function SellYourCarPage() {
             {steps.map(({ icon: Icon, title, desc }, i) => (
               <div key={title} className="relative text-center">
                 {i < steps.length - 1 && (
-                  <div className="absolute right-[-1rem] top-8 hidden h-px w-8 bg-slate-300 sm:block" />
+                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 items-center sm:flex">
+                    <span className="h-px w-6 bg-slate-300" />
+                    <ChevronRight size={16} className="-ml-0.5 text-slate-300" />
+                  </div>
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                   <Icon size={26} />

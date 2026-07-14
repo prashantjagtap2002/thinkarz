@@ -8,18 +8,23 @@ export default function SubmittableForm({
   submitLabel,
   successTitle,
   successMessage,
+  successExtra,
   className = '',
+  onSubmit,
 }: {
   children: ReactNode;
   submitLabel: string;
   successTitle: string;
   successMessage: string;
+  successExtra?: ReactNode;
   className?: string;
+  onSubmit?: () => void;
 }) {
   const [submitted, setSubmitted] = useState(false);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    onSubmit?.();
     setSubmitted(true);
     e.currentTarget.reset();
   }
@@ -30,6 +35,7 @@ export default function SubmittableForm({
         <CheckCircle2 className="mb-4 text-green-600" size={40} />
         <h3 className="text-lg font-bold text-slate-900">{successTitle}</h3>
         <p className="mt-2 max-w-sm text-sm text-slate-600">{successMessage}</p>
+        {successExtra}
         <button
           onClick={() => setSubmitted(false)}
           className="mt-6 text-sm font-semibold text-brand-red hover:underline"

@@ -141,6 +141,41 @@
     }
   }
 
+  /* Dual range slider for the budget filter */
+  .range-thumb {
+    pointer-events: none;
+  }
+  .range-thumb::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 2px solid #e31e24;
+    box-shadow: 0 1px 4px rgb(15 27 46 / 0.25);
+    cursor: pointer;
+    margin-top: 0;
+  }
+  .range-thumb::-moz-range-thumb {
+    pointer-events: auto;
+    height: 18px;
+    width: 18px;
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 2px solid #e31e24;
+    box-shadow: 0 1px 4px rgb(15 27 46 / 0.25);
+    cursor: pointer;
+  }
+  .range-thumb::-webkit-slider-runnable-track {
+    background: transparent;
+    height: 6px;
+  }
+  .range-thumb::-moz-range-track {
+    background: transparent;
+    height: 6px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .page-transition {
       opacity: 1;

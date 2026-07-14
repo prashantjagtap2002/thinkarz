@@ -12,14 +12,25 @@ import {
   CheckCircle2,
   Palette,
   Armchair,
+  ShieldCheck,
+  RotateCcw,
+  FileCheck2,
+  MessageCircle,
 } from 'lucide-react';
 import { cars, formatKms, formatPrice, getHighlights } from '@/lib/cars';
 import { carFaqs } from '@/lib/content';
 import CarCard from '@/components/CarCard';
 import CarGallery from '@/components/car-detail/CarGallery';
+import CarComparison from '@/components/car-detail/CarComparison';
 import EmiCalculator from '@/components/car-detail/EmiCalculator';
 import InspectionReport from '@/components/car-detail/InspectionReport';
 import FaqAccordion from '@/components/FaqAccordion';
+
+const trustBadges = [
+  { icon: ShieldCheck, label: '140-Point Inspection' },
+  { icon: RotateCcw, label: '7-Day Money Back' },
+  { icon: FileCheck2, label: 'Free RC Transfer' },
+];
 
 export function generateStaticParams() {
   return cars.map((car) => ({ id: car.id }));
@@ -137,7 +148,39 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
               <Link href="/contact-us" className="btn btn-outline w-full">
                 Make Offer
               </Link>
+              <a
+                href={`https://wa.me/912242125678?text=${encodeURIComponent(
+                  `Hi, I'm interested in the ${car.year} ${car.make} ${car.model} (${car.variant}) listed at ${formatPrice(car.price)} on Thinkarz.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-md border border-green-600 px-4 py-2.5 text-sm font-semibold text-green-700 transition-colors hover:bg-green-50"
+              >
+                <MessageCircle size={16} />
+                Chat on WhatsApp
+              </a>
             </div>
+
+            <div className="mt-6 grid grid-cols-3 gap-2 border-t border-slate-100 pt-5">
+              {trustBadges.map(({ icon: Icon, label }) => (
+                <div key={label} className="flex flex-col items-center gap-1.5 text-center">
+                  <Icon size={20} className="text-brand-blue" />
+                  <p className="text-[11px] font-medium leading-tight text-slate-600">{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-xl border border-slate-200 p-6">
+            <p className="mb-3 text-sm font-semibold text-slate-900">Key Highlights</p>
+            <ul className="space-y-2.5">
+              {highlights.slice(0, 3).map((h) => (
+                <li key={h} className="flex items-start gap-2 text-sm text-slate-600">
+                  <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-green-600" />
+                  {h}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="mt-6 rounded-xl bg-slate-50 p-6">
@@ -199,6 +242,11 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
       {/* EMI calculator */}
       <div className="mt-10">
         <EmiCalculator price={car.price} />
+      </div>
+
+      {/* Compare with similar cars */}
+      <div className="mt-16">
+        <CarComparison current={car} similar={similar} allCars={cars} />
       </div>
 
       {/* Similar cars */}

@@ -10,6 +10,7 @@ import {
   Route,
   GaugeCircle,
   MessageCircleMore,
+  ChevronRight,
 } from 'lucide-react';
 import SubmittableForm from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
@@ -197,7 +198,10 @@ export default function BookTestDrivePage() {
             {steps.map(({ icon: Icon, title, desc }, index) => (
               <div key={title} className="relative text-center">
                 {index < steps.length - 1 && (
-                  <div className="absolute right-[-1rem] top-8 hidden h-px w-8 bg-slate-300 lg:block" />
+                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 items-center lg:flex">
+                    <span className="h-px w-6 bg-slate-300" />
+                    <ChevronRight size={16} className="-ml-0.5 text-slate-300" />
+                  </div>
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                   <Icon size={26} />

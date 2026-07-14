@@ -318,6 +318,15 @@ export function matchesAgeLabel(car: Car, label: string, referenceYear = new Dat
   return true;
 }
 
+export const kmOptions = ['Under 20,000 km', '20,000 - 50,000 km', '50,000+ km'] as const;
+
+export function matchesKmLabel(car: Car, label: string) {
+  if (label === 'Under 20,000 km') return car.kms < 20000;
+  if (label === '20,000 - 50,000 km') return car.kms >= 20000 && car.kms <= 50000;
+  if (label === '50,000+ km') return car.kms > 50000;
+  return true;
+}
+
 export function formatPrice(price: number) {
   const lakh = price / 100000;
   return `Rs. ${lakh.toFixed(2)} Lakh`;
