@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Car as CarIcon } from 'lucide-react';
+import { Car as CarIcon, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
 import CarCard from './CarCard';
 import {
   Car,
@@ -160,11 +160,20 @@ export default function PreOwnedCarsBrowser() {
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
         {/* Filters */}
-        <aside className="h-fit rounded-xl border border-slate-200 bg-white p-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+        <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+            <h2 className="text-lg font-bold text-slate-900">Filters</h2>
+            {activeFilters.length > 0 && (
+              <button onClick={resetFilters} className="text-sm font-semibold text-brand-red hover:underline">
+                Clear all
+              </button>
+            )}
+          </div>
           <MultiSelectFilter
-            label="Make"
+            label="Brand"
             selected={make}
             counts={countsFor('make')}
+            defaultOpen={true}
             onToggle={(v) => toggleValue(setMake, v)}
           />
           <MultiSelectFilter
@@ -172,6 +181,7 @@ export default function PreOwnedCarsBrowser() {
             selected={budget}
             counts={budgetCounts}
             orderedOptions={budgetLabels}
+            defaultOpen={true}
             onToggle={(v) => toggleValue(setBudget, v)}
           />
           <MultiSelectFilter
@@ -212,28 +222,29 @@ export default function PreOwnedCarsBrowser() {
             onToggle={(v) => toggleValue(setOwners, v)}
           />
 
-          <div className="mb-5">
-            <p className="field-label">Certification Cars</p>
-            <label className="flex items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                checked={certifiedOnly}
-                onChange={(e) => {
-                  setCertifiedOnly(e.target.checked);
-                  setPage(1);
-                }}
-                className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
-                suppressHydrationWarning
-              />
-              Certified Cars
+          <div className="mb-6">
+            <label className="flex items-center justify-between gap-2 text-sm font-bold text-slate-800 cursor-pointer">
+              <span className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={certifiedOnly}
+                  onChange={(e) => {
+                    setCertifiedOnly(e.target.checked);
+                    setPage(1);
+                  }}
+                  className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
+                  suppressHydrationWarning
+                />
+                Certified Cars Only
+              </span>
             </label>
           </div>
 
           <button
             onClick={resetFilters}
-            className="text-sm font-semibold text-brand-blue hover:underline"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
           >
-            Reset Filters
+            <RotateCcw size={16} /> Reset Filters
           </button>
         </aside>
 
@@ -279,41 +290,55 @@ function MultiSelectFilter({
   selected,
   counts,
   orderedOptions,
+  defaultOpen = false,
   onToggle,
 }: {
   label: string;
   selected: string[];
   counts: Map<string, number>;
   orderedOptions?: readonly string[];
+  defaultOpen?: boolean;
   onToggle: (value: string) => void;
 }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const options = orderedOptions ?? Array.from(counts.keys()).sort();
 
   return (
     <div className="mb-5 border-b border-slate-100 pb-5 last:border-0 last:pb-0">
-      <p className="field-label">
-        {label}
-        {selected.length > 0 && (
-          <span className="ml-1.5 font-normal text-brand-red">({selected.length})</span>
-        )}
-      </p>
-      <div className="space-y-2">
-        {options.map((opt) => (
-          <label key={opt} className="flex items-center justify-between gap-2 text-sm text-slate-700">
-            <span className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={selected.includes(opt)}
-                onChange={() => onToggle(opt)}
-                className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
-                suppressHydrationWarning
-              />
-              {opt}
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex w-full items-center justify-between text-left focus:outline-none"
+      >
+        <p className="text-sm font-bold text-slate-800">
+          {label}
+          {selected.length > 0 && (
+            <span className="ml-1.5 rounded-full bg-brand-red/10 px-2 py-0.5 text-[10px] text-brand-red">
+              {selected.length}
             </span>
-            <span className="text-xs text-slate-400">{counts.get(opt)}</span>
-          </label>
-        ))}
-      </div>
+          )}
+        </p>
+        {isOpen ? <ChevronUp size={16} className="text-slate-400" /> : <ChevronDown size={16} className="text-slate-400" />}
+      </button>
+      
+      {isOpen && (
+        <div className="mt-4 space-y-3">
+          {options.map((opt) => (
+            <label key={opt} className="group flex cursor-pointer items-center justify-between gap-2 text-sm text-slate-600 transition-colors hover:text-slate-900">
+              <span className="flex items-center gap-2.5">
+                <input
+                  type="checkbox"
+                  checked={selected.includes(opt)}
+                  onChange={() => onToggle(opt)}
+                  className="h-4 w-4 rounded border-slate-300 text-brand-red transition-colors focus:ring-brand-red cursor-pointer"
+                  suppressHydrationWarning
+                />
+                {opt}
+              </span>
+              <span className="text-xs font-medium text-slate-400 group-hover:text-slate-500">{counts.get(opt)}</span>
+            </label>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
