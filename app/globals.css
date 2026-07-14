@@ -45,6 +45,9 @@
     background-size: 1rem;
     padding-right: 2.75rem;
   }
+  .glassmorphism {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
 }
 
 @layer utilities {
@@ -139,6 +142,20 @@
     to {
       transform: scale(1.06) translate3d(0, -8px, 0);
     }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 8s ease-in-out infinite;
+    background-size: 200% auto;
   }
 
   @media (prefers-reduced-motion: reduce) {
