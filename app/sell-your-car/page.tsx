@@ -104,6 +104,24 @@ export default function SellYourCarPage() {
                   placeholder="Enter KMs Driven"
                 />
               </div>
+              <div>
+                <label className="field-label">Phone Number</label>
+                <input
+                  required
+                  type="tel"
+                  className="field-input"
+                  placeholder="Enter your phone number"
+                />
+              </div>
+              <div>
+                <label className="field-label">Email ID</label>
+                <input
+                  required
+                  type="email"
+                  className="field-input"
+                  placeholder="Enter your email ID"
+                />
+              </div>
             </SubmittableForm>
           </div>
         </div>
