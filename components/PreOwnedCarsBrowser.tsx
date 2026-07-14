@@ -189,10 +189,16 @@ export default function PreOwnedCarsBrowser() {
                 <span>Rs. 0.00 Lakh</span>
                 <span>Rs. 20.00 Lakh</span>
               </div>
-              <div className="relative h-1 bg-brand-red rounded-full mx-2 mt-2">
-                {/* Simulated Dual Range Slider without clipping */}
-                <div className="absolute -left-2 top-1/2 -translate-y-1/2 h-4 w-4 rounded-full border-2 border-brand-red bg-white shadow-sm cursor-pointer hover:scale-110 transition-transform"></div>
-                <div className="absolute -right-2 top-1/2 -translate-y-1/2 h-4 w-4 rounded-full border-2 border-brand-red bg-white shadow-sm cursor-pointer hover:scale-110 transition-transform"></div>
+              <div className="relative h-5 flex items-center px-2">
+                {/* Background track (optional, if we want to show a track behind) */}
+                <div className="absolute left-2 right-2 h-1 bg-slate-200 rounded-full"></div>
+                {/* Active red track */}
+                <div className="absolute left-2 right-2 h-1 bg-brand-red rounded-full"></div>
+                
+                {/* Left Thumb */}
+                <div className="absolute left-0 h-[18px] w-[18px] rounded-full border-[3px] border-brand-red bg-white shadow-sm cursor-pointer hover:scale-110 transition-transform z-10"></div>
+                {/* Right Thumb */}
+                <div className="absolute right-0 h-[18px] w-[18px] rounded-full border-[3px] border-brand-red bg-white shadow-sm cursor-pointer hover:scale-110 transition-transform z-10"></div>
               </div>
             </div>
           </MultiSelectFilter>
