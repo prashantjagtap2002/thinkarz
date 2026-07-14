@@ -183,7 +183,19 @@ export default function PreOwnedCarsBrowser() {
             orderedOptions={budgetLabels}
             defaultOpen={true}
             onToggle={(v) => toggleValue(setBudget, v)}
-          />
+          >
+            <div className="mt-5 rounded-xl bg-slate-50 p-4 border border-slate-100">
+              <div className="mb-4 flex items-center justify-between text-xs font-bold text-slate-800">
+                <span>Rs. 0.00 Lakh</span>
+                <span>Rs. 20.00 Lakh</span>
+              </div>
+              <div className="relative h-1 bg-brand-red rounded-full mx-2 mt-2">
+                {/* Simulated Dual Range Slider without clipping */}
+                <div className="absolute -left-2 top-1/2 -translate-y-1/2 h-4 w-4 rounded-full border-2 border-brand-red bg-white shadow-sm cursor-pointer hover:scale-110 transition-transform"></div>
+                <div className="absolute -right-2 top-1/2 -translate-y-1/2 h-4 w-4 rounded-full border-2 border-brand-red bg-white shadow-sm cursor-pointer hover:scale-110 transition-transform"></div>
+              </div>
+            </div>
+          </MultiSelectFilter>
           <MultiSelectFilter
             label="Seller Type"
             selected={sellerType}
@@ -292,6 +304,7 @@ function MultiSelectFilter({
   orderedOptions,
   defaultOpen = false,
   onToggle,
+  children,
 }: {
   label: string;
   selected: string[];
@@ -299,6 +312,7 @@ function MultiSelectFilter({
   orderedOptions?: readonly string[];
   defaultOpen?: boolean;
   onToggle: (value: string) => void;
+  children?: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const options = orderedOptions ?? Array.from(counts.keys()).sort();
@@ -337,6 +351,7 @@ function MultiSelectFilter({
               <span className="text-xs font-medium text-slate-400 group-hover:text-slate-500">{counts.get(opt)}</span>
             </label>
           ))}
+          {children}
         </div>
       )}
     </div>
