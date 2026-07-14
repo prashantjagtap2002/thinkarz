@@ -128,26 +128,51 @@ export default function AboutPage() {
           <h2 className="mb-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">Our Journey</h2>
           <span className="mb-10 block h-1 w-12 bg-brand-red" />
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div className="relative mx-auto mt-16 max-w-4xl before:absolute before:inset-0 before:left-6 md:before:left-1/2 before:-translate-x-1/2 before:h-full before:w-1 before:bg-gradient-to-b before:from-slate-100 before:via-slate-200 before:to-slate-100">
             {journey.map(({ icon: Icon, period, title, desc, note }, i) => (
               <Reveal
                 key={period}
-                delay={i * 120}
-                className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-lg"
+                delay={i * 150}
+                className={`relative flex items-center justify-between md:justify-center ${
+                  i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                } ${i === journey.length - 1 ? '' : 'mb-12'}`}
               >
-                <div className="mb-5 flex items-center justify-between gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
-                    <Icon size={18} />
-                  </div>
-                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-600">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
+                {/* Empty Space for Desktop layout */}
+                <div className="hidden md:block md:w-1/2" />
+                
+                {/* Timeline Node */}
+                <div className="absolute left-6 md:left-1/2 -translate-x-1/2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-4 border-white bg-white shadow-md ring-1 ring-slate-200 z-10 transition-transform hover:scale-110 hover:ring-brand-red hover:text-brand-red group">
+                  <Icon size={20} className="text-slate-400 transition-colors group-hover:text-brand-red" />
                 </div>
-                <p className="text-sm font-bold uppercase tracking-wide text-brand-red">{period}</p>
-                <h3 className="mt-1 text-lg font-extrabold text-slate-900">{title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{desc}</p>
-                <div className="mt-5 border-t border-slate-100 pt-3 text-xs font-semibold text-brand-blue">
-                  {note}
+                
+                {/* Content Card */}
+                <div className="w-[calc(100%-4rem)] ml-auto md:ml-0 md:w-[calc(50%-3rem)] relative group">
+                  {/* Arrow (Desktop) */}
+                  <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-0 h-0 border-y-8 border-y-transparent z-0 ${
+                    i % 2 === 0 
+                      ? 'left-[-8px] border-r-8 border-r-slate-200' 
+                      : 'right-[-8px] border-l-8 border-l-slate-200'
+                  }`} />
+                  <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-0 h-0 border-y-[7px] border-y-transparent z-10 ${
+                    i % 2 === 0 
+                      ? 'left-[-7px] border-r-[7px] border-r-white' 
+                      : 'right-[-7px] border-l-[7px] border-l-white'
+                  }`} />
+
+                  <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-xl">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="rounded-full bg-brand-red/10 px-3 py-1 text-xs font-extrabold tracking-wide text-brand-red">
+                        {period}
+                      </span>
+                      <span className="text-xs font-bold text-slate-400">Phase 0{i + 1}</span>
+                    </div>
+                    <h3 className="text-xl font-extrabold text-slate-900">{title}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-600">{desc}</p>
+                    <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600 border border-slate-100">
+                      <Icon size={14} className="text-brand-blue" />
+                      {note}
+                    </div>
+                  </div>
                 </div>
               </Reveal>
             ))}
