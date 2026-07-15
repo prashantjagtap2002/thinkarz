@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Car as CarIcon, ChevronRight, X } from 'lucide-react';
+import { Car as CarIcon, ChevronRight, Trophy, X } from 'lucide-react';
 import { cars, formatKms, formatPrice, type Car } from '@/lib/cars';
 import Reveal from '@/components/Reveal';
 
@@ -22,29 +22,61 @@ type Row = {
 };
 
 const rows: Row[] = [
-  { label: 'Price', render: (c) => formatPrice(c.price) },
+  { label: 'Ex-Showroom Price', render: (c) => formatPrice(c.price) },
   { label: 'EMI / month', render: (c) => `Rs. ${c.emi.toLocaleString('en-IN')}` },
   { label: 'Year', render: (c) => String(c.year) },
-  { label: 'Kilometers', render: (c) => formatKms(c.kms), lowerIsBetter: true },
-  { label: 'Fuel', render: (c) => c.fuel },
+  { label: 'Kilometers Driven', render: (c) => formatKms(c.kms), lowerIsBetter: true },
+  { label: 'Fuel Type', render: (c) => c.fuel },
   { label: 'Transmission', render: (c) => c.transmission },
   { label: 'Power', render: (c) => c.power },
-  { label: 'Mileage', render: (c) => c.mileage },
-  { label: 'Owners', render: (c) => `${c.owners} Owner${c.owners > 1 ? 's' : ''}`, lowerIsBetter: true },
+  { label: 'Mileage', render: (c) => c.mileage, lowerIsBetter: false },
+  { label: 'Ownership', render: (c) => `${c.owners} Owner${c.owners > 1 ? 's' : ''}`, lowerIsBetter: true },
+  { label: 'Insurance Valid Till', render: (c) => c.insuranceValidTill },
 ];
 
+// Higher mileage (km/l or km/charge) is better — parsed from the leading number.
+function higherIsBetterRow(label: string) {
+  return label === 'Mileage';
+}
+
 function bestIndex(columns: Car[], row: Row): number {
-  if (!row.lowerIsBetter) return -1;
-  let bestIdx = 0;
-  let bestVal = Infinity;
+  const wantsLower = row.lowerIsBetter;
+  const wantsHigher = higherIsBetterRow(row.label);
+  if (!wantsLower && !wantsHigher) return -1;
+
+  let bestIdx = -1;
+  let bestVal = wantsLower ? Infinity : -Infinity;
   columns.forEach((car, i) => {
     const num = Number(row.render(car).replace(/[^0-9.]/g, ''));
-    if (!Number.isNaN(num) && num < bestVal) {
+    if (Number.isNaN(num)) return;
+    if ((wantsLower && num < bestVal) || (wantsHigher && num > bestVal)) {
       bestVal = num;
       bestIdx = i;
     }
   });
-  return bestIdx;
+
+  // Only call it a "winner" if the values actually differ across columns.
+  const values = columns.map((c) => Number(row.render(c).replace(/[^0-9.]/g, '')));
+  const allEqual = values.every((v) => v === values[0]);
+  return allEqual ? -1 : bestIdx;
+}
+
+function recommend(a: Car, b: Car): { winner: Car; reason: string } {
+  let aScore = 0;
+  let bScore = 0;
+  rows.forEach((row) => {
+    const idx = bestIndex([a, b], row);
+    if (idx === 0) aScore += 1;
+    if (idx === 1) bScore += 1;
+  });
+  if (aScore === bScore) {
+    return a.price <= b.price
+      ? { winner: a, reason: 'better overall value for the price' }
+      : { winner: b, reason: 'better overall value for the price' };
+  }
+  return aScore > bScore
+    ? { winner: a, reason: 'wins on more key specifications' }
+    : { winner: b, reason: 'wins on more key specifications' };
 }
 
 export default function CompareCarsPage() {
@@ -69,164 +101,207 @@ export default function CompareCarsPage() {
     });
   }
 
+  function runCompare() {
+    setShowResult(true);
+    requestAnimationFrame(() =>
+      document.getElementById('compare-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    );
+  }
+
+  const recommendation =
+    showResult && selectedCars.length === 2 ? recommend(selectedCars[0], selectedCars[1]) : null;
+
   return (
     <>
-      <section className="py-14 sm:py-20">
-        <div className="container-page">
+      {/* Header banner */}
+      <section className="relative overflow-hidden bg-brand-navy">
+        <div className="absolute inset-0">
+          <Image
+            src="https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg"
+            alt=""
+            fill
+            priority
+            className="object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/85 to-brand-navy/40" />
+        </div>
+        <div className="container-page relative py-16 sm:py-20">
           <span className="section-eyebrow">Compare Cars</span>
-          <h1 className="max-w-2xl text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-            Compare Cars Side by Side
+          <h1 className="max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+            Compare Specifications, Features &amp; Pricing
           </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">
-            Important decisions like a car purchase are often confusing. Our Compare Cars tool
-            helps you compare cars on the basis of price, mileage, power, performance and more
-            &mdash; so you can choose with confidence.
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300">
+            Important decisions like a car purchase are often confusing. Compare price, mileage,
+            power and performance side by side before you decide.
           </p>
+        </div>
+      </section>
 
-          {/* 4-slot selector */}
-          <div className="mt-10 rounded-2xl border border-slate-200 p-6 sm:p-8">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr]">
-              {slots.map((slotId, i) => {
-                const car = cars.find((c) => c.id === slotId);
-                return (
-                  <div key={i} className="contents">
-                    <div className="flex flex-col items-center text-center">
-                      {car ? (
-                        <div className="relative w-full">
-                          <button
-                            onClick={() => setSlot(i, '')}
-                            aria-label="Remove car"
-                            className="absolute -right-1 -top-1 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white text-slate-400 shadow ring-1 ring-slate-200 hover:text-brand-red"
-                          >
-                            <X size={13} />
-                          </button>
-                          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-slate-100">
-                            <Image src={car.image} alt={`${car.make} ${car.model}`} fill className="object-cover" />
-                          </div>
-                          <p className="mt-2 text-xs font-bold uppercase text-slate-900">
-                            {car.make} {car.model}
-                          </p>
+      {/* Selector — floats up over the banner */}
+      <section className="container-page">
+        <div className="relative z-10 -mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-xl sm:-mt-14 sm:p-8">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr]">
+            {slots.map((slotId, i) => {
+              const car = cars.find((c) => c.id === slotId);
+              return (
+                <div key={i} className="contents">
+                  <div className="flex flex-col items-center text-center">
+                    {car ? (
+                      <div className="relative w-full">
+                        <button
+                          onClick={() => setSlot(i, '')}
+                          aria-label="Remove car"
+                          className="absolute -right-1 -top-1 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white text-slate-400 shadow ring-1 ring-slate-200 hover:text-brand-red"
+                        >
+                          <X size={13} />
+                        </button>
+                        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-slate-100">
+                          <Image src={car.image} alt={`${car.make} ${car.model}`} fill className="object-cover" />
                         </div>
-                      ) : (
-                        <div className="flex aspect-[4/3] w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 text-slate-300">
-                          <CarIcon size={32} />
-                        </div>
-                      )}
-                      <select
-                        className="field-input mt-3 !py-2 text-xs"
-                        value={slotId ?? ''}
-                        onChange={(e) => setSlot(i, e.target.value)}
-                      >
-                        <option value="">Select Car</option>
-                        {cars.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.make} {c.model}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {i < SLOTS - 1 && (
-                      <span className="hidden h-7 w-7 shrink-0 items-center justify-center self-center rounded-full border border-slate-300 text-[11px] font-bold text-slate-400 lg:flex">
-                        VS
-                      </span>
+                        <p className="mt-2 text-xs font-bold uppercase text-slate-900">
+                          {car.make} {car.model}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex aspect-[4/3] w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 text-slate-300">
+                        <CarIcon size={32} />
+                      </div>
                     )}
+                    <select
+                      className="field-input mt-3 !py-2 text-xs"
+                      value={slotId ?? ''}
+                      onChange={(e) => setSlot(i, e.target.value)}
+                    >
+                      <option value="">Select Car</option>
+                      {cars.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.make} {c.model}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                );
-              })}
-            </div>
-
-            <button
-              onClick={() => {
-                setShowResult(true);
-                requestAnimationFrame(() =>
-                  document.getElementById('compare-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
-                );
-              }}
-              disabled={selectedCars.length < 2}
-              className="btn btn-primary mt-8 w-full disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
-            >
-              Compare
-            </button>
+                  {i < SLOTS - 1 && (
+                    <span className="hidden h-7 w-7 shrink-0 items-center justify-center self-center rounded-full border border-slate-300 text-[11px] font-bold text-slate-400 lg:flex">
+                      VS
+                    </span>
+                  )}
+                </div>
+              );
+            })}
           </div>
+
+          <button
+            onClick={runCompare}
+            disabled={selectedCars.length < 2}
+            className="btn btn-primary mt-8 w-full disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
+          >
+            Compare
+          </button>
         </div>
       </section>
 
       {/* Comparison result */}
       {showResult && selectedCars.length >= 2 && (
-        <section id="compare-result" className="bg-slate-50 py-14 sm:py-20 scroll-mt-24">
+        <section id="compare-result" className="py-14 scroll-mt-24 sm:py-20">
           <div className="container-page">
             <h2 className="mb-6 text-xl font-extrabold text-slate-900 sm:text-2xl">
               Comparison Result
             </h2>
-            <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-              <table className="w-full min-w-[640px] border-collapse text-sm">
-                <thead>
-                  <tr>
-                    <th className="w-32 border-b border-slate-200 p-3 text-left align-bottom text-xs font-bold uppercase tracking-wide text-slate-400">
-                      Specification
-                    </th>
-                    {selectedCars.map((car, i) => (
-                      <th
-                        key={car.id}
-                        className={`border-b border-slate-200 p-3 text-left align-bottom ${
-                          i === 0 ? 'rounded-t-xl bg-brand-blueLight' : ''
-                        }`}
-                      >
-                        <span className="text-sm font-bold uppercase text-slate-900">
-                          {car.make} {car.model}
-                        </span>
-                        <p className="mt-0.5 text-xs font-normal text-slate-500">{car.variant}</p>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((row) => {
-                    const winnerIdx = bestIndex(selectedCars, row);
-                    return (
-                      <tr key={row.label}>
-                        <td className="border-b border-slate-100 p-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                          {row.label}
-                        </td>
-                        {selectedCars.map((car, i) => (
-                          <td
-                            key={car.id}
-                            className={`border-b border-slate-100 p-3 font-semibold text-slate-900 ${
-                              i === 0 ? 'bg-brand-blueLight/60' : ''
-                            } ${i === winnerIdx && winnerIdx !== 0 ? 'text-green-600' : ''}`}
-                          >
-                            <span className="flex items-center gap-1.5">
-                              {row.render(car)}
-                              {i === winnerIdx && row.lowerIsBetter && (
-                                <span className="rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-bold uppercase text-green-700">
-                                  Best
-                                </span>
-                              )}
-                            </span>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+              {/* Car photo + price + actions row */}
+              <div
+                className="mb-6 grid grid-cols-1 gap-6 border-b border-slate-100 pb-6 sm:grid-cols-2"
+                style={{
+                  gridTemplateColumns:
+                    selectedCars.length > 2 ? `repeat(${selectedCars.length}, minmax(0, 1fr))` : undefined,
+                }}
+              >
+                {selectedCars.map((car) => (
+                  <div key={car.id} className="text-center">
+                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[220px] overflow-hidden rounded-xl bg-slate-100">
+                      <Image src={car.image} alt={`${car.make} ${car.model}`} fill className="object-cover" />
+                    </div>
+                    <p className="mt-3 text-sm font-bold uppercase text-slate-900">
+                      {car.make} {car.model}
+                    </p>
+                    <p className="text-2xl font-extrabold text-slate-900">{formatPrice(car.price)}</p>
+                    <div className="mt-3 flex flex-wrap justify-center gap-2">
+                      <Link href="/book-a-test-drive" className="btn btn-primary !px-4 !py-2 text-xs">
+                        Book Test Drive
+                      </Link>
+                      <Link href={`/pre-owned-cars/${car.id}`} className="btn btn-outline !px-4 !py-2 text-xs">
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Spec table */}
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[520px] border-collapse text-sm">
+                  <tbody>
+                    {rows.map((row) => {
+                      const winnerIdx = bestIndex(selectedCars, row);
+                      return (
+                        <tr key={row.label} className="border-b border-slate-100 last:border-0">
+                          <td className="w-40 p-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            {row.label}
                           </td>
-                        ))}
-                      </tr>
-                    );
-                  })}
-                  <tr>
-                    <td className="p-3" />
-                    {selectedCars.map((car) => (
-                      <td key={car.id} className="p-3">
-                        <Link href={`/pre-owned-cars/${car.id}`} className="btn btn-outline !py-2 text-xs">
-                          View Details
-                        </Link>
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
+                          {selectedCars.map((car, i) => (
+                            <td
+                              key={car.id}
+                              className={`p-3 font-semibold text-slate-900 ${
+                                i === winnerIdx ? 'text-green-600' : ''
+                              }`}
+                            >
+                              <span className="flex items-center gap-1.5">
+                                {row.render(car)}
+                                {winnerIdx === -1 ? (
+                                  <span className="text-xs font-normal text-slate-300">=</span>
+                                ) : i === winnerIdx ? (
+                                  <span className="text-green-600">&#10003;</span>
+                                ) : null}
+                              </span>
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
+
+            {/* Recommendation */}
+            {recommendation && (
+              <Reveal className="mt-6 flex flex-col items-start gap-4 rounded-xl bg-brand-red/5 p-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                    <Trophy size={20} />
+                  </span>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                      Our Recommendation
+                    </p>
+                    <p className="text-sm font-semibold text-slate-900">
+                      {recommendation.winner.make} {recommendation.winner.model} offers{' '}
+                      {recommendation.reason}.
+                    </p>
+                  </div>
+                </div>
+                <Link href="/book-a-test-drive" className="btn btn-primary shrink-0">
+                  Book Test Drive
+                </Link>
+              </Reveal>
+            )}
           </div>
         </section>
       )}
 
       {/* Popular comparisons */}
-      <section className="py-14 sm:py-20">
+      <section className="bg-slate-50 py-14 sm:py-20">
         <div className="container-page">
           <h2 className="mb-8 text-xl font-extrabold text-slate-900 sm:text-2xl">
             Popular Comparisons
@@ -240,7 +315,7 @@ export default function CompareCarsPage() {
                 <Reveal
                   key={aId + bId}
                   delay={i * 90}
-                  className="rounded-xl border border-slate-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-lg"
+                  className="rounded-xl border border-slate-200 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-lg"
                 >
                   <div className="mb-4 flex items-center gap-2">
                     <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg bg-slate-100">

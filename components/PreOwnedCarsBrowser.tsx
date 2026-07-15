@@ -2,7 +2,19 @@
 
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Car as CarIcon, CarFront, Truck, SlidersHorizontal, RotateCcw, X, ChevronDown } from 'lucide-react';
+import {
+  Car as CarIcon,
+  CarFront,
+  Truck,
+  Cog,
+  Settings,
+  Fuel as FuelIcon,
+  Zap,
+  SlidersHorizontal,
+  RotateCcw,
+  X,
+  ChevronDown,
+} from 'lucide-react';
 import CarCard from './CarCard';
 import BrandLogo from './BrandLogo';
 
@@ -11,6 +23,19 @@ const bodyTypeIcons: Record<string, typeof CarIcon> = {
   Sedan: CarIcon,
   SUV: Truck,
   MUV: Truck,
+};
+
+const transmissionIcons: Record<string, typeof CarIcon> = {
+  Automatic: Cog,
+  Manual: Settings,
+};
+
+const fuelIcons: Record<string, typeof CarIcon> = {
+  Petrol: FuelIcon,
+  Diesel: FuelIcon,
+  EV: Zap,
+  Hybrid: Zap,
+  CNG: FuelIcon,
 };
 import {
   Car,
@@ -459,21 +484,14 @@ function FilterSidebar(props: SidebarProps) {
 
         {/* Body Type */}
         <FilterSection title="Body Type" defaultOpen>
-          <div className="space-y-2">
-            {uniqueValues('bodyType').map((option) => {
-              const Icon = bodyTypeIcons[option] ?? CarIcon;
-              return (
-                <FilterCheckbox
-                  key={option}
-                  label={option}
-                  icon={<Icon size={16} className="text-slate-400" />}
-                  checked={state.bodyType.includes(option)}
-                  count={countsFor('bodyType').get(option) ?? 0}
-                  onToggle={() => onToggle('bodyType', option)}
-                />
-              );
-            })}
-          </div>
+          <FilterIconGrid
+            options={uniqueValues('bodyType')}
+            icons={bodyTypeIcons}
+            fallbackIcon={CarIcon}
+            selected={state.bodyType}
+            counts={countsFor('bodyType')}
+            onToggle={(option) => onToggle('bodyType', option)}
+          />
         </FilterSection>
 
         {/* Make */}
@@ -493,33 +511,27 @@ function FilterSidebar(props: SidebarProps) {
         </FilterSection>
 
         {/* Fuel */}
-        <FilterSection title="Fuel">
-          <div className="space-y-2">
-            {uniqueValues('fuel').map((option) => (
-              <FilterCheckbox
-                key={option}
-                label={option}
-                checked={state.fuel.includes(option)}
-                count={countsFor('fuel').get(option) ?? 0}
-                onToggle={() => onToggle('fuel', option)}
-              />
-            ))}
-          </div>
+        <FilterSection title="Fuel Type">
+          <FilterIconGrid
+            options={uniqueValues('fuel')}
+            icons={fuelIcons}
+            fallbackIcon={FuelIcon}
+            selected={state.fuel}
+            counts={countsFor('fuel')}
+            onToggle={(option) => onToggle('fuel', option)}
+          />
         </FilterSection>
 
         {/* Transmission */}
-        <FilterSection title="Transmission">
-          <div className="space-y-2">
-            {uniqueValues('transmission').map((option) => (
-              <FilterCheckbox
-                key={option}
-                label={option}
-                checked={state.transmission.includes(option)}
-                count={countsFor('transmission').get(option) ?? 0}
-                onToggle={() => onToggle('transmission', option)}
-              />
-            ))}
-          </div>
+        <FilterSection title="Transmission Type">
+          <FilterIconGrid
+            options={uniqueValues('transmission')}
+            icons={transmissionIcons}
+            fallbackIcon={Cog}
+            selected={state.transmission}
+            counts={countsFor('transmission')}
+            onToggle={(option) => onToggle('transmission', option)}
+          />
         </FilterSection>
 
         {/* Car Age */}
@@ -654,6 +666,47 @@ function FilterCheckbox({
       </span>
       <span className="text-xs text-slate-400">{count}</span>
     </label>
+  );
+}
+
+function FilterIconGrid({
+  options,
+  icons,
+  fallbackIcon,
+  selected,
+  counts,
+  onToggle,
+}: {
+  options: string[];
+  icons: Record<string, typeof CarIcon>;
+  fallbackIcon: typeof CarIcon;
+  selected: string[];
+  counts: Map<string, number>;
+  onToggle: (option: string) => void;
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {options.map((option) => {
+        const Icon = icons[option] ?? fallbackIcon;
+        const checked = selected.includes(option);
+        return (
+          <button
+            key={option}
+            type="button"
+            onClick={() => onToggle(option)}
+            className={`flex flex-col items-center gap-1.5 rounded-lg border p-3 text-center transition-colors ${
+              checked
+                ? 'border-brand-red bg-brand-red/5 text-brand-red'
+                : 'border-slate-200 text-slate-600 hover:border-brand-red/40'
+            }`}
+          >
+            <Icon size={22} className={checked ? 'text-brand-red' : 'text-slate-400'} />
+            <span className="text-[11px] font-semibold leading-tight">{option}</span>
+            <span className="text-[10px] text-slate-400">{counts.get(option) ?? 0}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
