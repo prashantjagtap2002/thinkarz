@@ -15,12 +15,44 @@ import {
   CalendarCheck,
   FileCheck,
   Star,
+  Scale,
+  CarFront,
+  Truck,
+  Zap,
+  Clock,
 } from 'lucide-react';
 import CarCard from '@/components/CarCard';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
 import Reveal from '@/components/Reveal';
-import { cars } from '@/lib/cars';
+import BrandLogo from '@/components/BrandLogo';
+import NewsletterSignup from '@/components/NewsletterSignup';
+import { bodyTypes, budgetOptions, cars, formatPrice } from '@/lib/cars';
 import { testimonials } from '@/lib/content';
+import { blogs } from '@/lib/blogs';
+
+const brands = Array.from(new Set(cars.map((c) => c.make))).sort();
+
+const bodyTypeIcons: Record<string, typeof CarFront> = {
+  Hatchback: CarFront,
+  SUV: Truck,
+  Sedan: CarIcon,
+  MUV: Truck,
+  EV: Zap,
+};
+
+function countByBodyType(type: string) {
+  return cars.filter((c) => c.bodyType === type).length;
+}
+
+function countByBudget(label: string) {
+  return cars.filter((c) => {
+    const option = budgetOptions.find((o) => o.label === label);
+    if (!option) return false;
+    const aboveMin = !('min' in option) || c.price >= option.min;
+    const belowMax = !('max' in option) || c.price <= option.max;
+    return aboveMin && belowMax;
+  }).length;
+}
 
 const trustBadges = [
   { icon: Wrench, value: '140+', label: 'Quality Checks' },
@@ -124,6 +156,86 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Browse by brand */}
+      <section className="bg-slate-50 py-16 sm:py-20">
+        <div className="container-page">
+          <Reveal className="mb-8 flex items-center justify-between">
+            <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">Browse by Brand</h2>
+            <Link
+              href="/pre-owned-cars"
+              className="flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
+            >
+              View All Brands <ArrowRight size={16} />
+            </Link>
+          </Reveal>
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+            {brands.map((brand, i) => (
+              <Reveal key={brand} delay={i * 60}>
+                <Link
+                  href={`/pre-owned-cars?make=${encodeURIComponent(brand)}`}
+                  className="flex flex-col items-center gap-3 rounded-xl border border-slate-200 bg-white p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
+                >
+                  <BrandLogo brand={brand} size={48} />
+                  <span className="text-xs font-semibold text-slate-700">{brand}</span>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Shop by body type & budget */}
+      <section className="py-16 sm:py-20">
+        <div className="container-page grid grid-cols-1 gap-12 lg:grid-cols-2">
+          <div>
+            <h2 className="mb-6 text-xl font-extrabold text-slate-900 sm:text-2xl">
+              Shop by Body Type
+            </h2>
+            <div className="grid grid-cols-3 gap-4">
+              {bodyTypes.map((type, i) => {
+                const Icon = bodyTypeIcons[type] ?? CarIcon;
+                return (
+                  <Reveal key={type} delay={i * 70}>
+                    <Link
+                      href={`/pre-owned-cars?bodyType=${encodeURIComponent(type)}`}
+                      className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
+                    >
+                      <Icon size={26} className="text-brand-blue" />
+                      <span className="text-xs font-semibold text-slate-700">{type}</span>
+                      <span className="text-[11px] text-slate-400">{countByBodyType(type)} Cars</span>
+                    </Link>
+                  </Reveal>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <h2 className="mb-6 text-xl font-extrabold text-slate-900 sm:text-2xl">
+              Shop by Budget
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              {budgetOptions.map((option, i) => (
+                <Reveal key={option.label} delay={i * 70}>
+                  <Link
+                    href={`/pre-owned-cars?budget=${encodeURIComponent(option.label)}`}
+                    className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
+                  >
+                    <div>
+                      <p className="text-sm font-bold text-slate-900">{option.label}</p>
+                      <p className="mt-0.5 text-[11px] text-slate-400">
+                        {countByBudget(option.label)} Cars
+                      </p>
+                    </div>
+                    <ArrowRight size={16} className="text-brand-red" />
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured cars */}
       <section className="bg-slate-50 py-16 sm:py-20">
         <div className="container-page">
@@ -199,9 +311,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Promo banner */}
-      <section className="container-page py-16 sm:py-20">
-        <Reveal className="flex flex-col items-start gap-6 rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:flex-row sm:items-center sm:justify-between sm:p-10">
+      {/* Promo banners */}
+      <section className="container-page grid grid-cols-1 gap-6 py-16 sm:py-20 lg:grid-cols-2">
+        <Reveal className="flex flex-col items-start gap-6 rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10">
           <div>
             <h3 className="text-xl font-bold text-white sm:text-2xl">Looking to sell your car?</h3>
             <p className="mt-2 max-w-md text-sm text-slate-300">
@@ -217,10 +329,71 @@ export default function HomePage() {
             </Link>
           </div>
         </Reveal>
+
+        <Reveal
+          delay={90}
+          className="flex flex-col items-start gap-6 rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10"
+        >
+          <div>
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
+              <Scale size={22} />
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 sm:text-2xl">
+              Not sure which car to pick?
+            </h3>
+            <p className="mt-2 max-w-md text-sm text-slate-600">
+              Compare price, mileage, power and features side by side before you decide.
+            </p>
+          </div>
+          <Link href="/compare-cars" className="btn btn-primary">
+            Compare Cars
+          </Link>
+        </Reveal>
+      </section>
+
+      {/* Latest from blog */}
+      <section className="bg-slate-50 py-16 sm:py-20">
+        <div className="container-page">
+          <Reveal className="mb-8 flex items-center justify-between">
+            <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+              Latest From Our Blog
+            </h2>
+            <Link
+              href="/blogs"
+              className="flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
+            >
+              View All Blogs <ArrowRight size={16} />
+            </Link>
+          </Reveal>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {blogs.slice(0, 3).map((post, i) => (
+              <Reveal
+                key={post.slug}
+                delay={i * 90}
+                className="overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-lg"
+              >
+                <Link href={`/blogs/${post.slug}`}>
+                  <div className="relative aspect-[16/10] w-full">
+                    <Image src={post.image} alt={post.title} fill className="object-cover" />
+                  </div>
+                  <div className="p-5">
+                    <span className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
+                      <Clock size={12} /> {post.readTime}
+                    </span>
+                    <h3 className="mb-2 text-sm font-bold leading-snug text-slate-900">
+                      {post.title}
+                    </h3>
+                    <span className="text-xs font-semibold text-brand-red">Read More &rarr;</span>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Testimonials */}
-      <section className="bg-slate-50 py-16 sm:py-20">
+      <section className="py-16 sm:py-20">
         <div className="container-page">
           <Reveal>
             <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">

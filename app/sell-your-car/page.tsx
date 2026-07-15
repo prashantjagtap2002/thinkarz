@@ -23,11 +23,41 @@ const steps = [
 ];
 
 const reasons = [
-  { icon: BadgeIndianRupee, title: 'Best Price Assurance', desc: 'Get the best market price for your car.' },
-  { icon: FileBadge2, title: 'Free Inspection', desc: '100% free inspection at your doorstep.' },
-  { icon: TimerReset, title: 'Quick Process', desc: 'Sell your car in just a few hours.' },
-  { icon: ShieldEllipsis, title: 'Secure & Safe', desc: 'Hassle-free and transparent process.' },
-  { icon: Landmark, title: 'Instant Payment', desc: 'Get paid instantly via secure transfer.' },
+  {
+    icon: BadgeIndianRupee,
+    title: 'Best Price',
+    desc: 'Get the best market price for your car.',
+    iconBg: 'bg-amber-500/15',
+    iconColor: 'text-amber-400',
+  },
+  {
+    icon: FileBadge2,
+    title: 'Free Inspection',
+    desc: '100% free inspection at your doorstep.',
+    iconBg: 'bg-blue-500/15',
+    iconColor: 'text-blue-400',
+  },
+  {
+    icon: TimerReset,
+    title: 'Quick Process',
+    desc: 'Sell your car in just a few hours.',
+    iconBg: 'bg-emerald-500/15',
+    iconColor: 'text-emerald-400',
+  },
+  {
+    icon: ShieldEllipsis,
+    title: 'Secure & Safe',
+    desc: 'Hassle-free and transparent process.',
+    iconBg: 'bg-violet-500/15',
+    iconColor: 'text-violet-400',
+  },
+  {
+    icon: Landmark,
+    title: 'Instant Payment',
+    desc: 'Get paid instantly via secure transfer.',
+    iconBg: 'bg-rose-500/15',
+    iconColor: 'text-rose-400',
+  },
 ];
 
 export default function SellYourCarPage() {
@@ -107,21 +137,24 @@ export default function SellYourCarPage() {
       </section>
 
       {/* Why sell to us */}
-      <section className="py-16 sm:py-20">
+      <section className="bg-brand-navy py-16 sm:py-20">
         <div className="container-page">
-          <h2 className="mb-2 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
+          <h2 className="mb-2 text-center text-2xl font-extrabold text-white sm:text-3xl">
             Why Sell Your Car to Thinkarz?
           </h2>
           <span className="mx-auto mb-12 block h-1 w-12 bg-brand-red" />
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            {reasons.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="rounded-xl border border-slate-200 p-6 text-center">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
+            {reasons.map(({ icon: Icon, title, desc, iconBg, iconColor }) => (
+              <div
+                key={title}
+                className="rounded-xl border border-white/10 bg-white/5 p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
+              >
+                <div className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full ${iconBg} ${iconColor}`}>
                   <Icon size={22} />
                 </div>
-                <h3 className="mb-1.5 text-sm font-bold text-slate-900">{title}</h3>
-                <p className="text-xs leading-relaxed text-slate-600">{desc}</p>
+                <h3 className="mb-1.5 text-sm font-bold text-white">{title}</h3>
+                <p className="text-xs leading-relaxed text-slate-300">{desc}</p>
               </div>
             ))}
           </div>

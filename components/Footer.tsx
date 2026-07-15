@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Facebook, Instagram, Youtube, Linkedin, MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { contactInfo } from '@/lib/content';
+import NewsletterSignup from './NewsletterSignup';
 
 const quickLinks = [
   { name: 'Home', href: '/' },
@@ -31,6 +32,20 @@ const company = [
 export default function Footer() {
   return (
     <footer className="bg-brand-navy text-slate-300">
+      <div className="border-b border-slate-700/60 py-10">
+        <div className="container-page flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+          <div>
+            <h3 className="text-lg font-bold text-white">Never Miss an Update</h3>
+            <p className="mt-1 max-w-md text-sm text-slate-400">
+              Get the latest car deals, tips and offers from Thinkarz straight to your inbox.
+            </p>
+          </div>
+          <div className="w-full lg:w-80">
+            <NewsletterSignup />
+          </div>
+        </div>
+      </div>
+
       <div className="container-page grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
         <div className="sm:col-span-2 lg:col-span-1">
           <span className="text-2xl font-extrabold tracking-tight text-white">

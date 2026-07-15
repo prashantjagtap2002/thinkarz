@@ -2,8 +2,16 @@
 
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Car as CarIcon, SlidersHorizontal, RotateCcw, X, ChevronDown } from 'lucide-react';
+import { Car as CarIcon, CarFront, Truck, SlidersHorizontal, RotateCcw, X, ChevronDown } from 'lucide-react';
 import CarCard from './CarCard';
+import BrandLogo from './BrandLogo';
+
+const bodyTypeIcons: Record<string, typeof CarIcon> = {
+  Hatchback: CarFront,
+  Sedan: CarIcon,
+  SUV: Truck,
+  MUV: Truck,
+};
 import {
   Car,
   ageOptions,
@@ -51,14 +59,16 @@ const PRICE_STEP = 50000;
 export default function PreOwnedCarsBrowser() {
   const searchParams = useSearchParams();
   const bodyTypeOptions = useMemo(() => uniqueValues('bodyType'), []);
+  const makeOptions = useMemo(() => uniqueValues('make'), []);
   const budgetLabels = useMemo(() => budgetOptions.map((option) => option.label), []);
   const ageLabels = useMemo(() => [...ageOptions], []);
   const kmLabels = useMemo(() => [...kmOptions], []);
   const initialBudget = initialSelection(searchParams.get('budget'), budgetLabels);
   const initialBodyType = initialSelection(searchParams.get('bodyType'), bodyTypeOptions);
   const initialAge = initialSelection(searchParams.get('age'), ageLabels);
+  const initialMake = initialSelection(searchParams.get('make'), makeOptions);
 
-  const [make, setMake] = useState<string[]>([]);
+  const [make, setMake] = useState<string[]>(initialMake);
   const [budget, setBudget] = useState<string[]>(initialBudget);
   const [sellerType, setSellerType] = useState<string[]>([]);
   const [fuel, setFuel] = useState<string[]>([]);
@@ -68,8 +78,8 @@ export default function PreOwnedCarsBrowser() {
   const [owners, setOwners] = useState<string[]>([]);
   const [kms, setKms] = useState<string[]>([]);
   const [certifiedOnly, setCertifiedOnly] = useState(false);
-  const [priceMin, setPriceMin] = useState(MIN_PRICE);
   const [priceMax, setPriceMax] = useState(MAX_PRICE);
+  const priceMin = MIN_PRICE;
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -86,7 +96,7 @@ export default function PreOwnedCarsBrowser() {
     [kmLabels],
   );
 
-  const priceSliderActive = priceMin !== MIN_PRICE || priceMax !== MAX_PRICE;
+  const priceSliderActive = priceMax !== MAX_PRICE;
 
   const filtered = useMemo(() => {
     let result = cars.filter((c) => {
@@ -169,11 +179,8 @@ export default function PreOwnedCarsBrowser() {
     activeChips.push({ label: 'Certified', clear: () => setCertifiedOnly(false) });
   if (priceSliderActive)
     activeChips.push({
-      label: `${formatPrice(priceMin)} - ${formatPrice(priceMax)}`,
-      clear: () => {
-        setPriceMin(MIN_PRICE);
-        setPriceMax(MAX_PRICE);
-      },
+      label: `Up to ${formatPrice(priceMax)}`,
+      clear: () => setPriceMax(MAX_PRICE),
     });
 
   const hasActiveFilters = activeChips.length > 0;
@@ -189,18 +196,12 @@ export default function PreOwnedCarsBrowser() {
     setOwners([]);
     setKms([]);
     setCertifiedOnly(false);
-    setPriceMin(MIN_PRICE);
     setPriceMax(MAX_PRICE);
     setPage(1);
   }
 
-  // Clamp the dual thumbs so min never crosses max.
-  function onMinChange(value: number) {
-    setPriceMin(Math.min(value, priceMax - PRICE_STEP));
-    setPage(1);
-  }
   function onMaxChange(value: number) {
-    setPriceMax(Math.max(value, priceMin + PRICE_STEP));
+    setPriceMax(Math.max(value, MIN_PRICE + PRICE_STEP));
     setPage(1);
   }
 
@@ -217,7 +218,6 @@ export default function PreOwnedCarsBrowser() {
         owners,
         kms,
         certifiedOnly,
-        priceMin,
         priceMax,
       }}
       counts={{ budgetCounts, ageCounts, kmCounts }}
@@ -226,7 +226,6 @@ export default function PreOwnedCarsBrowser() {
         setCertifiedOnly(v);
         setPage(1);
       }}
-      onMinChange={onMinChange}
       onMaxChange={onMaxChange}
       onReset={resetFilters}
       hasActiveFilters={hasActiveFilters}
@@ -270,7 +269,7 @@ export default function PreOwnedCarsBrowser() {
             <button
               key={i}
               onClick={chip.clear}
-              className="flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-brand-red hover:text-brand-red"
+              className="flex items-center gap-1.5 rounded-full bg-brand-blueLight px-3 py-1.5 text-xs font-semibold text-brand-blue transition-colors hover:bg-brand-red/10 hover:text-brand-red"
             >
               {chip.label}
               <X size={12} strokeWidth={2.5} />
@@ -374,7 +373,6 @@ type FilterState = {
   owners: string[];
   kms: string[];
   certifiedOnly: boolean;
-  priceMin: number;
   priceMax: number;
 };
 
@@ -388,13 +386,12 @@ type SidebarProps = {
   hasActiveFilters: boolean;
   onToggle: (field: string, value: string) => void;
   onCertifiedChange: (value: boolean) => void;
-  onMinChange: (value: number) => void;
   onMaxChange: (value: number) => void;
   onReset: () => void;
 };
 
 function FilterSidebar(props: SidebarProps) {
-  const { state, counts, hasActiveFilters, onToggle, onCertifiedChange, onMinChange, onMaxChange, onReset } = props;
+  const { state, counts, hasActiveFilters, onToggle, onCertifiedChange, onMaxChange, onReset } = props;
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
@@ -426,20 +423,21 @@ function FilterSidebar(props: SidebarProps) {
             ))}
           </div>
           <div className="mt-4 rounded-lg bg-slate-50 p-4">
-            <div className="mb-3 flex items-center justify-between text-xs font-semibold text-slate-700">
-              <span>{formatPrice(state.priceMin)}</span>
-              <span>{formatPrice(state.priceMax)}</span>
-            </div>
+            <p className="mb-3 text-center text-xs font-semibold text-slate-700">
+              Up to {formatPrice(state.priceMax)}
+            </p>
             <div className="px-2">
-              <DualRangeSlider
+              <MaxRangeSlider
                 min={MIN_PRICE}
                 max={MAX_PRICE}
                 step={PRICE_STEP}
-                valueMin={state.priceMin}
-                valueMax={state.priceMax}
-                onMinChange={onMinChange}
-                onMaxChange={onMaxChange}
+                value={state.priceMax}
+                onChange={onMaxChange}
               />
+            </div>
+            <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+              <span>0</span>
+              <span>20L+</span>
             </div>
           </div>
         </FilterSection>
@@ -462,15 +460,19 @@ function FilterSidebar(props: SidebarProps) {
         {/* Body Type */}
         <FilterSection title="Body Type" defaultOpen>
           <div className="space-y-2">
-            {uniqueValues('bodyType').map((option) => (
-              <FilterCheckbox
-                key={option}
-                label={option}
-                checked={state.bodyType.includes(option)}
-                count={countsFor('bodyType').get(option) ?? 0}
-                onToggle={() => onToggle('bodyType', option)}
-              />
-            ))}
+            {uniqueValues('bodyType').map((option) => {
+              const Icon = bodyTypeIcons[option] ?? CarIcon;
+              return (
+                <FilterCheckbox
+                  key={option}
+                  label={option}
+                  icon={<Icon size={16} className="text-slate-400" />}
+                  checked={state.bodyType.includes(option)}
+                  count={countsFor('bodyType').get(option) ?? 0}
+                  onToggle={() => onToggle('bodyType', option)}
+                />
+              );
+            })}
           </div>
         </FilterSection>
 
@@ -481,6 +483,7 @@ function FilterSidebar(props: SidebarProps) {
               <FilterCheckbox
                 key={option}
                 label={option}
+                icon={<BrandLogo brand={option} size={22} />}
                 checked={state.make.includes(option)}
                 count={countsFor('make').get(option) ?? 0}
                 onToggle={() => onToggle('make', option)}
@@ -625,11 +628,13 @@ function FilterSection({
 
 function FilterCheckbox({
   label,
+  icon,
   checked,
   count,
   onToggle,
 }: {
   label: string;
+  icon?: React.ReactNode;
   checked: boolean;
   count: number;
   onToggle: () => void;
@@ -641,9 +646,10 @@ function FilterCheckbox({
           type="checkbox"
           checked={checked}
           onChange={onToggle}
-          className="h-4 w-4 rounded border-slate-300 text-brand-red focus:ring-brand-red"
+          className="h-4 w-4 shrink-0 rounded border-slate-300 text-brand-red focus:ring-brand-red"
           suppressHydrationWarning
         />
+        {icon}
         {label}
       </span>
       <span className="text-xs text-slate-400">{count}</span>
@@ -651,55 +657,40 @@ function FilterCheckbox({
   );
 }
 
-function DualRangeSlider({
+function MaxRangeSlider({
   min,
   max,
   step,
-  valueMin,
-  valueMax,
-  onMinChange,
-  onMaxChange,
+  value,
+  onChange,
 }: {
   min: number;
   max: number;
   step: number;
-  valueMin: number;
-  valueMax: number;
-  onMinChange: (value: number) => void;
-  onMaxChange: (value: number) => void;
+  value: number;
+  onChange: (value: number) => void;
 }) {
-  const minPct = ((valueMin - min) / (max - min)) * 100;
-  const maxPct = ((valueMax - min) / (max - min)) * 100;
+  const pct = ((value - min) / (max - min)) * 100;
   return (
-    <div className="relative h-6 select-none">
+    // Horizontal padding equal to the thumb radius (9px) keeps the track's 0%/100%
+    // marks aligned with where the native thumb actually travels to, since a
+    // range input's thumb center never reaches the true edge of its own box.
+    <div className="relative h-6 select-none px-[9px]">
       {/* Track */}
-      <div className="absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-slate-200" />
+      <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-slate-200" />
       {/* Active range */}
       <div
-        className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-brand-red"
-        style={{ left: `${minPct}%`, right: `${100 - maxPct}%` }}
+        className="absolute left-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-brand-red"
+        style={{ right: `${100 - pct}%` }}
       />
-      {/* Min thumb */}
       <input
         type="range"
         min={min}
         max={max}
         step={step}
-        value={valueMin}
-        onChange={(e) => onMinChange(Number(e.target.value))}
-        className="range-thumb range-thumb-min pointer-events-none absolute top-0 z-20 h-6 w-full appearance-none bg-transparent"
-        style={{ zIndex: valueMin > max - step ? 25 : 20 }}
-        aria-label="Minimum price"
-      />
-      {/* Max thumb */}
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={valueMax}
-        onChange={(e) => onMaxChange(Number(e.target.value))}
-        className="range-thumb range-thumb-max pointer-events-none absolute top-0 z-30 h-6 w-full appearance-none bg-transparent"
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="range-thumb pointer-events-none absolute inset-x-0 top-0 z-20 h-6 w-full appearance-none bg-transparent"
         aria-label="Maximum price"
       />
     </div>

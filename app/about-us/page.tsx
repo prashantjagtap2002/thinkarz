@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import {
-  ShieldCheck,
-  MapPin,
+  Star,
+  Car as CarIcon,
   Users,
   Handshake,
-  Milestone,
+  ShieldCheck,
   Building2,
   Sparkles,
   BriefcaseBusiness,
@@ -17,33 +17,39 @@ import Reveal from '@/components/Reveal';
 export const metadata = { title: 'About Us | Thinkarz' };
 
 const stats = [
-  { icon: ShieldCheck, value: '35+', label: 'Years of Legacy' },
-  { icon: MapPin, value: '1', label: 'Branch' },
-  { icon: Users, value: '50,000+', label: 'Happy Customers' },
-  { icon: Handshake, value: '100%', label: 'Transparency' },
+  { icon: Star, value: '35+', label: 'Years in Business' },
+  { icon: CarIcon, value: '50,000+', label: 'Cars Sold' },
+  { icon: Users, value: '20+', label: 'Expert Team' },
+  { icon: Handshake, value: '1', label: 'Commitment to You' },
 ];
 
 const journey = [
   {
-    icon: Milestone,
-    period: '1990s',
-    title: 'Trust-led foundation',
-    desc: 'Gautam Modi Group was founded with a vision to serve customers with integrity and trust.',
+    icon: ShieldCheck,
+    year: '1990',
+    title: 'Trust-led Foundation',
+    desc: 'Gautam Modi Group was founded with a vision to serve customers with integrity, transparency and trust.',
     note: 'Legacy begins',
+    image:
+      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.13.41-PM-1024x768.jpeg',
   },
   {
     icon: Building2,
-    period: '2010s',
-    title: 'Retail network growth',
-    desc: 'Expanded across automotive retail with multiple brands.',
+    year: '2010',
+    title: 'Retail Network Growth',
+    desc: 'Expanded across automotive retail with multiple brands and a customer-first approach.',
     note: 'Multi-brand experience',
+    image:
+      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.02.15-PM-1024x768.jpeg',
   },
   {
     icon: Sparkles,
-    period: '2020s',
-    title: 'Thinkarz launched',
-    desc: 'Launched Thinkarz to revolutionize the pre-owned car experience.',
+    year: '2020',
+    title: 'Thinkarz Launched',
+    desc: 'Launched Thinkarz to revolutionize the pre-owned car experience with quality assurance and complete transparency.',
     note: 'Pre-owned focus',
+    image:
+      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.04.01-PM-1-768x1024.jpeg',
   },
 ];
 
@@ -107,76 +113,77 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="bg-slate-50 py-12">
-        <div className="container-page grid grid-cols-2 gap-6 rounded-2xl border border-slate-200 bg-white p-8 sm:grid-cols-4">
-          {stats.map(({ icon: Icon, value, label }) => (
-            <div key={label} className="text-center">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
-                <Icon size={22} />
-              </div>
-              <p className="text-2xl font-extrabold text-slate-900">{value}</p>
-              <p className="text-xs text-slate-500">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Journey */}
-      <section className="py-16 sm:py-20">
+      <section className="bg-slate-50 py-16 sm:py-20">
         <div className="container-page">
           <h2 className="mb-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">Our Journey</h2>
-          <span className="mb-10 block h-1 w-12 bg-brand-red" />
+          <span className="mb-16 block h-1 w-12 bg-brand-red" />
 
-          <div className="relative mx-auto mt-16 max-w-4xl before:absolute before:inset-0 before:left-6 md:before:left-1/2 before:-translate-x-1/2 before:h-full before:w-1 before:bg-gradient-to-b before:from-slate-100 before:via-slate-200 before:to-slate-100">
-            {journey.map(({ icon: Icon, period, title, desc, note }, i) => (
+          <div className="relative mx-auto max-w-5xl before:absolute before:left-0 before:top-0 before:h-full before:w-px before:bg-slate-200 md:before:left-1/2 md:before:-translate-x-1/2">
+            {journey.map(({ icon: Icon, year, title, desc, note, image }, i) => (
               <Reveal
-                key={period}
+                key={year}
                 delay={i * 150}
-                className={`relative flex items-center justify-between md:justify-center ${
-                  i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                } ${i === journey.length - 1 ? '' : 'mb-12'}`}
+                className={`relative grid grid-cols-1 items-center gap-6 pl-10 md:grid-cols-2 md:gap-16 md:pl-0 ${
+                  i === journey.length - 1 ? '' : 'pb-14 md:pb-20'
+                }`}
               >
-                {/* Empty Space for Desktop layout */}
-                <div className="hidden md:block md:w-1/2" />
-                
-                {/* Timeline Node */}
-                <div className="absolute left-6 md:left-1/2 -translate-x-1/2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-4 border-white bg-white shadow-md ring-1 ring-slate-200 z-10 transition-transform hover:scale-110 hover:ring-brand-red hover:text-brand-red group">
-                  <Icon size={20} className="text-slate-400 transition-colors group-hover:text-brand-red" />
-                </div>
-                
-                {/* Content Card */}
-                <div className="w-[calc(100%-4rem)] ml-auto md:ml-0 md:w-[calc(50%-3rem)] relative group">
-                  {/* Arrow (Desktop) */}
-                  <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-0 h-0 border-y-8 border-y-transparent z-0 ${
-                    i % 2 === 0 
-                      ? 'left-[-8px] border-r-8 border-r-slate-200' 
-                      : 'right-[-8px] border-l-8 border-l-slate-200'
-                  }`} />
-                  <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-0 h-0 border-y-[7px] border-y-transparent z-10 ${
-                    i % 2 === 0 
-                      ? 'left-[-7px] border-r-[7px] border-r-white' 
-                      : 'right-[-7px] border-l-[7px] border-l-white'
-                  }`} />
+                {/* Timeline dot */}
+                <span className="absolute left-0 top-2 flex h-4 w-4 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-red shadow ring-1 ring-brand-red/30 md:left-1/2" />
 
-                  <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-xl">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="rounded-full bg-brand-red/10 px-3 py-1 text-xs font-extrabold tracking-wide text-brand-red">
-                        {period}
+                {i % 2 === 0 ? (
+                  <>
+                    <div>
+                      <span className="block text-6xl font-extrabold leading-none text-slate-200 sm:text-7xl">
+                        {year}
                       </span>
-                      <span className="text-xs font-bold text-slate-400">Phase 0{i + 1}</span>
+                      <span className="mb-3 mt-2 block h-1 w-10 bg-brand-red" />
+                      <h3 className="text-xl font-extrabold text-slate-900">{title}</h3>
+                      <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-600">{desc}</p>
+                      <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-brand-red">
+                        <Icon size={16} />
+                        {note}
+                      </div>
                     </div>
-                    <h3 className="text-xl font-extrabold text-slate-900">{title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-slate-600">{desc}</p>
-                    <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600 border border-slate-100">
-                      <Icon size={14} className="text-brand-blue" />
-                      {note}
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-md md:order-last">
+                      <Image src={image} alt={title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 480px" />
                     </div>
-                  </div>
-                </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-md md:order-first">
+                      <Image src={image} alt={title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 480px" />
+                    </div>
+                    <div className="md:text-right">
+                      <span className="block text-6xl font-extrabold leading-none text-slate-200 sm:text-7xl">
+                        {year}
+                      </span>
+                      <span className="mb-3 mt-2 block h-1 w-10 bg-brand-red md:ml-auto" />
+                      <h3 className="text-xl font-extrabold text-slate-900">{title}</h3>
+                      <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-600 md:ml-auto">{desc}</p>
+                      <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-brand-red">
+                        <Icon size={16} />
+                        {note}
+                      </div>
+                    </div>
+                  </>
+                )}
               </Reveal>
             ))}
           </div>
+
+          {/* Stats */}
+          <Reveal className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-6 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm sm:grid-cols-4">
+            {stats.map(({ icon: Icon, value, label }) => (
+              <div key={label} className="text-center">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
+                  <Icon size={22} />
+                </div>
+                <p className="text-2xl font-extrabold text-slate-900">{value}</p>
+                <p className="text-xs text-slate-500">{label}</p>
+              </div>
+            ))}
+          </Reveal>
         </div>
       </section>
 

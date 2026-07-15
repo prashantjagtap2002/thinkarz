@@ -23,6 +23,7 @@ export const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'About Us', href: '/about-us' },
   { name: 'Pre Owned Cars', href: '/pre-owned-cars' },
+  { name: 'Compare Cars', href: '/compare-cars' },
   { name: 'Sell Your Car', href: '/sell-your-car' },
   { name: 'Book a Test Drive', href: '/book-a-test-drive' },
   { name: 'Blogs', href: '/blogs' },
