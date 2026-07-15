@@ -309,7 +309,14 @@ export default function PreOwnedCarsBrowser() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
         {/* Filters — desktop sticky sidebar */}
         <aside className="hidden lg:block">
-          <div className="lg:sticky lg:top-24">{sidebar}</div>
+          {/* The filter card's own content (many sections) can be nearly as
+              tall as the results column, which leaves position:sticky with
+              no room to move within its containing block and makes it look
+              broken. Capping the height and scrolling internally guarantees
+              it's always shorter than the viewport, so it actually sticks. */}
+          <div className="lg:sticky lg:top-24 lg:max-h-[65vh] lg:overflow-y-auto">
+            {sidebar}
+          </div>
         </aside>
 
         {/* Mobile filter trigger */}
@@ -468,7 +475,7 @@ function FilterSidebar(props: SidebarProps) {
         </FilterSection>
 
         {/* Kilometers Driven */}
-        <FilterSection title="Kilometers Driven" defaultOpen>
+        <FilterSection title="Kilometers Driven">
           <div className="space-y-2">
             {kmOptions.map((option) => (
               <FilterCheckbox
@@ -580,7 +587,7 @@ function FilterSidebar(props: SidebarProps) {
         </FilterSection>
 
         {/* Certification */}
-        <FilterSection title="Certification" defaultOpen>
+        <FilterSection title="Certification">
           <label className="flex items-center gap-2 py-1.5 text-sm text-slate-700">
             <input
               type="checkbox"
