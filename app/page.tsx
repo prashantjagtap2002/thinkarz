@@ -170,8 +170,8 @@ export default function HomePage() {
                   href={`/pre-owned-cars?make=${encodeURIComponent(brand)}`}
                   className="flex flex-col items-center justify-center bg-white p-6 text-center hover:bg-slate-50 transition-colors"
                 >
-                  <div className="flex h-10 w-full items-center justify-center overflow-hidden">
-                    <BrandLogo brand={brand} size={32} />
+                  <div className="flex h-14 w-full items-center justify-center overflow-hidden">
+                    <BrandLogo brand={brand} size={42} />
                   </div>
                 </Link>
               ))}
