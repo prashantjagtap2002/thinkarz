@@ -6,7 +6,7 @@ export default function Logo({ dark = false }: { dark?: boolean }) {
       <span
         className={`text-2xl font-extrabold tracking-tight ${dark ? 'text-white' : 'text-slate-900'}`}
       >
-        Thin<span className="text-brand-red">k</span>arz
+        THIN<span className="text-brand-red text-[1.18em]">K</span>ARZ
       </span>
       <span
         className={`mt-0.5 text-[10px] font-semibold tracking-wide ${dark ? 'text-slate-300' : 'text-slate-500'}`}

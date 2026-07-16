@@ -114,12 +114,12 @@ export default function HomePage() {
           </div>
 
           {/* Search widget */}
-          <div className="animate-fade-up" style={{ animationDelay: '120ms' }}>
+          <div className="animate-fade-up relative z-20" style={{ animationDelay: '120ms' }}>
             <HeroSearchWidget />
           </div>
 
           <div
-            className="mt-6 flex flex-wrap gap-4 animate-fade-up"
+            className="mt-6 flex flex-wrap gap-4 animate-fade-up relative z-10"
             style={{ animationDelay: '220ms' }}
           >
             <Link href="/pre-owned-cars" className="btn btn-primary">

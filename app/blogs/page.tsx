@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Clock, CalendarDays } from 'lucide-react';
 import { blogs, blogCategories } from '@/lib/blogs';
-import NewsletterSignup from '@/components/NewsletterSignup';
 
 const PAGE_SIZE = 6;
 
@@ -267,13 +266,6 @@ export default function BlogsPage() {
               </ul>
             </div>
 
-            <div className="rounded-xl bg-brand-navy p-6 text-white">
-              <h3 className="mb-1.5 text-sm font-bold">Never Miss an Update</h3>
-              <p className="mb-4 text-xs text-slate-300">
-                Subscribe to our newsletter and get the latest car news, tips and offers.
-              </p>
-              <NewsletterSignup />
-            </div>
           </aside>
         </div>
       </section>

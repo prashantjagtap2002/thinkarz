@@ -47,7 +47,7 @@ export default function Footer() {
       <div className="container-page grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
         <div className="sm:col-span-2 lg:col-span-1">
           <span className="text-2xl font-extrabold tracking-tight text-white">
-            Thin<span className="text-brand-red">k</span>arz
+            THIN<span className="text-brand-red text-[1.18em]">K</span>ARZ
           </span>
           <p className="mt-1 text-[10px] font-semibold tracking-wide text-slate-400">
             YOUR ULTIMATE CAR DESTINATION

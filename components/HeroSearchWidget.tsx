@@ -34,7 +34,7 @@ function CarTypeSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className={`field-input flex items-center justify-between gap-3 text-left ${
+        className={`field-input flex items-center justify-between gap-3 text-left w-full ${
           open ? 'border-brand-red ring-1 ring-brand-red' : ''
         }`}
       >
@@ -111,6 +111,244 @@ function CarTypeSelect({
   );
 }
 
+function BudgetSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const budgetSteps = ['Any Budget', 'Under 5 Lakh', '5 - 10 Lakh', '10 - 15 Lakh', '15 Lakh+'];
+  const budgetIndex = value === '' ? 0 : budgetSteps.indexOf(value);
+
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, []);
+
+  const handleSliderChange = (val: number) => {
+    if (val === 0) onChange('');
+    else onChange(budgetSteps[val]);
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className={`field-input flex items-center justify-between gap-3 text-left w-full ${
+          open ? 'border-brand-red ring-1 ring-brand-red' : ''
+        }`}
+      >
+        <span className="flex items-center gap-2.5">
+          <IndianRupee size={16} className={value ? 'text-brand-red' : 'text-slate-400'} />
+          <span className={value ? 'text-slate-900 font-medium' : 'text-slate-500'}>
+            {value || 'Select Budget'}
+          </span>
+        </span>
+        <ChevronDown
+          size={16}
+          className={`shrink-0 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {open && (
+        <div className="absolute left-0 right-0 sm:right-auto sm:w-72 top-[calc(100%+6px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs font-semibold text-slate-500">Adjust Budget</span>
+            <span className="text-xs font-bold text-brand-red bg-brand-red/5 px-2 py-0.5 rounded">
+              {value || 'Any Budget'}
+            </span>
+          </div>
+
+          {/* Range Slider */}
+          <div className="flex flex-col gap-1 py-1">
+            <input
+              type="range"
+              min="0"
+              max="4"
+              step="1"
+              value={budgetIndex}
+              onChange={(e) => handleSliderChange(Number(e.target.value))}
+              className="accent-brand-red w-full h-1.5 bg-slate-100 rounded-lg cursor-pointer appearance-none"
+            />
+            <div className="flex justify-between text-[9px] font-semibold text-slate-400 mt-1 select-none">
+              <span>Any</span>
+              <span>5L</span>
+              <span>10L</span>
+              <span>15L</span>
+              <span>15L+</span>
+            </div>
+          </div>
+
+          <div className="my-3 h-px bg-slate-100" />
+
+          {/* Quick Option Chips */}
+          <div className="flex flex-wrap gap-1.5">
+            {budgetSteps.map((step, idx) => {
+              if (idx === 0) return null;
+              const label = step.replace(' Lakh', 'L').replace('Under ', '<');
+              const active = value === step;
+
+              return (
+                <button
+                  key={step}
+                  type="button"
+                  onClick={() => onChange(step)}
+                  className={`px-2.5 py-1 text-xs rounded-full border transition-all ${
+                    active
+                      ? 'bg-brand-red border-brand-red text-white font-medium'
+                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-800'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => onChange('')}
+              className="px-2.5 py-1 text-xs rounded-full border border-dashed border-slate-300 text-slate-500 hover:bg-slate-50"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AgeSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const ageSteps = ['Any Age', 'Under 1 Year', '1 - 3 Years', '3 - 5 Years', '5+ Years'];
+  const ageIndex = value === '' ? 0 : ageSteps.indexOf(value);
+
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, []);
+
+  const handleSliderChange = (val: number) => {
+    if (val === 0) onChange('');
+    else onChange(ageSteps[val]);
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className={`field-input flex items-center justify-between gap-3 text-left w-full ${
+          open ? 'border-brand-red ring-1 ring-brand-red' : ''
+        }`}
+      >
+        <span className="flex items-center gap-2.5">
+          <Calendar size={16} className={value ? 'text-brand-red' : 'text-slate-400'} />
+          <span className={value ? 'text-slate-900 font-medium' : 'text-slate-500'}>
+            {value || 'Select Year'}
+          </span>
+        </span>
+        <ChevronDown
+          size={16}
+          className={`shrink-0 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 sm:left-auto sm:w-72 top-[calc(100%+6px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs font-semibold text-slate-500">Adjust Car Age</span>
+            <span className="text-xs font-bold text-brand-red bg-brand-red/5 px-2 py-0.5 rounded">
+              {value || 'Any Age'}
+            </span>
+          </div>
+
+          {/* Range Slider */}
+          <div className="flex flex-col gap-1 py-1">
+            <input
+              type="range"
+              min="0"
+              max="4"
+              step="1"
+              value={ageIndex}
+              onChange={(e) => handleSliderChange(Number(e.target.value))}
+              className="accent-brand-red w-full h-1.5 bg-slate-100 rounded-lg cursor-pointer appearance-none"
+            />
+            <div className="flex justify-between text-[9px] font-semibold text-slate-400 mt-1 select-none">
+              <span>Any</span>
+              <span>1Y</span>
+              <span>3Y</span>
+              <span>5Y</span>
+              <span>5Y+</span>
+            </div>
+          </div>
+
+          <div className="my-3 h-px bg-slate-100" />
+
+          {/* Quick Option Chips */}
+          <div className="flex flex-wrap gap-1.5">
+            {ageSteps.map((step, idx) => {
+              if (idx === 0) return null;
+              const label = step.replace(' Years', 'Y').replace(' Year', 'Y').replace('Under ', '<');
+              const active = value === step;
+
+              return (
+                <button
+                  key={step}
+                  type="button"
+                  onClick={() => onChange(step)}
+                  className={`px-2.5 py-1 text-xs rounded-full border transition-all ${
+                    active
+                      ? 'bg-brand-red border-brand-red text-white font-medium'
+                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-800'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => onChange('')}
+              className="px-2.5 py-1 text-xs rounded-full border border-dashed border-slate-300 text-slate-500 hover:bg-slate-50"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function HeroSearchWidget() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
@@ -155,41 +393,23 @@ export default function HeroSearchWidget() {
         {activeTab === 'buy' ? (
           <>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="relative">
-                <label className="field-label flex items-center gap-1.5">
-                  <IndianRupee size={14} /> Budget
+              <div className="relative flex flex-col gap-2">
+                <label className="field-label flex items-center gap-1.5 !mb-0">
+                  <IndianRupee size={14} className="text-slate-500" /> Budget
                 </label>
-                <select
-                  className="field-input"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                >
-                  <option value="">Select Budget</option>
-                  {budgetOptions.map((b) => (
-                    <option key={b.label} value={b.label}>
-                      {b.label}
-                    </option>
-                  ))}
-                </select>
+                <BudgetSelect value={budget} onChange={setBudget} />
               </div>
-              <div className="relative">
-                <label className="field-label flex items-center gap-1.5">
-                  <Car size={14} /> Car Type
+              <div className="relative flex flex-col gap-2">
+                <label className="field-label flex items-center gap-1.5 !mb-0">
+                  <Car size={14} className="text-slate-500" /> Car Type
                 </label>
                 <CarTypeSelect value={bodyType} onChange={setBodyType} />
               </div>
-              <div className="relative">
-                <label className="field-label flex items-center gap-1.5">
-                  <Calendar size={14} /> Car Age
+              <div className="relative flex flex-col gap-2">
+                <label className="field-label flex items-center gap-1.5 !mb-0">
+                  <Calendar size={14} className="text-slate-500" /> Car Age
                 </label>
-                <select className="field-input" value={age} onChange={(e) => setAge(e.target.value)}>
-                  <option value="">Select Year</option>
-                  {ageOptions.map((a) => (
-                    <option key={a} value={a}>
-                      {a}
-                    </option>
-                  ))}
-                </select>
+                <AgeSelect value={age} onChange={setAge} />
               </div>
             </div>
             <button

@@ -10,10 +10,6 @@ import {
   ShieldCheck,
   Building2,
   Sparkles,
-  BriefcaseBusiness,
-  BadgeCheck,
-  FileSearch,
-  MessageSquareHeart,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 
@@ -56,28 +52,32 @@ const journey = [
 
 const leadership = [
   {
-    icon: BriefcaseBusiness,
+    name: 'Gautam Modi',
     area: 'Founder Office',
-    role: 'Strategic Direction',
+    role: 'Founder & Chairman',
     desc: 'Sets the customer-first standards, pricing discipline, and long-term growth roadmap.',
+    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256&h=256',
   },
   {
-    icon: BadgeCheck,
+    name: 'Rahul Modi',
     area: 'Retail Operations',
-    role: 'Inventory & Delivery',
+    role: 'Managing Director',
     desc: 'Manages sourcing, showroom readiness, test drives, and vehicle handover quality.',
+    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=256&h=256',
   },
   {
-    icon: FileSearch,
+    name: 'Amit Sharma',
     area: 'Quality Team',
-    role: 'Inspection & Documents',
+    role: 'Head of Quality Assurance',
     desc: 'Owns verification, inspection checkpoints, service history, and paperwork accuracy.',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=256&h=256',
   },
   {
-    icon: MessageSquareHeart,
+    name: 'Priya Patel',
     area: 'Customer Desk',
-    role: 'Support & Experience',
+    role: 'Customer Experience Lead',
     desc: 'Keeps buyers and sellers informed from first enquiry to post-delivery support.',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=256&h=256',
   },
 ];
 
@@ -270,17 +270,24 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {leadership.map(({ icon: Icon, area, role, desc }, i) => (
+            {leadership.map(({ name, area, role, desc, image }, i) => (
               <Reveal
                 key={area}
                 delay={i * 90}
                 className="rounded-xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-lg"
               >
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
-                  <Icon size={24} />
+                <div className="relative mb-5 h-16 w-16 overflow-hidden rounded-full border-2 border-slate-100 shadow-sm bg-slate-50">
+                  <Image
+                    src={image}
+                    alt={name}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
                 </div>
-                <p className="text-xs font-bold uppercase tracking-wide text-brand-red">{area}</p>
-                <h3 className="mt-1 text-base font-extrabold text-slate-900">{role}</h3>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-brand-red">{area}</p>
+                <h3 className="mt-1.5 text-base font-extrabold text-slate-900">{name}</h3>
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">{role}</p>
                 <p className="mt-3 text-sm leading-relaxed text-slate-600">{desc}</p>
               </Reveal>
             ))}
