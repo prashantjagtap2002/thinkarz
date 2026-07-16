@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import ScrollToTopButton from '@/components/ScrollToTopButton';
 import {
   CalendarHeart,
   MapPinned,
@@ -283,9 +284,9 @@ export default function BookTestDrivePage() {
                   <p className="mt-1 mb-3 text-xs text-slate-500">
                     {car.year} • {car.fuel} • {car.transmission}
                   </p>
-                  <Link href="#" className="btn btn-primary w-full !px-3 !py-2 text-xs">
+                  <ScrollToTopButton className="btn btn-primary w-full !px-3 !py-2 text-xs">
                     Book Test Drive
-                  </Link>
+                  </ScrollToTopButton>
                 </div>
               </div>
             ))}
@@ -301,9 +302,9 @@ export default function BookTestDrivePage() {
               Schedule your test drive at a time that suits you best. We&apos;ll make it happen!
             </p>
           </div>
-          <Link href="#" className="btn btn-primary">
+          <ScrollToTopButton className="btn btn-primary">
             Schedule Test Drive
-          </Link>
+          </ScrollToTopButton>
         </div>
       </section>
     </>

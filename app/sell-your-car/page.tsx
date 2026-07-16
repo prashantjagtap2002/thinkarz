@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import ScrollToTopButton from '@/components/ScrollToTopButton';
 import {
   ScanSearch,
   ClipboardPenLine,
@@ -180,9 +181,9 @@ export default function SellYourCarPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="#" className="btn btn-primary">
+              <ScrollToTopButton className="btn btn-primary">
                 Get Free Valuation
-              </Link>
+              </ScrollToTopButton>
               <Link href="/contact-us" className="btn btn-outline-white">
                 Talk to Expert
               </Link>

@@ -25,6 +25,7 @@ import CarComparison from '@/components/car-detail/CarComparison';
 import EmiCalculator from '@/components/car-detail/EmiCalculator';
 import InspectionReport from '@/components/car-detail/InspectionReport';
 import FaqAccordion from '@/components/FaqAccordion';
+import MakeOfferButton from '@/components/MakeOfferButton';
 
 const trustBadges = [
   { icon: ShieldCheck, label: '140-Point Inspection' },
@@ -145,9 +146,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
               <Link href="/book-a-test-drive" className="btn btn-primary w-full">
                 Book Test Drive
               </Link>
-              <Link href="/contact-us" className="btn btn-outline w-full">
-                Make Offer
-              </Link>
+              <MakeOfferButton car={car} className="btn btn-outline w-full" />
               <a
                 href={`https://wa.me/912242125678?text=${encodeURIComponent(
                   `Hi, I'm interested in the ${car.year} ${car.make} ${car.model} (${car.variant}) listed at ${formatPrice(car.price)} on Thinkarz.`
