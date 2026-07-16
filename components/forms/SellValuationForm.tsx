@@ -38,12 +38,19 @@ export default function SellValuationForm() {
 
   const estimate = estimatePrice(model, year, kms);
 
+  function resetValuationFields() {
+    setModel('');
+    setYear('');
+    setKms('');
+  }
+
   return (
     <SubmittableForm
       submitLabel="Get Valuation"
       successTitle="Valuation Request Received!"
       successMessage="Our team will get back to you shortly to confirm your car's final value."
       className="space-y-5"
+      onSubmit={resetValuationFields}
       successExtra={
         estimate && (
           <div className="mt-5 w-full rounded-xl bg-white p-4 text-left">
@@ -67,20 +74,20 @@ export default function SellValuationForm() {
       </div>
       <div>
         <label className="field-label">Car Model</label>
-        <select
+        <input
           required
           className="field-input"
+          list="car-model-options"
+          placeholder="Type or select your car model"
           value={model}
           onChange={(e) => setModel(e.target.value)}
-        >
-          <option value="" disabled>
-            Select Model
-          </option>
-          <option>Hatchback</option>
-          <option>Sedan</option>
-          <option>SUV</option>
-          <option>Electric</option>
-        </select>
+        />
+        <datalist id="car-model-options">
+          <option value="Hatchback" />
+          <option value="Sedan" />
+          <option value="SUV" />
+          <option value="Electric" />
+        </datalist>
       </div>
       <div>
         <label className="field-label">Manufacturing Year</label>

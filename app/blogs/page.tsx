@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Clock, CalendarDays } from 'lucide-react';
@@ -19,16 +19,32 @@ export default function BlogsPage() {
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
+
     return rest.filter((post) => {
       if (category && post.category !== category) return false;
-      if (query && !post.title.toLowerCase().includes(query) && !post.excerpt.toLowerCase().includes(query))
+      if (
+        query &&
+        !post.title.toLowerCase().includes(query) &&
+        !post.excerpt.toLowerCase().includes(query)
+      ) {
         return false;
+      }
+
       return true;
     });
   }, [rest, search, category]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const showFeatured = !search && !category && page === 1;
+  const startResult = filtered.length === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const endResult = Math.min(page * PAGE_SIZE, filtered.length);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
 
   function handleSearchChange(value: string) {
     setSearch(value);
@@ -69,8 +85,7 @@ export default function BlogsPage() {
       <section className="container-page py-14 sm:py-20">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
           <div>
-            {/* Featured blog */}
-            {!search && !category && (
+            {showFeatured && (
               <>
                 <div className="mb-3">
                   <span className="section-eyebrow">Featured Blog</span>
@@ -96,16 +111,23 @@ export default function BlogsPage() {
                       </span>
                     </div>
                     <p className="mb-4 text-sm text-slate-600">{featured.excerpt}</p>
-                    <span className="text-sm font-semibold text-brand-red">Read More →</span>
+                    <span className="text-sm font-semibold text-brand-red">Read More -&gt;</span>
                   </div>
                 </Link>
               </>
             )}
 
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-xl font-extrabold text-slate-900">
-                {category ? category : 'All Blogs'}
-              </h2>
+              <div>
+                <h2 className="text-xl font-extrabold text-slate-900">
+                  {category ? category : 'All Blogs'}
+                </h2>
+                <p className="mt-1 text-xs text-slate-500">
+                  {filtered.length === 0
+                    ? 'No articles found'
+                    : `Showing ${startResult}-${endResult} of ${filtered.length} articles`}
+                </p>
+              </div>
               {(search || category) && (
                 <button
                   onClick={() => {
@@ -147,7 +169,7 @@ export default function BlogsPage() {
                         <span>&middot;</span>
                         <span>{post.readTime}</span>
                       </div>
-                      <span className="text-xs font-semibold text-brand-red">Read More →</span>
+                      <span className="text-xs font-semibold text-brand-red">Read More -&gt;</span>
                     </div>
                   </Link>
                 ))}
@@ -155,7 +177,14 @@ export default function BlogsPage() {
             )}
 
             {totalPages > 1 && (
-              <div className="mt-10 flex justify-center gap-2">
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  onClick={() => setPage((current) => Math.max(1, current - 1))}
+                  disabled={page === 1}
+                  className="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:border-brand-blue hover:text-brand-blue disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Previous
+                </button>
                 {Array.from({ length: totalPages }).map((_, i) => (
                   <button
                     key={i}
@@ -169,11 +198,17 @@ export default function BlogsPage() {
                     {i + 1}
                   </button>
                 ))}
+                <button
+                  onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                  disabled={page === totalPages}
+                  className="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:border-brand-blue hover:text-brand-blue disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next
+                </button>
               </div>
             )}
           </div>
 
-          {/* Sidebar */}
           <aside className="space-y-8">
             <div className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -211,15 +246,20 @@ export default function BlogsPage() {
               <ul className="space-y-4">
                 {popular.map((p) => (
                   <li key={p.slug}>
-                    <Link href={`/blogs/${p.slug}`} className="flex gap-3">
-                      <div className="relative h-14 w-16 shrink-0 overflow-hidden rounded-md">
-                        <Image src={p.image} alt={p.title} fill className="object-cover" />
+                    <Link href={`/blogs/${p.slug}`} className="flex gap-4 group">
+                      <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-slate-100 shadow-sm">
+                        <Image 
+                          src={p.image} 
+                          alt={p.title} 
+                          fill 
+                          className="object-cover transition-transform duration-300 group-hover:scale-105" 
+                        />
                       </div>
-                      <div>
-                        <p className="text-xs font-semibold leading-snug text-slate-900">
+                      <div className="flex flex-col justify-center">
+                        <h4 className="text-sm font-semibold leading-snug text-slate-900 group-hover:text-brand-red transition-colors line-clamp-2">
                           {p.title}
-                        </p>
-                        <p className="mt-1 text-[11px] text-slate-500">{p.date}</p>
+                        </h4>
+                        <p className="mt-1.5 text-xs text-slate-400">{p.date}</p>
                       </div>
                     </Link>
                   </li>

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import CarCard from './CarCard';
 import BrandLogo from './BrandLogo';
+import BodyTypeIcon from './BodyTypeIcon';
 
 const bodyTypeIcons: Record<string, typeof CarIcon> = {
   Hatchback: CarFront,
@@ -74,6 +75,17 @@ function initialSelection(value: string | null, options: readonly string[]) {
   return value && options.includes(value) ? [value] : [];
 }
 
+function getBaseColor(color: string): string {
+  const c = color.toLowerCase();
+  if (c.includes('white')) return 'White';
+  if (c.includes('grey') || c.includes('gray')) return 'Grey';
+  if (c.includes('red')) return 'Red';
+  if (c.includes('silver')) return 'Silver';
+  if (c.includes('black')) return 'Black';
+  if (c.includes('blue')) return 'Blue';
+  return 'Other';
+}
+
 const PAGE_SIZE = 6;
 
 // Price slider bounds derived from the inventory.
@@ -102,9 +114,10 @@ export default function PreOwnedCarsBrowser() {
   const [age, setAge] = useState<string[]>(initialAge);
   const [owners, setOwners] = useState<string[]>([]);
   const [kms, setKms] = useState<string[]>([]);
+  const [color, setColor] = useState<string[]>([]);
   const [certifiedOnly, setCertifiedOnly] = useState(false);
+  const [priceMin, setPriceMin] = useState(MIN_PRICE);
   const [priceMax, setPriceMax] = useState(MAX_PRICE);
-  const priceMin = MIN_PRICE;
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -120,6 +133,11 @@ export default function PreOwnedCarsBrowser() {
     () => countsForOptions(kmLabels, (car, option) => matchesKmLabel(car, option)),
     [kmLabels],
   );
+  const colorLabels = useMemo(() => ['White', 'Grey', 'Red', 'Silver'] as const, []);
+  const colorCounts = useMemo(
+    () => countsForOptions(colorLabels, (car, option) => getBaseColor(car.color) === option),
+    [colorLabels],
+  );
 
   const priceSliderActive = priceMax !== MAX_PRICE;
 
@@ -134,6 +152,7 @@ export default function PreOwnedCarsBrowser() {
       if (age.length && !age.some((option) => matchesAgeLabel(c, option))) return false;
       if (owners.length && !owners.includes(String(c.owners))) return false;
       if (kms.length && !kms.some((option) => matchesKmLabel(c, option))) return false;
+      if (color.length && !color.includes(getBaseColor(c.color))) return false;
       if (certifiedOnly && !c.certified) return false;
       if (c.price < priceMin || c.price > priceMax) return false;
       return true;
@@ -147,7 +166,7 @@ export default function PreOwnedCarsBrowser() {
     });
 
     return result;
-  }, [make, budget, sellerType, fuel, transmission, bodyType, age, owners, kms, certifiedOnly, priceMin, priceMax, sortBy]);
+  }, [make, budget, sellerType, fuel, transmission, bodyType, age, owners, kms, color, certifiedOnly, priceMin, priceMax, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -162,6 +181,7 @@ export default function PreOwnedCarsBrowser() {
     age: setAge,
     owners: setOwners,
     kms: setKms,
+    color: setColor,
   };
 
   function toggleValue(field: string, value: string) {
@@ -185,6 +205,9 @@ export default function PreOwnedCarsBrowser() {
   kms.forEach((value) =>
     activeChips.push({ label: `KMs: ${value}`, clear: () => toggleValue('kms', value) }),
   );
+  color.forEach((value) =>
+    activeChips.push({ label: `Color: ${value}`, clear: () => toggleValue('color', value) }),
+  );
   make.forEach((value) =>
     activeChips.push({ label: value, clear: () => toggleValue('make', value) }),
   );
@@ -204,8 +227,11 @@ export default function PreOwnedCarsBrowser() {
     activeChips.push({ label: 'Certified', clear: () => setCertifiedOnly(false) });
   if (priceSliderActive)
     activeChips.push({
-      label: `Up to ${formatPrice(priceMax)}`,
-      clear: () => setPriceMax(MAX_PRICE),
+      label: `${formatPrice(priceMin)} - ${formatPrice(priceMax)}`,
+      clear: () => {
+        setPriceMin(MIN_PRICE);
+        setPriceMax(MAX_PRICE);
+      },
     });
 
   const hasActiveFilters = activeChips.length > 0;
@@ -220,13 +246,16 @@ export default function PreOwnedCarsBrowser() {
     setAge([]);
     setOwners([]);
     setKms([]);
+    setColor([]);
     setCertifiedOnly(false);
+    setPriceMin(MIN_PRICE);
     setPriceMax(MAX_PRICE);
     setPage(1);
   }
 
-  function onMaxChange(value: number) {
-    setPriceMax(Math.max(value, MIN_PRICE + PRICE_STEP));
+  function onPriceRangeChange(minVal: number, maxVal: number) {
+    setPriceMin(minVal);
+    setPriceMax(maxVal);
     setPage(1);
   }
 
@@ -243,15 +272,17 @@ export default function PreOwnedCarsBrowser() {
         owners,
         kms,
         certifiedOnly,
+        priceMin,
         priceMax,
+        color,
       }}
-      counts={{ budgetCounts, ageCounts, kmCounts }}
+      counts={{ budgetCounts, ageCounts, kmCounts, colorCounts }}
       onToggle={toggleValue}
       onCertifiedChange={(v) => {
         setCertifiedOnly(v);
         setPage(1);
       }}
-      onMaxChange={onMaxChange}
+      onPriceRangeChange={onPriceRangeChange}
       onReset={resetFilters}
       hasActiveFilters={hasActiveFilters}
     />
@@ -405,7 +436,9 @@ type FilterState = {
   owners: string[];
   kms: string[];
   certifiedOnly: boolean;
+  priceMin: number;
   priceMax: number;
+  color: string[];
 };
 
 type SidebarProps = {
@@ -414,16 +447,17 @@ type SidebarProps = {
     budgetCounts: Map<string, number>;
     ageCounts: Map<string, number>;
     kmCounts: Map<string, number>;
+    colorCounts: Map<string, number>;
   };
   hasActiveFilters: boolean;
   onToggle: (field: string, value: string) => void;
   onCertifiedChange: (value: boolean) => void;
-  onMaxChange: (value: number) => void;
+  onPriceRangeChange: (minVal: number, maxVal: number) => void;
   onReset: () => void;
 };
 
 function FilterSidebar(props: SidebarProps) {
-  const { state, counts, hasActiveFilters, onToggle, onCertifiedChange, onMaxChange, onReset } = props;
+  const { state, counts, hasActiveFilters, onToggle, onCertifiedChange, onPriceRangeChange, onReset } = props;
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
@@ -456,15 +490,16 @@ function FilterSidebar(props: SidebarProps) {
           </div>
           <div className="mt-4 rounded-lg bg-slate-50 p-4">
             <p className="mb-3 text-center text-xs font-semibold text-slate-700">
-              Up to {formatPrice(state.priceMax)}
+              {formatPrice(state.priceMin)} - {formatPrice(state.priceMax)}
             </p>
             <div className="px-2">
-              <MaxRangeSlider
+              <PriceRangeSlider
                 min={MIN_PRICE}
                 max={MAX_PRICE}
                 step={PRICE_STEP}
-                value={state.priceMax}
-                onChange={onMaxChange}
+                minValue={state.priceMin}
+                maxValue={state.priceMax}
+                onChange={onPriceRangeChange}
               />
             </div>
             <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400">
@@ -498,6 +533,7 @@ function FilterSidebar(props: SidebarProps) {
             selected={state.bodyType}
             counts={countsFor('bodyType')}
             onToggle={(option) => onToggle('bodyType', option)}
+            isBodyType
           />
         </FilterSection>
 
@@ -508,10 +544,42 @@ function FilterSidebar(props: SidebarProps) {
               <FilterCheckbox
                 key={option}
                 label={option}
-                icon={<BrandLogo brand={option} size={22} />}
+                icon={<BrandLogo brand={option} size={32} />}
+                hideVisibleLabel
                 checked={state.make.includes(option)}
                 count={countsFor('make').get(option) ?? 0}
                 onToggle={() => onToggle('make', option)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Color */}
+        <FilterSection title="Color">
+          <div className="space-y-2">
+            {['White', 'Grey', 'Red', 'Silver'].map((option) => (
+              <FilterCheckbox
+                key={option}
+                label={option}
+                icon={
+                  <span
+                    className={`rounded-full inline-block mr-2 shrink-0 ${
+                      option === 'White'
+                        ? 'bg-white border border-slate-300'
+                        : option === 'Grey'
+                          ? 'bg-slate-400'
+                          : option === 'Red'
+                            ? 'bg-red-500'
+                            : option === 'Silver'
+                              ? 'bg-slate-300'
+                              : 'bg-slate-100'
+                    }`}
+                    style={{ width: '16px', height: '16px' }}
+                  />
+                }
+                checked={state.color.includes(option)}
+                count={counts.colorCounts.get(option) ?? 0}
+                onToggle={() => onToggle('color', option)}
               />
             ))}
           </div>
@@ -648,12 +716,14 @@ function FilterSection({
 function FilterCheckbox({
   label,
   icon,
+  hideVisibleLabel = false,
   checked,
   count,
   onToggle,
 }: {
   label: string;
   icon?: React.ReactNode;
+  hideVisibleLabel?: boolean;
   checked: boolean;
   count: number;
   onToggle: () => void;
@@ -669,7 +739,7 @@ function FilterCheckbox({
           suppressHydrationWarning
         />
         {icon}
-        {label}
+        {hideVisibleLabel ? <span className="sr-only">{label}</span> : label}
       </span>
       <span className="text-xs text-slate-400">{count}</span>
     </label>
@@ -683,6 +753,7 @@ function FilterIconGrid({
   selected,
   counts,
   onToggle,
+  isBodyType,
 }: {
   options: string[];
   icons: Record<string, typeof CarIcon>;
@@ -690,11 +761,11 @@ function FilterIconGrid({
   selected: string[];
   counts: Map<string, number>;
   onToggle: (option: string) => void;
+  isBodyType?: boolean;
 }) {
   return (
     <div className="grid grid-cols-3 gap-2">
       {options.map((option) => {
-        const Icon = icons[option] ?? fallbackIcon;
         const checked = selected.includes(option);
         return (
           <button
@@ -707,7 +778,18 @@ function FilterIconGrid({
                 : 'border-slate-200 text-slate-600 hover:border-brand-red/40'
             }`}
           >
-            <Icon size={22} className={checked ? 'text-brand-red' : 'text-slate-400'} />
+            {isBodyType ? (
+              <BodyTypeIcon
+                bodyType={option}
+                size={22}
+                className={checked ? 'text-brand-red' : 'text-slate-400'}
+              />
+            ) : (
+              (() => {
+                const Icon = icons[option] ?? fallbackIcon;
+                return <Icon size={22} className={checked ? 'text-brand-red' : 'text-slate-400'} />;
+              })()
+            )}
             <span className="text-[11px] font-semibold leading-tight">{option}</span>
             <span className="text-[10px] text-slate-400">{counts.get(option) ?? 0}</span>
           </button>
@@ -717,40 +799,59 @@ function FilterIconGrid({
   );
 }
 
-function MaxRangeSlider({
+function PriceRangeSlider({
   min,
   max,
   step,
-  value,
+  minValue,
+  maxValue,
   onChange,
 }: {
   min: number;
   max: number;
   step: number;
-  value: number;
-  onChange: (value: number) => void;
+  minValue: number;
+  maxValue: number;
+  onChange: (minVal: number, maxVal: number) => void;
 }) {
-  const pct = ((value - min) / (max - min)) * 100;
+  const minPct = ((minValue - min) / (max - min)) * 100;
+  const maxPct = ((maxValue - min) / (max - min)) * 100;
+
   return (
-    // Horizontal padding equal to the thumb radius (9px) keeps the track's 0%/100%
-    // marks aligned with where the native thumb actually travels to, since a
-    // range input's thumb center never reaches the true edge of its own box.
     <div className="relative h-6 select-none px-[9px]">
       {/* Track */}
       <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-slate-200" />
       {/* Active range */}
       <div
-        className="absolute left-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-brand-red"
-        style={{ right: `${100 - pct}%` }}
+        className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-brand-red"
+        style={{ left: `${minPct}%`, right: `${100 - maxPct}%` }}
       />
+      {/* Min input handle */}
       <input
         type="range"
         min={min}
         max={max}
         step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="range-thumb pointer-events-none absolute inset-x-0 top-0 z-20 h-6 w-full appearance-none bg-transparent"
+        value={minValue}
+        onChange={(e) => {
+          const val = Math.min(Number(e.target.value), maxValue - step);
+          onChange(val, maxValue);
+        }}
+        className="range-thumb absolute inset-x-0 top-0 z-20 h-6 w-full appearance-none bg-transparent"
+        aria-label="Minimum price"
+      />
+      {/* Max input handle */}
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={maxValue}
+        onChange={(e) => {
+          const val = Math.max(Number(e.target.value), minValue + step);
+          onChange(minValue, val);
+        }}
+        className="range-thumb absolute inset-x-0 top-0 z-30 h-6 w-full appearance-none bg-transparent"
         aria-label="Maximum price"
       />
     </div>

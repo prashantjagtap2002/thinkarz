@@ -10,16 +10,16 @@ import {
   ShieldEllipsis,
   Landmark,
   CalendarClock,
-  ChevronRight,
+  MoveRight,
 } from 'lucide-react';
 import SellValuationForm from '@/components/forms/SellValuationForm';
 
 export const metadata = { title: 'Sell Your Car | Thinkarz' };
 
 const steps = [
-  { icon: ScanSearch, title: '1. Get Valuation', desc: 'Get instant price for your car.' },
+  { icon: ScanSearch, title: '1. Request Valuation', desc: 'Submit details for an expert estimate.' },
   { icon: ClipboardPenLine, title: '2. Book Inspection', desc: 'Schedule a free inspection.' },
-  { icon: WalletCards, title: '3. Get Paid', desc: 'Get instant payment on the spot.' },
+  { icon: WalletCards, title: '3. Get Paid', desc: 'Get paid on the spot after inspection.' },
 ];
 
 const reasons = [
@@ -86,10 +86,10 @@ export default function SellYourCarPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-lg font-bold text-slate-900">Get Instant Valuation</h2>
+          <div id="valuation-form" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <h2 className="text-lg font-bold text-slate-900">Request a Free Valuation</h2>
             <p className="mb-6 text-sm text-slate-500">
-              Enter your car details to get a free, no-obligation valuation.
+              Enter your car details and our team will get back to you with an expert valuation estimate.
             </p>
             <SellValuationForm />
           </div>
@@ -108,9 +108,8 @@ export default function SellYourCarPage() {
             {steps.map(({ icon: Icon, title, desc }, i) => (
               <div key={title} className="relative text-center">
                 {i < steps.length - 1 && (
-                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 items-center sm:flex">
-                    <span className="h-px w-6 bg-slate-300" />
-                    <ChevronRight size={16} className="-ml-0.5 text-slate-300" />
+                  <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center sm:flex">
+                    <MoveRight size={28} className="text-slate-400" />
                   </div>
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
@@ -162,7 +161,7 @@ export default function SellYourCarPage() {
       </section>
 
       {/* CTA */}
-      <section className="container-page pb-16 sm:pb-20">
+      <section className="container-page pt-12 pb-16 sm:pt-16 sm:pb-20">
         <div className="relative overflow-hidden rounded-2xl bg-brand-navy">
           <div className="absolute inset-0">
             <Image
@@ -181,7 +180,7 @@ export default function SellYourCarPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="/contact-us" className="btn btn-primary">
+              <Link href="#" className="btn btn-primary">
                 Get Free Valuation
               </Link>
               <Link href="/contact-us" className="btn btn-outline-white">

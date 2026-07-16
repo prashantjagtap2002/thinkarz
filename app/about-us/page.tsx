@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import {
   Star,
@@ -13,8 +16,6 @@ import {
   MessageSquareHeart,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
-
-export const metadata = { title: 'About Us | Thinkarz' };
 
 const stats = [
   { icon: Star, value: '35+', label: 'Years in Business' },
@@ -81,6 +82,56 @@ const leadership = [
 ];
 
 export default function AboutPage() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [lineTop, setLineTop] = useState(0);
+  const [lineHeight, setLineHeight] = useState(0);
+  const [activeDots, setActiveDots] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    function handleScroll() {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      const dots = containerRef.current.querySelectorAll('.timeline-dot');
+      if (dots.length >= 2) {
+        const firstDotRect = dots[0].getBoundingClientRect();
+        const lastDotRect = dots[dots.length - 1].getBoundingClientRect();
+        
+        const top = firstDotRect.top - rect.top + firstDotRect.height / 2;
+        const bottom = lastDotRect.top - rect.top + lastDotRect.height / 2;
+        
+        setLineTop(top);
+        setLineHeight(bottom - top);
+        
+        const triggerY = viewportHeight * 0.6; 
+        
+        const totalScrollDist = lastDotRect.top - firstDotRect.top;
+        const currentScrollDist = triggerY - firstDotRect.top;
+        
+        const progress = totalScrollDist > 0 ? currentScrollDist / totalScrollDist : 0;
+        setScrollProgress(Math.max(0, Math.min(1, progress)));
+
+        const activeStates = Array.from(dots).map(dot => {
+          const dotRect = dot.getBoundingClientRect();
+          return dotRect.top <= triggerY;
+        });
+        setActiveDots(activeStates);
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
+    const timer = setTimeout(handleScroll, 100);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <>
       <section className="py-16 sm:py-20">
@@ -118,8 +169,19 @@ export default function AboutPage() {
         <div className="container-page">
           <h2 className="mb-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">Our Journey</h2>
           <span className="mb-16 block h-1 w-12 bg-brand-red" />
+          <div ref={containerRef} className="relative mx-auto max-w-5xl">
+            {/* Background Track Line */}
+            <div 
+              className="absolute left-0 w-px bg-slate-200 md:left-1/2 md:-translate-x-1/2" 
+              style={{ top: `${lineTop}px`, height: `${lineHeight}px` }}
+            />
+            
+            {/* Animated Active Red Line */}
+            <div 
+              className="absolute left-0 w-px bg-brand-red md:left-1/2 md:-translate-x-1/2 transition-all duration-100 ease-out" 
+              style={{ top: `${lineTop}px`, height: `${scrollProgress * lineHeight}px` }}
+            />
 
-          <div className="relative mx-auto max-w-5xl before:absolute before:left-0 before:top-0 before:h-full before:w-px before:bg-slate-200 md:before:left-1/2 md:before:-translate-x-1/2">
             {journey.map(({ icon: Icon, year, title, desc, note, image }, i) => (
               <Reveal
                 key={year}
@@ -129,7 +191,11 @@ export default function AboutPage() {
                 }`}
               >
                 {/* Timeline dot */}
-                <span className="absolute left-0 top-2 flex h-4 w-4 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-red shadow ring-1 ring-brand-red/30 md:left-1/2" />
+                <span className={`timeline-dot absolute left-0 top-1/2 -translate-y-1/2 flex h-4 w-4 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white shadow ring-1 transition-all duration-300 md:left-1/2 ${
+                  activeDots[i]
+                    ? 'bg-brand-red ring-brand-red/30 scale-110'
+                    : 'bg-slate-300 ring-slate-200/50'
+                }`} />
 
                 {i % 2 === 0 ? (
                   <>

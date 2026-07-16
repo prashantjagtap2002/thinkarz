@@ -1,8 +1,13 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Car, formatKms, formatPrice } from '@/lib/cars';
+import MakeOfferModal from '@/components/MakeOfferModal';
 
 export default function CarCard({ car }: { car: Car }) {
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1.5 hover:border-brand-red/20 hover:shadow-xl">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
@@ -27,7 +32,7 @@ export default function CarCard({ car }: { car: Car }) {
         <p className="mb-2 text-xs font-medium text-slate-500">{car.variant}</p>
 
         <p className="mb-3 text-xs text-slate-500">
-          {car.year} &middot; {car.fuel} &middot; {formatKms(car.kms)}
+          {car.year} &middot; {car.fuel} &middot; {formatKms(car.kms)} &middot; {car.color}
         </p>
 
         <p className="text-lg font-bold text-slate-900">{formatPrice(car.price)}</p>
@@ -40,14 +45,17 @@ export default function CarCard({ car }: { car: Car }) {
           >
             View Details
           </Link>
-          <Link
-            href="/sell-your-car"
+          <button
+            onClick={() => setIsOfferModalOpen(true)}
             className="btn btn-outline flex-1 !px-3 !py-2 text-xs"
           >
             Make Offer
-          </Link>
+          </button>
         </div>
       </div>
+      {isOfferModalOpen && (
+        <MakeOfferModal car={car} onClose={() => setIsOfferModalOpen(false)} />
+      )}
     </div>
   );
 }

@@ -262,9 +262,32 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
       )}
 
       {/* FAQs */}
-      <div className="mt-16">
-        <h2 className="mb-6 text-xl font-extrabold text-slate-900">Frequently Asked Questions</h2>
-        <FaqAccordion faqs={carFaqs} />
+      <div className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
+        {/* Left — heading */}
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <h2 className="text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl">
+            Questions,
+            <br />
+            <span className="relative inline-block">
+              answered.
+              <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-brand-red" />
+            </span>
+          </h2>
+          <p className="mt-4 text-sm leading-relaxed text-slate-500">
+            Everything you need to know about this car before you decide.
+          </p>
+          <Link
+            href="/contact-us"
+            className="mt-5 inline-flex items-center gap-2 rounded-full border-2 border-slate-900 px-5 py-2 text-xs font-bold uppercase tracking-widest text-slate-900 transition-all duration-300 hover:bg-slate-900 hover:text-white"
+          >
+            Ask Us Directly →
+          </Link>
+        </div>
+
+        {/* Right — accordion */}
+        <div className="border-t border-slate-200">
+          <FaqAccordion faqs={carFaqs} />
+        </div>
       </div>
 
       {/* CTA */}

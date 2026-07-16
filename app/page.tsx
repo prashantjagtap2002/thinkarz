@@ -29,16 +29,10 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 import { bodyTypes, budgetOptions, cars, formatPrice } from '@/lib/cars';
 import { testimonials } from '@/lib/content';
 import { blogs } from '@/lib/blogs';
+import BodyTypeIcon from '@/components/BodyTypeIcon';
 
 const brands = Array.from(new Set(cars.map((c) => c.make))).sort();
 
-const bodyTypeIcons: Record<string, typeof CarFront> = {
-  Hatchback: CarFront,
-  SUV: Truck,
-  Sedan: CarIcon,
-  MUV: Truck,
-  EV: Zap,
-};
 
 function countByBodyType(type: string) {
   return cars.filter((c) => c.bodyType === type).length;
@@ -168,19 +162,21 @@ export default function HomePage() {
               View All Brands <ArrowRight size={16} />
             </Link>
           </Reveal>
-          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 lg:grid-cols-6">
-            {brands.map((brand, i) => (
-              <Reveal key={brand} delay={i * 60}>
+          <Reveal>
+            <div className="grid grid-cols-3 rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-slate-200 gap-[1px] sm:grid-cols-6">
+              {brands.map((brand) => (
                 <Link
+                  key={brand}
                   href={`/pre-owned-cars?make=${encodeURIComponent(brand)}`}
-                  className="flex flex-col items-center gap-3 rounded-xl border border-slate-200 bg-white p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
+                  className="flex flex-col items-center justify-center bg-white p-6 text-center hover:bg-slate-50 transition-colors"
                 >
-                  <BrandLogo brand={brand} size={48} />
-                  <span className="text-xs font-semibold text-slate-700">{brand}</span>
+                  <div className="flex h-10 w-full items-center justify-center overflow-hidden">
+                    <BrandLogo brand={brand} size={32} />
+                  </div>
                 </Link>
-              </Reveal>
-            ))}
-          </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -193,14 +189,13 @@ export default function HomePage() {
             </h2>
             <div className="grid grid-cols-3 gap-4">
               {bodyTypes.map((type, i) => {
-                const Icon = bodyTypeIcons[type] ?? CarIcon;
                 return (
                   <Reveal key={type} delay={i * 70}>
                     <Link
                       href={`/pre-owned-cars?bodyType=${encodeURIComponent(type)}`}
                       className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
                     >
-                      <Icon size={26} className="text-brand-blue" />
+                      <BodyTypeIcon bodyType={type} size={28} className="text-brand-blue" />
                       <span className="text-xs font-semibold text-slate-700">{type}</span>
                       <span className="text-[11px] text-slate-400">{countByBodyType(type)} Cars</span>
                     </Link>

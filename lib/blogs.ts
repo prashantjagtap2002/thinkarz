@@ -55,8 +55,7 @@ export const blogs: Blog[] = [
     category: 'Automobile News',
     date: 'Apr 30, 2024',
     readTime: '4 min read',
-    excerpt:
-      'A quick breakdown of the emission norms and what they mean for buyers.',
+    excerpt: 'A quick breakdown of the emission norms and what they mean for buyers.',
     image: 'https://picsum.photos/seed/thinkarz-blog-5/900/600',
   },
   {
@@ -77,12 +76,99 @@ export const blogs: Blog[] = [
     excerpt: 'Beat the heat with these summer car care tips to protect your vehicle.',
     image: 'https://picsum.photos/seed/thinkarz-blog-7/900/600',
   },
+  {
+    slug: 'best-family-cars-under-10-lakh-in-india',
+    title: 'Best Family Cars Under 10 Lakh in India',
+    category: 'Buying Guide',
+    date: 'Apr 20, 2024',
+    readTime: '6 min read',
+    excerpt:
+      'A practical shortlist of safe, spacious and budget-friendly family cars worth considering.',
+    image: 'https://picsum.photos/seed/thinkarz-blog-8/900/600',
+  },
+  {
+    slug: 'how-often-should-you-service-your-used-car',
+    title: 'How Often Should You Service Your Used Car?',
+    category: 'Car Maintenance',
+    date: 'Apr 16, 2024',
+    readTime: '4 min read',
+    excerpt:
+      'A simple service schedule to keep your used car reliable without overspending on maintenance.',
+    image: 'https://picsum.photos/seed/thinkarz-blog-9/900/600',
+  },
+  {
+    slug: 'zero-dep-vs-comprehensive-car-insurance',
+    title: 'Zero Dep Vs Comprehensive Car Insurance',
+    category: 'Car Insurance',
+    date: 'Apr 12, 2024',
+    readTime: '5 min read',
+    excerpt:
+      'Understand the difference between two popular insurance options before renewing your policy.',
+    image: 'https://picsum.photos/seed/thinkarz-blog-10/900/600',
+  },
+  {
+    slug: 'signs-your-car-battery-needs-replacement',
+    title: '7 Signs Your Car Battery Needs Replacement',
+    category: 'Car Maintenance',
+    date: 'Apr 08, 2024',
+    readTime: '3 min read',
+    excerpt:
+      'Watch for these common warning signs before a weak battery leaves you stranded.',
+    image: 'https://picsum.photos/seed/thinkarz-blog-11/900/600',
+  },
+  {
+    slug: 'best-time-of-year-to-buy-a-used-car',
+    title: 'When Is the Best Time of Year to Buy a Used Car?',
+    category: 'Buying Guide',
+    date: 'Apr 03, 2024',
+    readTime: '4 min read',
+    excerpt:
+      'Timing matters more than most buyers expect. Here is when the best used-car deals usually appear.',
+    image: 'https://picsum.photos/seed/thinkarz-blog-12/900/600',
+  },
+  {
+    slug: 'how-to-spot-flood-damaged-cars',
+    title: 'How to Spot Flood-Damaged Cars Before You Buy',
+    category: 'Tips & Advice',
+    date: 'Mar 29, 2024',
+    readTime: '5 min read',
+    excerpt:
+      'Use this inspection checklist to avoid hidden electrical and mechanical damage after heavy rains.',
+    image: 'https://picsum.photos/seed/thinkarz-blog-13/900/600',
+  },
+  {
+    slug: 'used-evs-what-buyers-should-check-first',
+    title: 'Used EVs: What Buyers Should Check First',
+    category: 'Automobile News',
+    date: 'Mar 24, 2024',
+    readTime: '6 min read',
+    excerpt:
+      'Battery health, charging support and warranty coverage matter more than the odometer on a used EV.',
+    image: 'https://picsum.photos/seed/thinkarz-blog-14/900/600',
+  },
+  {
+    slug: 'documents-you-need-before-selling-your-car',
+    title: 'Documents You Need Before Selling Your Car',
+    category: 'Tips & Advice',
+    date: 'Mar 18, 2024',
+    readTime: '4 min read',
+    excerpt:
+      'Keep the transfer process smooth by preparing the right ownership, insurance and loan paperwork.',
+    image: 'https://picsum.photos/seed/thinkarz-blog-15/900/600',
+  },
 ];
 
-export const blogCategories = [
-  { name: 'Buying Guide', count: 12 },
-  { name: 'Car Maintenance', count: 10 },
-  { name: 'Car Insurance', count: 6 },
-  { name: 'Automobile News', count: 8 },
-  { name: 'Tips & Advice', count: 9 },
+const categoryOrder = [
+  'Buying Guide',
+  'Car Maintenance',
+  'Car Insurance',
+  'Automobile News',
+  'Tips & Advice',
 ];
+
+export const blogCategories = categoryOrder
+  .map((name) => ({
+    name,
+    count: blogs.filter((post) => post.category === name).length,
+  }))
+  .filter((category) => category.count > 0);

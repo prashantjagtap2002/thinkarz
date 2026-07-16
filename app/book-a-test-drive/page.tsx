@@ -10,10 +10,11 @@ import {
   Route,
   GaugeCircle,
   MessageCircleMore,
-  ChevronRight,
+  MoveRight,
 } from 'lucide-react';
 import SubmittableForm from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
+import { cars } from '@/lib/cars';
 
 export const metadata = { title: 'Book a Test Drive | Thinkarz' };
 
@@ -68,21 +69,7 @@ const reasons = [
   },
 ];
 
-const popularCars = [
-  {
-    name: 'Tata Nexon EV',
-    image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.04.01-PM-1-768x1024.jpeg',
-  },
-  { name: 'Hyundai Creta', image: 'https://picsum.photos/seed/hyundai-creta/600/450' },
-  {
-    name: 'Kia Seltos',
-    image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.15.28-PM-1024x768.jpeg',
-  },
-  { name: 'Maruti Suzuki Grand Vitara', image: 'https://picsum.photos/seed/grand-vitara/600/450' },
-  { name: 'MG Hector', image: 'https://picsum.photos/seed/mg-hector/600/450' },
-];
+const popularCars = cars.slice(0, 5);
 
 export default function BookTestDrivePage() {
   return (
@@ -110,6 +97,36 @@ export default function BookTestDrivePage() {
             <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-300">
               Experience the car you love before you buy. Book a test drive at your convenience.
             </p>
+
+            <div className="mt-10 space-y-6">
+              {[
+                {
+                  icon: CarFront,
+                  title: 'Certified Multi-Brand Fleet',
+                  desc: 'Choose from our wide selection of thoroughly inspected pre-owned cars.',
+                },
+                {
+                  icon: MapPinned,
+                  title: 'Convenient Test Drive',
+                  desc: 'Test drive at our prime showroom in Malad (West), Mumbai.',
+                },
+                {
+                  icon: Sparkles,
+                  title: 'Expert Guidance',
+                  desc: 'Get feature walkthroughs and complete vehicle history from our product experts.',
+                },
+              ].map(({ icon: Icon, title, desc }) => (
+                <div key={title} className="flex gap-4 max-w-md">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10 text-brand-red">
+                    <Icon size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white">{title}</h3>
+                    <p className="mt-1 text-sm text-slate-300 leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
@@ -155,7 +172,7 @@ export default function BookTestDrivePage() {
                       Select Car Model
                     </option>
                     {popularCars.map((car) => (
-                      <option key={car.name}>{car.name}</option>
+                      <option key={car.id}>{car.make} {car.model}</option>
                     ))}
                   </select>
                 </div>
@@ -198,9 +215,8 @@ export default function BookTestDrivePage() {
             {steps.map(({ icon: Icon, title, desc }, index) => (
               <div key={title} className="relative text-center">
                 {index < steps.length - 1 && (
-                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 items-center lg:flex">
-                    <span className="h-px w-6 bg-slate-300" />
-                    <ChevronRight size={16} className="-ml-0.5 text-slate-300" />
+                  <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center lg:flex">
+                    <MoveRight size={28} className="text-slate-400" />
                   </div>
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
@@ -249,15 +265,25 @@ export default function BookTestDrivePage() {
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
             {popularCars.map((car) => (
               <div
-                key={car.name}
+                key={car.id}
                 className="overflow-hidden rounded-xl border border-slate-200 bg-white"
               >
                 <div className="relative aspect-[4/3] w-full bg-slate-100">
-                  <Image src={car.image} alt={car.name} fill className="object-cover" />
+                  <Image
+                    src={car.image}
+                    alt={`${car.make} ${car.model}`}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-                <div className="p-4">
-                  <p className="mb-3 text-sm font-bold text-slate-900">{car.name}</p>
-                  <Link href="/contact-us" className="btn btn-primary w-full !px-3 !py-2 text-xs">
+                <div className="p-4 text-center">
+                  <h3 className="text-sm font-bold text-slate-900 line-clamp-1" title={`${car.make} ${car.model}`}>
+                    {car.make} {car.model}
+                  </h3>
+                  <p className="mt-1 mb-3 text-xs text-slate-500">
+                    {car.year} • {car.fuel} • {car.transmission}
+                  </p>
+                  <Link href="#" className="btn btn-primary w-full !px-3 !py-2 text-xs">
                     Book Test Drive
                   </Link>
                 </div>
@@ -275,7 +301,7 @@ export default function BookTestDrivePage() {
               Schedule your test drive at a time that suits you best. We&apos;ll make it happen!
             </p>
           </div>
-          <Link href="/contact-us" className="btn btn-primary">
+          <Link href="#" className="btn btn-primary">
             Schedule Test Drive
           </Link>
         </div>
