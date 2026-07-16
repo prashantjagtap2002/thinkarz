@@ -8,6 +8,7 @@ export default function PageTransition({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setIsReady(false);
     const frame = window.requestAnimationFrame(() => setIsReady(true));
     return () => window.cancelAnimationFrame(frame);

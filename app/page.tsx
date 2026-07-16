@@ -11,15 +11,14 @@ import {
   Award,
   Users,
   Search,
-  Car as CarIcon,
+  CarFront as CarIcon,
   CalendarCheck,
   FileCheck,
   Star,
   Scale,
-  CarFront,
   Truck,
-  Zap,
   Clock,
+  MoveRight,
 } from 'lucide-react';
 import CarCard from '@/components/CarCard';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
@@ -293,10 +292,12 @@ export default function HomePage() {
             {howItWorks.map(({ icon: Icon, step, desc }, i) => (
               <Reveal key={step} className="relative text-center" delay={i * 100}>
                 {i < howItWorks.length - 1 && (
-                  <div className="absolute right-[-1rem] top-8 hidden h-px w-8 bg-slate-300 lg:block" />
+                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 text-slate-500 lg:block">
+                    <MoveRight size={20} />
+                  </div>
                 )}
-                <div className="animate-soft-pulse mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
-                  <Icon size={26} />
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-800 border border-slate-200/60 shadow-sm">
+                  <Icon size={24} />
                 </div>
                 <h3 className="mb-1 font-bold text-slate-900">{step}</h3>
                 <p className="text-sm text-slate-600">{desc}</p>
@@ -400,7 +401,7 @@ export default function HomePage() {
               <Reveal
                 key={i}
                 delay={i * 90}
-                className="rounded-xl bg-white p-6 shadow-sm transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lg"
+                className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-red/25 hover:shadow-md"
               >
                 <p className="mb-4 text-3xl font-serif text-brand-red">&ldquo;</p>
                 <p className="mb-4 text-sm leading-relaxed text-slate-600">{t.quote}</p>

@@ -16,17 +16,15 @@ const quickLinks = [
 const services = [
   { name: 'Buy a Car', href: '/pre-owned-cars' },
   { name: 'Sell Your Car', href: '/sell-your-car' },
-  { name: 'Car Inspection', href: '/contact-us' },
+  { name: 'Car Inspection', href: '/sell-your-car' },
   { name: 'Finance Options', href: '/contact-us' },
-  { name: 'Extended Warranty', href: '/contact-us' },
-  { name: 'Roadside Assistance', href: '/contact-us' },
 ];
 
 const company = [
   { name: 'About Gautam Modi Group', href: '/about-us' },
   { name: 'Careers', href: '#' },
-  { name: 'Terms & Conditions', href: '#' },
-  { name: 'Privacy Policy', href: '#' },
+  { name: 'Terms & Conditions', href: '/terms-and-conditions' },
+  { name: 'Privacy Policy', href: '/privacy-policy' },
 ];
 
 export default function Footer() {
