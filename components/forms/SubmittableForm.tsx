@@ -1,7 +1,25 @@
 'use client';
 
-import { FormEvent, ReactNode, useState } from 'react';
+import { createContext, FormEvent, ReactNode, useContext, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
+
+export interface FieldValidation {
+  name: string;
+  pattern?: string;
+  message: string;
+}
+
+interface FormContextType {
+  errors: Record<string, string>;
+}
+
+const FormContext = createContext<FormContextType>({ errors: {} });
+
+export function FieldError({ name }: { name: string }) {
+  const { errors } = useContext(FormContext);
+  if (!errors[name]) return null;
+  return <p className="mt-1 text-xs text-red-600">{errors[name]}</p>;
+}
 
 export default function SubmittableForm({
   children,
@@ -10,6 +28,7 @@ export default function SubmittableForm({
   successMessage,
   successExtra,
   className = '',
+  validations,
   onSubmit,
 }: {
   children: ReactNode;
@@ -18,15 +37,43 @@ export default function SubmittableForm({
   successMessage: string;
   successExtra?: ReactNode;
   className?: string;
+  validations?: FieldValidation[];
   onSubmit?: () => void;
 }) {
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  function validate(form: HTMLFormElement): boolean {
+    const newErrors: Record<string, string> = {};
+
+    for (const field of form.querySelectorAll('input, select, textarea')) {
+      const el = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+      if (!el.name) continue;
+
+      if (el.hasAttribute('required') && !el.value.trim()) {
+        newErrors[el.name] = 'This field is required';
+        continue;
+      }
+
+      if (el.value.trim() && validations) {
+        const rule = validations.find((v) => v.name === el.name);
+        if (rule?.pattern && !new RegExp(rule.pattern).test(el.value)) {
+          newErrors[el.name] = rule.message;
+        }
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!validate(e.currentTarget)) return;
     onSubmit?.();
     setSubmitted(true);
     e.currentTarget.reset();
+    setErrors({});
   }
 
   if (submitted) {
@@ -47,11 +94,13 @@ export default function SubmittableForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className={className}>
-      {children}
-      <button type="submit" className="btn btn-primary mt-2 w-full">
-        {submitLabel}
-      </button>
-    </form>
+    <FormContext.Provider value={{ errors }}>
+      <form onSubmit={handleSubmit} className={className}>
+        {children}
+        <button type="submit" className="btn btn-primary mt-2 w-full">
+          {submitLabel}
+        </button>
+      </form>
+    </FormContext.Provider>
   );
 }

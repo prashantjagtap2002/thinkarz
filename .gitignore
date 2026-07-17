@@ -27,3 +27,6 @@ next-env.d.ts
 *.njsproj
 *.sln
 *.sw?
+
+# Source images (served from public/)
+showroom_image/

@@ -13,7 +13,7 @@ import {
   MessageCircleMore,
   MoveRight,
 } from 'lucide-react';
-import SubmittableForm from '@/components/forms/SubmittableForm';
+import SubmittableForm, { type FieldValidation, FieldError } from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
 import { cars } from '@/lib/cars';
 
@@ -140,46 +140,58 @@ export default function BookTestDrivePage() {
               successTitle="Test Drive Booked!"
               successMessage="We'll call you shortly to confirm your slot at our Malad (West) showroom."
               className="space-y-4"
+              validations={[
+                { name: 'mobile', pattern: '^[6-9]\\d{9}$', message: 'Enter a valid 10-digit mobile number' },
+                { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
+              ]}
             >
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="field-label">Full Name</label>
-                  <input required className="field-input" placeholder="Enter your name" />
+                  <label htmlFor="name" className="field-label">Full Name</label>
+                  <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
+                  <FieldError name="name" />
                 </div>
                 <div>
-                  <label className="field-label">Mobile Number</label>
+                  <label htmlFor="mobile" className="field-label">Mobile Number</label>
                   <input
+                    id="mobile"
+                    name="mobile"
                     required
                     type="tel"
                     className="field-input"
                     placeholder="Enter your mobile number"
                   />
+                  <FieldError name="mobile" />
                 </div>
               </div>
               <div>
-                <label className="field-label">Email Address</label>
+                <label htmlFor="email" className="field-label">Email Address</label>
                 <input
+                  id="email"
+                  name="email"
                   required
                   type="email"
                   className="field-input"
                   placeholder="Enter your email address"
                 />
+                <FieldError name="email" />
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="field-label">Select Car</label>
-                  <select required className="field-input" defaultValue="">
+                  <label htmlFor="car" className="field-label">Select Car</label>
+                  <select id="car" name="car" required className="field-input" defaultValue="">
                     <option value="" disabled>
                       Select Car Model
                     </option>
                     {popularCars.map((car) => (
-                      <option key={car.id}>{car.make} {car.model}</option>
+                      <option key={car.id} value={`${car.make} ${car.model}`}>{car.make} {car.model}</option>
                     ))}
                   </select>
+                  <FieldError name="car" />
                 </div>
                 <div>
-                  <label className="field-label">Select Variant (Optional)</label>
-                  <select className="field-input" defaultValue="">
+                  <label htmlFor="variant" className="field-label">Select Variant (Optional)</label>
+                  <select id="variant" name="variant" className="field-input" defaultValue="">
                     <option value="" disabled>
                       Select Variant
                     </option>
@@ -191,12 +203,14 @@ export default function BookTestDrivePage() {
               </div>
               <AppointmentFields />
               <div>
-                <label className="field-label">Preferred Location</label>
-                <input className="field-input" defaultValue="Malad (West), Mumbai" readOnly />
+                <label htmlFor="location" className="field-label">Preferred Location</label>
+                <input id="location" name="location" className="field-input" defaultValue="Malad (West), Mumbai" readOnly />
               </div>
               <div>
-                <label className="field-label">Additional Notes (Optional)</label>
+                <label htmlFor="notes" className="field-label">Additional Notes (Optional)</label>
                 <textarea
+                  id="notes"
+                  name="notes"
                   className="field-input"
                   rows={3}
                   placeholder="Tell us anything we should know"

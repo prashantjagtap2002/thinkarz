@@ -138,7 +138,7 @@ export default function Footer() {
 
       <div className="border-t border-slate-700/60 py-5">
         <p className="container-page text-center text-xs text-slate-500">
-          © 2024 Thinkarz. All Rights Reserved.
+          © 2026 Thinkarz. All Rights Reserved.
         </p>
       </div>
     </footer>

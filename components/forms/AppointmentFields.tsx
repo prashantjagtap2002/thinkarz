@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { CalendarDays } from 'lucide-react';
+import { FieldError } from './SubmittableForm';
 
 const TIME_SLOTS = [
   { value: '10:00', label: '10:00 AM - 11:00 AM' },
@@ -26,7 +26,6 @@ function timeToMinutes(value: string) {
 export default function AppointmentFields() {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const today = useMemo(() => getTodayIsoDate(), []);
 
   const availableTimeSlots = useMemo(() => {
@@ -49,28 +48,33 @@ export default function AppointmentFields() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
-        <label className="field-label">Preferred Date</label>
+        <label htmlFor="date" className="field-label">Preferred Date</label>
         <div className="relative">
           <input
+            id="date"
+            name="date"
             required
-            type={showDatePicker || selectedDate ? 'date' : 'text'}
-            className="field-input pr-11"
+            type="date"
+            className="field-input"
             value={selectedDate}
             min={today}
-            placeholder=""
-            onFocus={() => setShowDatePicker(true)}
-            onBlur={() => setShowDatePicker(Boolean(selectedDate))}
+            onKeyDown={(e) => e.preventDefault()}
+            onClick={(e) => (e.target as HTMLInputElement).showPicker?.()}
             onChange={(e) => setSelectedDate(e.target.value)}
           />
-          <CalendarDays
-            size={18}
-            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
-          />
+          {!selectedDate && (
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400">
+              Select Date
+            </span>
+          )}
         </div>
+        <FieldError name="date" />
       </div>
       <div>
-        <label className="field-label">Preferred Time</label>
+        <label htmlFor="time" className="field-label">Preferred Time</label>
         <select
+          id="time"
+          name="time"
           required
           className="field-input"
           value={selectedTime}
@@ -86,6 +90,7 @@ export default function AppointmentFields() {
             </option>
           ))}
         </select>
+        <FieldError name="time" />
       </div>
     </div>
   );

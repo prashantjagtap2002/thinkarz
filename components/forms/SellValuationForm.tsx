@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { BadgeIndianRupee } from 'lucide-react';
-import SubmittableForm from '@/components/forms/SubmittableForm';
+import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 
 const BASE_VALUE: Record<string, number> = {
   Hatchback: 500000,
@@ -51,6 +51,10 @@ export default function SellValuationForm() {
       successMessage="Our team will get back to you shortly to confirm your car's final value."
       className="space-y-5"
       onSubmit={resetValuationFields}
+      validations={[
+        { name: 'phone', pattern: '^[6-9]\\d{9}$', message: 'Enter a valid 10-digit mobile number' },
+        { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
+      ]}
       successExtra={
         estimate && (
           <div className="mt-5 w-full rounded-xl bg-white p-4 text-left">
@@ -69,12 +73,15 @@ export default function SellValuationForm() {
       }
     >
       <div>
-        <label className="field-label">Registration Number</label>
-        <input required className="field-input" placeholder="e.g. MH01AB1234" />
+        <label htmlFor="regNumber" className="field-label">Registration Number</label>
+        <input id="regNumber" name="regNumber" required className="field-input" placeholder="e.g. MH01AB1234" />
+        <FieldError name="regNumber" />
       </div>
       <div>
-        <label className="field-label">Car Model</label>
+        <label htmlFor="carModel" className="field-label">Car Model</label>
         <input
+          id="carModel"
+          name="carModel"
           required
           className="field-input"
           list="car-model-options"
@@ -88,10 +95,13 @@ export default function SellValuationForm() {
           <option value="SUV" />
           <option value="Electric" />
         </datalist>
+        <FieldError name="carModel" />
       </div>
       <div>
-        <label className="field-label">Manufacturing Year</label>
+        <label htmlFor="year" className="field-label">Manufacturing Year</label>
         <select
+          id="year"
+          name="year"
           required
           className="field-input"
           value={year}
@@ -104,10 +114,13 @@ export default function SellValuationForm() {
             <option key={i}>{2024 - i}</option>
           ))}
         </select>
+        <FieldError name="year" />
       </div>
       <div>
-        <label className="field-label">Kilometer Driven</label>
+        <label htmlFor="kms" className="field-label">Kilometer Driven</label>
         <input
+          id="kms"
+          name="kms"
           required
           type="number"
           min={0}
@@ -117,24 +130,31 @@ export default function SellValuationForm() {
           value={kms}
           onChange={(e) => setKms(e.target.value)}
         />
+        <FieldError name="kms" />
       </div>
       <div>
-        <label className="field-label">Phone Number</label>
+        <label htmlFor="phone" className="field-label">Phone Number</label>
         <input
+          id="phone"
+          name="phone"
           required
           type="tel"
           className="field-input"
           placeholder="Enter your phone number"
         />
+        <FieldError name="phone" />
       </div>
       <div>
-        <label className="field-label">Email ID</label>
+        <label htmlFor="email" className="field-label">Email ID</label>
         <input
+          id="email"
+          name="email"
           required
           type="email"
           className="field-input"
           placeholder="Enter your email ID"
         />
+        <FieldError name="email" />
       </div>
     </SubmittableForm>
   );
