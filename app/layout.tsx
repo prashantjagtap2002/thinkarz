@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageTransition from '@/components/PageTransition';
+import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 
@@ -37,12 +39,15 @@ export const viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans`}>
+      <body className={`${inter.variable} font-sans`} suppressHydrationWarning>
         <Header />
         <PageTransition>
           <main>{children}</main>
         </PageTransition>
         <Footer />
+        <Suspense fallback={null}>
+          <FloatingWhatsAppButton />
+        </Suspense>
       </body>
     </html>
   );

@@ -1,7 +1,22 @@
 'use client';
 
-import { createContext, FormEvent, ReactNode, useContext, useState } from 'react';
+import { createContext, FormEvent, ReactNode, Suspense, useContext, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
+import { useUtmParams } from '@/hooks/useUtmParams';
+
+function UtmHiddenFields() {
+  const utm = useUtmParams();
+  return (
+    <>
+      <input type="hidden" name="utm_source" value={utm.utm_source} />
+      <input type="hidden" name="utm_medium" value={utm.utm_medium} />
+      <input type="hidden" name="utm_campaign" value={utm.utm_campaign} />
+      <input type="hidden" name="utm_term" value={utm.utm_term} />
+      <input type="hidden" name="utm_content" value={utm.utm_content} />
+      <input type="hidden" name="page_url" value={utm.page_url} />
+    </>
+  );
+}
 
 export interface FieldValidation {
   name: string;
@@ -97,6 +112,9 @@ export default function SubmittableForm({
     <FormContext.Provider value={{ errors }}>
       <form onSubmit={handleSubmit} className={className}>
         {children}
+        <Suspense fallback={null}>
+          <UtmHiddenFields />
+        </Suspense>
         <button type="submit" className="btn btn-primary mt-2 w-full">
           {submitLabel}
         </button>
