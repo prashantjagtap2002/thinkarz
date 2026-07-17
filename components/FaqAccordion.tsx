@@ -16,7 +16,7 @@ function FaqItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border-b border-slate-200 last:border-b-0">
+    <div>
       <button
         type="button"
         onClick={onToggle}
@@ -58,7 +58,7 @@ export default function FaqAccordion({ faqs = defaultFaqs }: { faqs?: Faq[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="divide-y-0">
+    <div className="divide-y divide-slate-200">
       {faqs.map((faq, index) => {
         const isOpen = openIndex === index;
 

@@ -134,7 +134,7 @@ export default function ContactUsPage() {
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
             <div className="relative aspect-[16/10] w-full">
               <Image
-                src="https://picsum.photos/seed/thinkarz-showroom-front/1200/750"
+                src="/showroom.jpeg"
                 alt="Thinkarz showroom"
                 fill
                 className="object-cover"

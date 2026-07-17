@@ -154,7 +154,7 @@ export default function AboutPage() {
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
             <Image
-              src="https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.13.41-PM-1024x768.jpeg"
+              src="/showroom_image/thinkarz-malad-west-mumbai-second-hand-car-dealers-tinbrdbc9n.webp"
               alt="Thinkarz showroom"
               fill
               priority
