@@ -12,12 +12,16 @@ import {
   GaugeCircle,
   MessageCircleMore,
   MoveRight,
+  ChevronDown,
 } from 'lucide-react';
 import SubmittableForm, { type FieldValidation, FieldError } from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
 import { cars } from '@/lib/cars';
 
-export const metadata = { title: 'Book a Test Drive | Thinkarz' };
+export const metadata = {
+  title: 'Book a Test Drive | Thinkarz',
+  description: 'Book a test drive for your favourite pre-owned car at our Malad West showroom. Choose your car, date and time slot.',
+};
 
 const steps = [
   {
@@ -226,13 +230,18 @@ export default function BookTestDrivePage() {
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             How It Works
           </h2>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
             {steps.map(({ icon: Icon, title, desc }, index) => (
               <div key={title} className="relative text-center">
                 {index < steps.length - 1 && (
-                  <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center lg:flex">
-                    <MoveRight size={28} className="text-slate-400" />
-                  </div>
+                  <>
+                    <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center lg:flex">
+                      <MoveRight size={28} className="text-slate-400" />
+                    </div>
+                    <div className="mb-4 flex justify-center text-slate-400 lg:hidden">
+                      <ChevronDown size={20} />
+                    </div>
+                  </>
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-800 border border-slate-200/60 shadow-sm">
                   <Icon size={24} />

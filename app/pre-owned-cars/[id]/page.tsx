@@ -299,11 +299,11 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
             Book a test drive or talk to our team to take the next step.
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/book-a-test-drive" className="btn btn-primary">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <Link href="/book-a-test-drive" className="btn btn-primary w-full sm:w-auto">
             Book Test Drive
           </Link>
-          <Link href="/contact-us" className="btn btn-outline-white">
+          <Link href="/contact-us" className="btn btn-outline-white w-full sm:w-auto">
             Talk to Expert
           </Link>
         </div>

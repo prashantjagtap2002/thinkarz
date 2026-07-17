@@ -210,15 +210,7 @@ export default function CompareCarsPage() {
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
               {/* Car photo + price + actions row */}
-              <div
-                className="mb-6 grid grid-cols-1 gap-6 border-b border-slate-100 pb-6 sm:grid-cols-2"
-                style={{
-                  gridTemplateColumns:
-                    selectedCars.length > 2
-                      ? `repeat(${Math.min(selectedCars.length, window?.innerWidth < 640 ? 1 : selectedCars.length)}, minmax(0, 1fr))`
-                      : undefined,
-                }}
-              >
+              <div className="mb-6 grid grid-cols-1 gap-6 border-b border-slate-100 pb-6 sm:grid-cols-2">
                 {selectedCars.map((car) => (
                   <div key={car.id} className="text-center">
                     <div className="relative mx-auto aspect-[4/3] w-full max-w-[180px] overflow-hidden rounded-xl bg-slate-100 sm:max-w-[220px]">

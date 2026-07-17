@@ -4,7 +4,10 @@ import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm'
 import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
 
-export const metadata = { title: 'Contact Us | Thinkarz' };
+export const metadata = {
+  title: 'Contact Us | Thinkarz',
+  description: 'Get in touch with Thinkarz for pre-owned car inquiries, test drives, and expert guidance. Visit our Malad West showroom or call us today.',
+};
 
 const touchPoints = [
   { icon: MapPin, title: 'Visit Our Showroom', lines: contactInfo.address },

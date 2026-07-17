@@ -89,6 +89,8 @@ export default function AboutPage() {
   const [activeDots, setActiveDots] = useState<boolean[]>([]);
 
   useEffect(() => {
+    let ticking = false;
+
     function handleScroll() {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
@@ -121,13 +123,23 @@ export default function AboutPage() {
       }
     }
 
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleScroll);
-    const timer = setTimeout(handleScroll, 100);
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    const timer = setTimeout(onScroll, 100);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
       clearTimeout(timer);
     };
   }, []);

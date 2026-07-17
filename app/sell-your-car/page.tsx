@@ -12,10 +12,14 @@ import {
   Landmark,
   CalendarClock,
   MoveRight,
+  ChevronDown,
 } from 'lucide-react';
 import SellValuationForm from '@/components/forms/SellValuationForm';
 
-export const metadata = { title: 'Sell Your Car | Thinkarz' };
+export const metadata = {
+  title: 'Sell Your Car | Thinkarz',
+  description: 'Get the best value for your car with Thinkarz. Free inspection, instant valuation, and hassle-free paperwork.',
+};
 
 const steps = [
   { icon: ScanSearch, title: '1. Request Valuation', desc: 'Submit details for an expert estimate.' },
@@ -105,13 +109,18 @@ export default function SellYourCarPage() {
           </h2>
           <span className="mx-auto mb-12 block h-1 w-12 bg-brand-red" />
 
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8">
             {steps.map(({ icon: Icon, title, desc }, i) => (
               <div key={title} className="relative text-center">
                 {i < steps.length - 1 && (
-                  <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center sm:flex">
-                    <MoveRight size={28} className="text-slate-400" />
-                  </div>
+                  <>
+                    <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center sm:flex">
+                      <MoveRight size={28} className="text-slate-400" />
+                    </div>
+                    <div className="mb-4 flex justify-center text-slate-400 sm:hidden">
+                      <ChevronDown size={20} />
+                    </div>
+                  </>
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                   <Icon size={26} />
@@ -180,11 +189,11 @@ export default function SellYourCarPage() {
                 hassle-free.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <ScrollToTopButton className="btn btn-primary">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <ScrollToTopButton className="btn btn-primary w-full sm:w-auto">
                 Get Free Valuation
               </ScrollToTopButton>
-              <Link href="/contact-us" className="btn btn-outline-white">
+              <Link href="/contact-us" className="btn btn-outline-white w-full sm:w-auto">
                 Talk to Expert
               </Link>
             </div>

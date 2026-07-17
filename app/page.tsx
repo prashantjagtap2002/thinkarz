@@ -19,6 +19,7 @@ import {
   Truck,
   Clock,
   MoveRight,
+  ChevronDown,
 } from 'lucide-react';
 import CarCard from '@/components/CarCard';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
@@ -288,13 +289,18 @@ export default function HomePage() {
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             How It Works
           </h2>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
             {howItWorks.map(({ icon: Icon, step, desc }, i) => (
               <Reveal key={step} className="relative text-center" delay={i * 100}>
                 {i < howItWorks.length - 1 && (
-                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 text-slate-500 lg:block">
-                    <MoveRight size={20} />
-                  </div>
+                  <>
+                    <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 text-slate-500 lg:block">
+                      <MoveRight size={20} />
+                    </div>
+                    <div className="mb-4 flex justify-center text-slate-400 lg:hidden">
+                      <ChevronDown size={20} />
+                    </div>
+                  </>
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-800 border border-slate-200/60 shadow-sm">
                   <Icon size={24} />
@@ -316,11 +322,11 @@ export default function HomePage() {
               Get the best value for your car with a quick, free and hassle-free valuation.
             </p>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/sell-your-car" className="btn btn-primary">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Link href="/sell-your-car" className="btn btn-primary w-full sm:w-auto">
               Get Free Valuation
             </Link>
-            <Link href="/sell-your-car" className="btn btn-outline-white">
+            <Link href="/sell-your-car" className="btn btn-outline-white w-full sm:w-auto">
               Sell Your Car
             </Link>
           </div>
@@ -396,7 +402,9 @@ export default function HomePage() {
               What Our Customers Say
             </h2>
           </Reveal>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+
+          {/* Desktop grid */}
+          <div className="hidden grid-cols-3 gap-6 sm:grid">
             {testimonials.map((t, i) => (
               <Reveal
                 key={i}
@@ -412,6 +420,35 @@ export default function HomePage() {
                 </div>
                 <p className="text-sm font-semibold text-slate-900">{t.name}</p>
               </Reveal>
+            ))}
+          </div>
+
+          {/* Mobile carousel */}
+          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide sm:hidden">
+            {testimonials.map((t, i) => (
+              <div
+                key={i}
+                className="w-[85vw] shrink-0 snap-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+              >
+                <p className="mb-4 text-3xl font-serif text-brand-red">&ldquo;</p>
+                <p className="mb-4 text-sm leading-relaxed text-slate-600">{t.quote}</p>
+                <div className="mb-2 flex gap-0.5 text-brand-red">
+                  {Array.from({ length: t.rating }).map((_, s) => (
+                    <Star key={s} size={14} fill="currentColor" />
+                  ))}
+                </div>
+                <p className="text-sm font-semibold text-slate-900">{t.name}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile dots */}
+          <div className="mt-4 flex justify-center gap-2 sm:hidden">
+            {testimonials.map((_, i) => (
+              <span
+                key={i}
+                className="h-2 w-2 rounded-full bg-slate-300"
+              />
             ))}
           </div>
         </div>
