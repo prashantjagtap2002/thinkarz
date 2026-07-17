@@ -119,7 +119,7 @@ export default function HomePage() {
           </div>
 
           <div
-            className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 animate-fade-up relative z-10"
+            className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:gap-4 animate-fade-up relative z-10"
             style={{ animationDelay: '220ms' }}
           >
             <Link href="/pre-owned-cars" className="btn btn-primary w-full sm:w-auto">

@@ -67,15 +67,15 @@ export default function CarComparison({
 
   return (
     <div className="rounded-2xl border border-slate-200 p-6 sm:p-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <Scale className="text-brand-red" size={22} />
           <h2 className="text-xl font-extrabold text-slate-900">Compare With Another Car</h2>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <select
-            className="field-input !w-auto !py-2 text-xs"
+            className="field-input !w-full !py-2 text-xs sm:!w-auto"
             value={extraId ?? ''}
             onChange={(e) => setExtraId(e.target.value || null)}
           >
@@ -112,8 +112,9 @@ export default function CarComparison({
           Pick a car above (or hit &quot;Surprise Me&quot;) to compare it side-by-side with this one.
         </p>
       ) : (
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[640px] border-collapse text-sm">
+      <>
+      <div className="hidden sm:block overflow-x-auto">
+        <table className="w-full min-w-0 border-collapse text-sm">
           <thead>
             <tr>
               <th className="w-32 border-b border-slate-200 p-3 text-left align-bottom text-xs font-bold uppercase tracking-wide text-slate-400">
@@ -172,6 +173,45 @@ export default function CarComparison({
           </tbody>
         </table>
       </div>
+
+      {/* Mobile comparison cards */}
+      <div className="space-y-4 sm:hidden">
+        {rows.map((row) => {
+          const winnerIdx = bestIndex(columns, row);
+          return (
+            <div key={row.label} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                {row.label}
+              </p>
+              <div className="space-y-1.5">
+                {columns.map((car, i) => (
+                  <div key={car.id} className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-slate-600">
+                      {car.make} {car.model}
+                      {i === 0 && (
+                        <span className="ml-1.5 rounded bg-brand-red px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
+                          This Car
+                        </span>
+                      )}
+                    </span>
+                    <span className={`text-sm font-semibold ${
+                      i === winnerIdx && row.lowerIsBetter ? 'text-green-600' : 'text-slate-900'
+                    }`}>
+                      {row.render(car)}
+                      {i === winnerIdx && row.lowerIsBetter && (
+                        <span className="ml-1 rounded bg-green-100 px-1 py-0.5 text-[10px] font-bold text-green-700">
+                          Best
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      </>
       )}
     </div>
   );
