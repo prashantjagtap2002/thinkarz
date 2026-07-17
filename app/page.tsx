@@ -169,8 +169,8 @@ export default function HomePage() {
                   href={`/pre-owned-cars?make=${encodeURIComponent(brand)}`}
                   className="flex flex-col items-center justify-center bg-white p-6 text-center hover:bg-slate-50 transition-colors"
                 >
-                  <div className="flex h-14 w-full items-center justify-center overflow-hidden">
-                    <BrandLogo brand={brand} size={42} />
+                  <div className="flex h-16 w-full items-center justify-center overflow-hidden">
+                    <BrandLogo brand={brand} size={52} />
                   </div>
                 </Link>
               ))}
@@ -271,7 +271,7 @@ export default function HomePage() {
                 key={title}
                 className="rounded-xl border border-slate-200 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
                   <Icon size={22} />
                 </div>
                 <h3 className="mb-1.5 font-bold text-slate-900">{title}</h3>
@@ -331,7 +331,7 @@ export default function HomePage() {
           className="flex flex-col items-start gap-6 rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10"
         >
           <div>
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
               <Scale size={22} />
             </div>
             <h3 className="text-xl font-bold text-slate-900 sm:text-2xl">

@@ -53,7 +53,7 @@ export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
       <div 
         className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl p-6 overflow-hidden flex flex-col gap-5 border border-slate-100 transition-all duration-300 scale-100"
         onClick={(e) => e.stopPropagation()}

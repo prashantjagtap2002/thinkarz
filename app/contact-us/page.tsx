@@ -124,9 +124,11 @@ export default function ContactUsPage() {
           <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200">
             <iframe
               title="Thinkarz showroom location"
-              src="https://www.google.com/maps?q=Link+Road,+Malad+West,+Mumbai+400064&z=14&output=embed"
+              src="https://maps.google.com/maps?q=19.182148,72.836216&z=15&output=embed"
               className="h-full w-full"
               loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
@@ -146,7 +148,7 @@ export default function ContactUsPage() {
                 We look forward to welcoming you!
               </p>
               <a
-                href="https://maps.google.com/?q=Link+Road,+Malad+West,+Mumbai+400064"
+                href="https://maps.app.goo.gl/j1DSAt9Dy3wuXHwy6"
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline"

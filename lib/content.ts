@@ -31,9 +31,14 @@ export const navLinks = [
 ];
 
 export const contactInfo = {
-  address: ['Thinkarz, 5th Floor, Modi House,', 'Link Road, Malad (West),', 'Mumbai - 400064'],
-  phone: '022 4212 5678',
-  email: 'hello@thinkarz.com',
+  address: [
+    'Dheeraj Sagar, Building, New Link Rd,',
+    'Opp. Goregaon Sports Club,',
+    'Malad, Ekta Nagar, Malad West,',
+    'Mumbai, Maharashtra 400064',
+  ],
+  phone: '+91-80806-34444',
+  email: 'info.thinkarz@gmail.com',
   hours: ['Mon - Sat: 10:00 AM - 7:00 PM', 'Sun: 10:00 AM - 5:00 PM'],
 };
 

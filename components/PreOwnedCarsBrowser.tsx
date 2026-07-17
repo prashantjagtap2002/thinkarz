@@ -77,16 +77,18 @@ function initialSelection(value: string | null, options: readonly string[]) {
 
 function getBaseColor(color: string): string {
   const c = color.toLowerCase();
-  if (c.includes('white')) return 'White';
+  if (c.includes('white') || c.includes('pearl')) return 'White';
   if (c.includes('grey') || c.includes('gray')) return 'Grey';
   if (c.includes('red')) return 'Red';
-  if (c.includes('silver')) return 'Silver';
+  if (c.includes('silver') || c.includes('steel')) return 'Silver';
   if (c.includes('black')) return 'Black';
   if (c.includes('blue')) return 'Blue';
   return 'Other';
 }
 
 const PAGE_SIZE = 6;
+
+const colorLabels = ['White', 'Grey', 'Red', 'Silver', 'Black', 'Blue', 'Other'] as const;
 
 // Price slider bounds derived from the inventory.
 const MIN_PRICE = 0;
@@ -133,10 +135,9 @@ export default function PreOwnedCarsBrowser() {
     () => countsForOptions(kmLabels, (car, option) => matchesKmLabel(car, option)),
     [kmLabels],
   );
-  const colorLabels = useMemo(() => ['White', 'Grey', 'Red', 'Silver'] as const, []);
   const colorCounts = useMemo(
     () => countsForOptions(colorLabels, (car, option) => getBaseColor(car.color) === option),
-    [colorLabels],
+    [],
   );
 
   const priceSliderActive = priceMax !== MAX_PRICE;
@@ -557,7 +558,7 @@ function FilterSidebar(props: SidebarProps) {
         {/* Color */}
         <FilterSection title="Color">
           <div className="space-y-2">
-            {['White', 'Grey', 'Red', 'Silver'].map((option) => (
+            {colorLabels.map((option) => (
               <FilterCheckbox
                 key={option}
                 label={option}
@@ -572,7 +573,11 @@ function FilterSidebar(props: SidebarProps) {
                             ? 'bg-red-500'
                             : option === 'Silver'
                               ? 'bg-slate-300'
-                              : 'bg-slate-100'
+                              : option === 'Black'
+                                ? 'bg-slate-900'
+                                : option === 'Blue'
+                                  ? 'bg-blue-500'
+                                  : 'bg-slate-200 border border-slate-300'
                     }`}
                     style={{ width: '16px', height: '16px' }}
                   />
