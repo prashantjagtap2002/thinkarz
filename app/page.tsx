@@ -119,13 +119,13 @@ export default function HomePage() {
           </div>
 
           <div
-            className="mt-6 flex flex-wrap gap-4 animate-fade-up relative z-10"
+            className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 animate-fade-up relative z-10"
             style={{ animationDelay: '220ms' }}
           >
-            <Link href="/pre-owned-cars" className="btn btn-primary">
+            <Link href="/pre-owned-cars" className="btn btn-primary w-full sm:w-auto">
               Browse Cars
             </Link>
-            <Link href="/sell-your-car" className="btn btn-outline-white">
+            <Link href="/sell-your-car" className="btn btn-outline-white w-full sm:w-auto">
               Sell Your Car
             </Link>
           </div>
@@ -162,7 +162,7 @@ export default function HomePage() {
             </Link>
           </Reveal>
           <Reveal>
-            <div className="grid grid-cols-3 rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-slate-200 gap-[1px] sm:grid-cols-6">
+            <div className="grid grid-cols-2 rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-slate-200 gap-[1px] sm:grid-cols-3 md:grid-cols-6">
               {brands.map((brand) => (
                 <Link
                   key={brand}
@@ -186,7 +186,7 @@ export default function HomePage() {
             <h2 className="mb-6 text-xl font-extrabold text-slate-900 sm:text-2xl">
               Shop by Body Type
             </h2>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
               {bodyTypes.map((type, i) => {
                 return (
                   <Reveal key={type} delay={i * 70}>
@@ -208,7 +208,7 @@ export default function HomePage() {
             <h2 className="mb-6 text-xl font-extrabold text-slate-900 sm:text-2xl">
               Shop by Budget
             </h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {budgetOptions.map((option, i) => (
                 <Reveal key={option.label} delay={i * 70}>
                   <Link

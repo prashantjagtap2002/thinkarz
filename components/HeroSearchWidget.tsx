@@ -164,7 +164,7 @@ function BudgetSelect({
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 sm:right-auto sm:w-72 top-[calc(100%+6px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up">
+        <div className="absolute left-0 right-0 sm:right-auto sm:w-72 top-[calc(100%+6px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up max-h-[60vh] overflow-y-auto">
           <div className="flex justify-between items-center mb-3">
             <span className="text-xs font-semibold text-slate-500">Adjust Budget</span>
             <span className="text-xs font-bold text-brand-red bg-brand-red/5 px-2 py-0.5 rounded">
@@ -283,7 +283,7 @@ function AgeSelect({
       </button>
 
       {open && (
-        <div className="absolute right-0 sm:left-auto sm:w-72 top-[calc(100%+6px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up">
+        <div className="absolute right-0 sm:left-auto sm:w-72 top-[calc(100%+6px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up max-h-[60vh] overflow-y-auto">
           <div className="flex justify-between items-center mb-3">
             <span className="text-xs font-semibold text-slate-500">Adjust Car Age</span>
             <span className="text-xs font-bold text-brand-red bg-brand-red/5 px-2 py-0.5 rounded">

@@ -44,12 +44,12 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="container-page grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
-        <div className="sm:col-span-2 lg:col-span-1">
-          <span className="text-2xl font-extrabold tracking-tight text-white">
+      <div className="container-page grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        <div className="sm:col-span-2 md:col-span-3 lg:col-span-1">
+          <span className="text-xl font-extrabold tracking-tight text-white sm:text-2xl">
             THIN<span className="text-brand-red text-[1.18em]">K</span>ARZ
           </span>
-          <p className="mt-1 text-[10px] font-semibold tracking-wide text-slate-400">
+          <p className="mt-1 text-[11px] font-semibold tracking-wide text-slate-400">
             YOUR ULTIMATE CAR DESTINATION
           </p>
           <p className="mt-4 text-sm leading-relaxed text-slate-400">
@@ -71,11 +71,11 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-4 text-sm font-semibold text-white">Quick Links</h4>
+          <h4 className="mb-4 text-sm font-semibold text-white sm:text-base">Quick Links</h4>
           <ul className="space-y-2.5">
             {quickLinks.map((link) => (
               <li key={link.name}>
-                <Link href={link.href} className="text-sm text-slate-400 hover:text-brand-red">
+                <Link href={link.href} className="text-xs text-slate-400 hover:text-brand-red sm:text-sm">
                   {link.name}
                 </Link>
               </li>
@@ -84,11 +84,11 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-4 text-sm font-semibold text-white">Our Services</h4>
+          <h4 className="mb-4 text-sm font-semibold text-white sm:text-base">Our Services</h4>
           <ul className="space-y-2.5">
             {services.map((service) => (
               <li key={service.name}>
-                <Link href={service.href} className="text-sm text-slate-400 hover:text-brand-red">
+                <Link href={service.href} className="text-xs text-slate-400 hover:text-brand-red sm:text-sm">
                   {service.name}
                 </Link>
               </li>
@@ -97,11 +97,11 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-4 text-sm font-semibold text-white">Company</h4>
+          <h4 className="mb-4 text-sm font-semibold text-white sm:text-base">Company</h4>
           <ul className="space-y-2.5">
             {company.map((item) => (
               <li key={item.name}>
-                <Link href={item.href} className="text-sm text-slate-400 hover:text-brand-red">
+                <Link href={item.href} className="text-xs text-slate-400 hover:text-brand-red sm:text-sm">
                   {item.name}
                 </Link>
               </li>
@@ -110,23 +110,23 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-4 text-sm font-semibold text-white">Contact Us</h4>
+          <h4 className="mb-4 text-sm font-semibold text-white sm:text-base">Contact Us</h4>
           <ul className="space-y-3 text-sm text-slate-400">
             <li className="flex gap-2.5">
               <MapPin size={16} className="mt-0.5 shrink-0 text-brand-red" />
-              <span>{contactInfo.address.join(' ')}</span>
+              <span className="min-w-0 break-words">{contactInfo.address.join(', ')}</span>
             </li>
             <li className="flex gap-2.5">
               <Phone size={16} className="mt-0.5 shrink-0 text-brand-red" />
-              <span>{contactInfo.phone}</span>
+              <span className="min-w-0 break-words">{contactInfo.phone}</span>
             </li>
             <li className="flex gap-2.5">
               <Mail size={16} className="mt-0.5 shrink-0 text-brand-red" />
-              <span>{contactInfo.email}</span>
+              <span className="min-w-0 break-words">{contactInfo.email}</span>
             </li>
             <li className="flex gap-2.5">
               <Clock size={16} className="mt-0.5 shrink-0 text-brand-red" />
-              <span>
+              <span className="min-w-0 break-words">
                 {contactInfo.hours[0]}
                 <br />
                 {contactInfo.hours[1]}

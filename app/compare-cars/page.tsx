@@ -214,19 +214,21 @@ export default function CompareCarsPage() {
                 className="mb-6 grid grid-cols-1 gap-6 border-b border-slate-100 pb-6 sm:grid-cols-2"
                 style={{
                   gridTemplateColumns:
-                    selectedCars.length > 2 ? `repeat(${selectedCars.length}, minmax(0, 1fr))` : undefined,
+                    selectedCars.length > 2
+                      ? `repeat(${Math.min(selectedCars.length, window?.innerWidth < 640 ? 1 : selectedCars.length)}, minmax(0, 1fr))`
+                      : undefined,
                 }}
               >
                 {selectedCars.map((car) => (
                   <div key={car.id} className="text-center">
-                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[220px] overflow-hidden rounded-xl bg-slate-100">
+                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[180px] overflow-hidden rounded-xl bg-slate-100 sm:max-w-[220px]">
                       <Image src={car.image} alt={`${car.make} ${car.model}`} fill className="object-cover" />
                     </div>
                     <p className="mt-3 text-sm font-bold uppercase text-slate-900">
                       {car.make} {car.model}
                     </p>
                     <p className="text-2xl font-extrabold text-slate-900">{formatPrice(car.price)}</p>
-                    <div className="mt-3 flex flex-wrap justify-center gap-2">
+                    <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center">
                       <Link href="/book-a-test-drive" className="btn btn-primary !px-4 !py-2 text-xs">
                         Book Test Drive
                       </Link>
@@ -238,15 +240,15 @@ export default function CompareCarsPage() {
                 ))}
               </div>
 
-              {/* Spec table */}
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[520px] border-collapse text-sm">
+              {/* Spec table - desktop */}
+              <div className="hidden sm:block overflow-x-auto">
+                <table className="w-full min-w-0 border-collapse text-sm">
                   <tbody>
                     {rows.map((row) => {
                       const winnerIdx = bestIndex(selectedCars, row);
                       return (
                         <tr key={row.label} className="border-b border-slate-100 last:border-0">
-                          <td className="w-40 p-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          <td className="w-32 p-3 text-xs font-semibold uppercase tracking-wide text-slate-500 lg:w-40">
                             {row.label}
                           </td>
                           {selectedCars.map((car, i) => (
@@ -271,6 +273,39 @@ export default function CompareCarsPage() {
                     })}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Spec cards - mobile */}
+              <div className="space-y-4 sm:hidden">
+                {rows.map((row) => {
+                  const winnerIdx = bestIndex(selectedCars, row);
+                  return (
+                    <div key={row.label} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                      <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        {row.label}
+                      </p>
+                      <div className="space-y-2">
+                        {selectedCars.map((car, i) => (
+                          <div key={car.id} className="flex items-center justify-between">
+                            <span className="text-xs font-medium text-slate-700">
+                              {car.make} {car.model}
+                            </span>
+                            <span
+                              className={`text-sm font-semibold ${
+                                i === winnerIdx ? 'text-green-600' : 'text-slate-900'
+                              }`}
+                            >
+                              {row.render(car)}
+                              {winnerIdx !== -1 && i === winnerIdx && (
+                                <span className="ml-1 text-green-600">&#10003;</span>
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -306,7 +341,7 @@ export default function CompareCarsPage() {
           <h2 className="mb-8 text-xl font-extrabold text-slate-900 sm:text-2xl">
             Popular Comparisons
           </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {popularPairs.map(([aId, bId], i) => {
               const a = cars.find((c) => c.id === aId);
               const b = cars.find((c) => c.id === bId);

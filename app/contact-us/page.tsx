@@ -59,10 +59,10 @@ export default function ContactUsPage() {
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                     <Icon size={20} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm font-bold text-slate-900">{title}</p>
                     {lines.map((line) => (
-                      <p key={line} className="text-sm text-slate-600">
+                      <p key={line} className="text-sm text-slate-600 break-words">
                         {line}
                       </p>
                     ))}

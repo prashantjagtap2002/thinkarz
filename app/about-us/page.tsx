@@ -186,7 +186,7 @@ export default function AboutPage() {
               <Reveal
                 key={year}
                 delay={i * 150}
-                className={`relative grid grid-cols-1 items-center gap-6 pl-10 md:grid-cols-2 md:gap-16 md:pl-0 ${
+                className={`relative grid grid-cols-1 items-center gap-6 pl-8 md:grid-cols-2 md:gap-16 md:pl-0 ${
                   i === journey.length - 1 ? '' : 'pb-14 md:pb-20'
                 }`}
               >
@@ -239,7 +239,7 @@ export default function AboutPage() {
           </div>
 
           {/* Stats */}
-          <Reveal className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-6 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm sm:grid-cols-4">
+          <Reveal className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-4 sm:p-8">
             {stats.map(({ icon: Icon, value, label }) => (
               <div key={label} className="text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">

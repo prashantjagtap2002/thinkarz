@@ -346,7 +346,7 @@ export default function PreOwnedCarsBrowser() {
               no room to move within its containing block and makes it look
               broken. Capping the height and scrolling internally guarantees
               it's always shorter than the viewport, so it actually sticks. */}
-          <div className="lg:sticky lg:top-24 lg:max-h-[65vh] lg:overflow-y-auto">
+          <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
             {sidebar}
           </div>
         </aside>
