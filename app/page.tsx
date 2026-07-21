@@ -195,7 +195,7 @@ export default function HomePage() {
                       href={`/pre-owned-cars?bodyType=${encodeURIComponent(type)}`}
                       className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
                     >
-                      <BodyTypeIcon bodyType={type} size={28} className="text-brand-blue" />
+                      <BodyTypeIcon bodyType={type} size={48} className="text-brand-blue" />
                       <span className="text-xs font-semibold text-slate-700">{type}</span>
                       <span className="text-[11px] text-slate-400">{countByBodyType(type)} Cars</span>
                     </Link>
@@ -411,7 +411,7 @@ export default function HomePage() {
                 delay={i * 90}
                 className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-red/25 hover:shadow-md"
               >
-                <p className="mb-4 text-3xl font-serif text-brand-red">&ldquo;</p>
+                
                 <p className="mb-4 text-sm leading-relaxed text-slate-600">{t.quote}</p>
                 <div className="mb-2 flex gap-0.5 text-brand-red">
                   {Array.from({ length: t.rating }).map((_, s) => (
@@ -430,7 +430,7 @@ export default function HomePage() {
                 key={i}
                 className="w-[85vw] shrink-0 snap-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
               >
-                <p className="mb-4 text-3xl font-serif text-brand-red">&ldquo;</p>
+                
                 <p className="mb-4 text-sm leading-relaxed text-slate-600">{t.quote}</p>
                 <div className="mb-2 flex gap-0.5 text-brand-red">
                   {Array.from({ length: t.rating }).map((_, s) => (

@@ -14,8 +14,7 @@ import {
   MoveRight,
   ChevronDown,
 } from 'lucide-react';
-import SubmittableForm, { type FieldValidation, FieldError } from '@/components/forms/SubmittableForm';
-import AppointmentFields from '@/components/forms/AppointmentFields';
+import BookTestDriveCta from '@/components/BookTestDriveCta';
 import { cars } from '@/lib/cars';
 
 export const metadata = {
@@ -91,7 +90,7 @@ export default function BookTestDrivePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/85 to-brand-navy/30" />
         </div>
 
-        <div className="container-page relative grid grid-cols-1 gap-10 py-16 sm:py-20 lg:grid-cols-2">
+        <div className="container-page relative grid grid-cols-1 items-center gap-10 py-16 sm:py-20 lg:grid-cols-2">
           <div>
             <span className="section-eyebrow">Book a Test Drive</span>
             <h1 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl">
@@ -134,94 +133,7 @@ export default function BookTestDrivePage() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
-            <h2 className="text-lg font-bold text-slate-900">Book Your Test Drive</h2>
-            <p className="mb-6 text-sm text-slate-500">
-              Fill in your details and we&apos;ll get in touch with you to confirm.
-            </p>
-            <SubmittableForm
-              submitLabel="Book Test Drive"
-              successTitle="Test Drive Booked!"
-              successMessage="We'll call you shortly to confirm your slot at our Malad (West) showroom."
-              className="space-y-4"
-              validations={[
-                { name: 'mobile', pattern: '^[6-9]\\d{9}$', message: 'Enter a valid 10-digit mobile number' },
-                { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
-              ]}
-            >
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="name" className="field-label">Full Name</label>
-                  <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
-                  <FieldError name="name" />
-                </div>
-                <div>
-                  <label htmlFor="mobile" className="field-label">Mobile Number</label>
-                  <input
-                    id="mobile"
-                    name="mobile"
-                    required
-                    type="tel"
-                    className="field-input"
-                    placeholder="Enter your mobile number"
-                  />
-                  <FieldError name="mobile" />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="email" className="field-label">Email Address</label>
-                <input
-                  id="email"
-                  name="email"
-                  required
-                  type="email"
-                  className="field-input"
-                  placeholder="Enter your email address"
-                />
-                <FieldError name="email" />
-              </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="car" className="field-label">Select Car</label>
-                  <select id="car" name="car" required className="field-input" defaultValue="">
-                    <option value="" disabled>
-                      Select Car Model
-                    </option>
-                    {popularCars.map((car) => (
-                      <option key={car.id} value={`${car.make} ${car.model}`}>{car.make} {car.model}</option>
-                    ))}
-                  </select>
-                  <FieldError name="car" />
-                </div>
-                <div>
-                  <label htmlFor="variant" className="field-label">Select Variant (Optional)</label>
-                  <select id="variant" name="variant" className="field-input" defaultValue="">
-                    <option value="" disabled>
-                      Select Variant
-                    </option>
-                    <option>Base</option>
-                    <option>Mid</option>
-                    <option>Top</option>
-                  </select>
-                </div>
-              </div>
-              <AppointmentFields />
-              <div>
-                <label htmlFor="location" className="field-label">Preferred Location</label>
-                <input id="location" name="location" className="field-input" defaultValue="Malad (West), Mumbai" readOnly />
-              </div>
-              <div>
-                <label htmlFor="notes" className="field-label">Additional Notes (Optional)</label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  className="field-input"
-                  rows={3}
-                  placeholder="Tell us anything we should know"
-                />
-              </div>
-            </SubmittableForm>
-          </div>
+          <BookTestDriveCta />
         </div>
       </section>
 

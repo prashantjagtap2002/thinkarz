@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
-import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
+import ContactUsCta from '@/components/ContactUsCta';
 import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
 
@@ -75,58 +75,7 @@ export default function ContactUsPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-lg font-bold text-slate-900">Send Us a Message</h2>
-            <p className="mb-6 text-sm text-slate-500">
-              Fill in the details below and we&apos;ll get back to you shortly.
-            </p>
-            <SubmittableForm
-              submitLabel="Send Message"
-              successTitle="Message Sent!"
-              successMessage="Thanks for reaching out. Our team will get back to you shortly."
-              className="space-y-4"
-              validations={[
-                { name: 'mobile', pattern: '^[6-9]\\d{9}$', message: 'Enter a valid 10-digit mobile number' },
-                { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
-              ]}
-            >
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="name" className="field-label">Full Name</label>
-                  <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
-                  <FieldError name="name" />
-                </div>
-                <div>
-                  <label htmlFor="mobile" className="field-label">Mobile Number</label>
-                  <input id="mobile" name="mobile" required type="tel" className="field-input" placeholder="Enter your mobile number" />
-                  <FieldError name="mobile" />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="email" className="field-label">Email Address</label>
-                <input id="email" name="email" required type="email" className="field-input" placeholder="Enter your email address" />
-                <FieldError name="email" />
-              </div>
-              <div>
-                <label htmlFor="subject" className="field-label">Subject</label>
-                <select id="subject" name="subject" required className="field-input" defaultValue="">
-                  <option value="" disabled>
-                    Select a subject
-                  </option>
-                  <option>Buying a Car</option>
-                  <option>Selling a Car</option>
-                  <option>Service Appointment</option>
-                  <option>General Enquiry</option>
-                </select>
-                <FieldError name="subject" />
-              </div>
-              <div>
-                <label htmlFor="message" className="field-label">Your Message</label>
-                <textarea id="message" name="message" required className="field-input" rows={4} placeholder="Type your message here..." />
-                <FieldError name="message" />
-              </div>
-            </SubmittableForm>
-          </div>
+          <ContactUsCta />
         </div>
       </section>
 

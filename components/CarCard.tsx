@@ -1,15 +1,13 @@
-'use client';
-
-import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Car, formatKms, formatPrice } from '@/lib/cars';
-import MakeOfferModal from '@/components/MakeOfferModal';
 
 export default function CarCard({ car }: { car: Car }) {
-  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   return (
-    <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1.5 hover:border-brand-red/20 hover:shadow-xl">
+    <Link
+      href={`/pre-owned-cars/${car.id}`}
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1.5 hover:border-brand-red/20 hover:shadow-xl"
+    >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
         <Image
           src={car.image}
@@ -36,26 +34,16 @@ export default function CarCard({ car }: { car: Car }) {
         </p>
 
         <p className="text-lg font-bold text-slate-900">{formatPrice(car.price)}</p>
-        <p className="mb-4 text-xs text-slate-500">EMI at Rs. {car.emi.toLocaleString('en-IN')}</p>
+        <p className="mb-4 text-xs text-slate-500">
+          EMI at Rs. {car.emi.toLocaleString('en-IN')}
+        </p>
 
-        <div className="mt-auto flex gap-2">
-          <Link
-            href={`/pre-owned-cars/${car.id}`}
-            className="btn btn-primary flex-1 !px-3 !py-2 text-xs"
-          >
+        <div className="mt-auto">
+          <div className="btn btn-primary w-full !py-2 text-xs pointer-events-none">
             View Details
-          </Link>
-          <button
-            onClick={() => setIsOfferModalOpen(true)}
-            className="btn btn-outline flex-1 !px-3 !py-2 text-xs"
-          >
-            Make Offer
-          </button>
+          </div>
         </div>
       </div>
-      {isOfferModalOpen && (
-        <MakeOfferModal car={car} onClose={() => setIsOfferModalOpen(false)} />
-      )}
-    </div>
+    </Link>
   );
 }
