@@ -60,7 +60,7 @@ export default function BlogsPage() {
       <section className="relative overflow-hidden bg-brand-navy">
         <div className="absolute inset-0">
           <Image
-            src="https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg"
+            src="/images/hero-banner.jpg"
             alt=""
             fill
             priority
@@ -151,24 +151,34 @@ export default function BlogsPage() {
                   <Link
                     key={post.slug}
                     href={`/blogs/${post.slug}`}
-                    className="overflow-hidden rounded-xl border border-slate-200 bg-white"
+                    className="group overflow-hidden rounded-xl border border-slate-200"
                   >
-                    <div className="relative aspect-[16/10] w-full">
-                      <Image src={post.image} alt={post.title} fill className="object-cover" />
+                    <div className="bg-slate-50 px-5 pb-5 pt-5">
+                      <div className="relative mb-4 aspect-[16/10] w-full overflow-hidden rounded-lg">
+                        <Image
+                          src={post.image}
+                          alt={post.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <h3 className="text-sm font-bold leading-snug text-slate-900 group-hover:text-brand-red transition-colors">
+                        {post.title}
+                      </h3>
                     </div>
-                    <div className="p-5">
+                    <div className="bg-white px-5 pb-5">
                       <span className="mb-2 inline-block rounded-full bg-brand-blueLight px-2.5 py-0.5 text-[11px] font-semibold text-brand-blue">
                         {post.category}
                       </span>
-                      <h3 className="mb-2 text-sm font-bold leading-snug text-slate-900">
-                        {post.title}
-                      </h3>
                       <div className="mb-3 flex items-center gap-3 text-[11px] text-slate-500">
-                        <span>{post.date}</span>
-                        <span>&middot;</span>
-                        <span>{post.readTime}</span>
+                        <span className="flex items-center gap-1">
+                          <CalendarDays size={12} /> {post.date}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock size={12} /> {post.readTime}
+                        </span>
                       </div>
-                      <span className="text-xs font-semibold text-brand-red">Read More -&gt;</span>
+                      <span className="text-xs font-semibold text-brand-red">Read More &rarr;</span>
                     </div>
                   </Link>
                 ))}

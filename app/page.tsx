@@ -92,7 +92,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-brand-navy">
         <div className="absolute inset-0">
           <Image
-            src="https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg"
+            src="/images/hero-banner.jpg"
             alt="Thinkarz featured car"
             fill
             priority
@@ -243,7 +243,7 @@ export default function HomePage() {
               View All Cars <ArrowRight size={16} />
             </Link>
           </Reveal>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {cars.slice(0, 4).map((car, i) => (
               <Reveal key={car.id} delay={i * 80}>
                 <CarCard car={car} />

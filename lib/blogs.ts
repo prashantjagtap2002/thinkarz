@@ -17,7 +17,7 @@ export const blogs: Blog[] = [
     readTime: '5 min read',
     excerpt:
       "Buying a used car? Here's a complete checklist to help you make a smart and safe purchase.",
-    image: 'https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg',
+    image: '/images/hero-banner.jpg',
   },
   {
     slug: 'how-to-get-the-best-resale-value-for-your-car',
@@ -27,7 +27,7 @@ export const blogs: Blog[] = [
     readTime: '4 min read',
     excerpt:
       'Simple steps that can significantly boost your car resale value before you sell it.',
-    image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.13.41-PM-1024x768.jpeg',
+    image: '/images/cars/mg-zs-ev.jpg',
   },
   {
     slug: 'understanding-car-insurance-a-complete-guide',
@@ -37,7 +37,7 @@ export const blogs: Blog[] = [
     readTime: '6 min read',
     excerpt:
       'Everything you need to know about car insurance policies, coverage and claims.',
-    image: 'https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg',
+    image: '/images/hero-banner.jpg',
   },
   {
     slug: '5-essential-car-maintenance-tips-for-a-smooth-drive',
@@ -47,7 +47,7 @@ export const blogs: Blog[] = [
     readTime: '5 min read',
     excerpt:
       'Keep your car running smoothly with these easy and essential maintenance tips.',
-    image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.02.15-PM-1024x768.jpeg',
+    image: '/images/cars/hyundai-venue-dct.jpg',
   },
   {
     slug: 'bs6-vs-bs4-whats-the-difference',
@@ -56,7 +56,7 @@ export const blogs: Blog[] = [
     date: 'Apr 30, 2024',
     readTime: '4 min read',
     excerpt: 'A quick breakdown of the emission norms and what they mean for buyers.',
-    image: 'https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg',
+    image: '/images/hero-banner.jpg',
   },
   {
     slug: 'upcoming-cars-in-india-in-2024',
@@ -65,7 +65,7 @@ export const blogs: Blog[] = [
     date: 'Apr 25, 2024',
     readTime: '5 min read',
     excerpt: 'A look at the most anticipated car launches coming to India this year.',
-    image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.04.01-PM-1-768x1024.jpeg',
+    image: '/images/cars/tata-nexon-ev.jpg',
   },
   {
     slug: 'summer-car-care-keep-your-car-cool-and-efficient',
@@ -74,7 +74,7 @@ export const blogs: Blog[] = [
     date: 'Apr 25, 2024',
     readTime: '4 min read',
     excerpt: 'Beat the heat with these summer car care tips to protect your vehicle.',
-    image: 'https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg',
+    image: '/images/hero-banner.jpg',
   },
   {
     slug: 'best-family-cars-under-10-lakh-in-india',
@@ -84,7 +84,7 @@ export const blogs: Blog[] = [
     readTime: '6 min read',
     excerpt:
       'A practical shortlist of safe, spacious and budget-friendly family cars worth considering.',
-    image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.15.28-PM-1024x768.jpeg',
+    image: '/images/cars/kia-seltos.jpg',
   },
   {
     slug: 'how-often-should-you-service-your-used-car',
@@ -94,7 +94,7 @@ export const blogs: Blog[] = [
     readTime: '4 min read',
     excerpt:
       'A simple service schedule to keep your used car reliable without overspending on maintenance.',
-    image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.01.51-PM-1024x768.jpeg',
+    image: '/images/cars/maruti-ignis.jpg',
   },
   {
     slug: 'zero-dep-vs-comprehensive-car-insurance',
@@ -104,7 +104,7 @@ export const blogs: Blog[] = [
     readTime: '5 min read',
     excerpt:
       'Understand the difference between two popular insurance options before renewing your policy.',
-    image: 'https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg',
+    image: '/images/hero-banner.jpg',
   },
   {
     slug: 'signs-your-car-battery-needs-replacement',
@@ -114,7 +114,7 @@ export const blogs: Blog[] = [
     readTime: '3 min read',
     excerpt:
       'Watch for these common warning signs before a weak battery leaves you stranded.',
-    image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.12.05-PM-1024x768.jpeg',
+    image: '/images/cars/hyundai-venue-mt.jpg',
   },
   {
     slug: 'best-time-of-year-to-buy-a-used-car',
@@ -124,7 +124,7 @@ export const blogs: Blog[] = [
     readTime: '4 min read',
     excerpt:
       'Timing matters more than most buyers expect. Here is when the best used-car deals usually appear.',
-    image: 'https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg',
+    image: '/images/hero-banner.jpg',
   },
   {
     slug: 'how-to-spot-flood-damaged-cars',
@@ -134,7 +134,7 @@ export const blogs: Blog[] = [
     readTime: '5 min read',
     excerpt:
       'Use this inspection checklist to avoid hidden electrical and mechanical damage after heavy rains.',
-    image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.16.42-PM-1024x768.jpeg',
+    image: '/images/cars/honda-amaze.jpg',
   },
   {
     slug: 'used-evs-what-buyers-should-check-first',
@@ -144,7 +144,7 @@ export const blogs: Blog[] = [
     readTime: '6 min read',
     excerpt:
       'Battery health, charging support and warranty coverage matter more than the odometer on a used EV.',
-    image: 'https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg',
+    image: '/images/hero-banner.jpg',
   },
   {
     slug: 'documents-you-need-before-selling-your-car',
@@ -154,7 +154,7 @@ export const blogs: Blog[] = [
     readTime: '4 min read',
     excerpt:
       'Keep the transfer process smooth by preparing the right ownership, insurance and loan paperwork.',
-    image: 'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.00.30-PM-1024x768.jpeg',
+    image: '/images/cars/kia-sonet.jpg',
   },
 ];
 

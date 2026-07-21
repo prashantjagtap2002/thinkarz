@@ -10,37 +10,37 @@ type BrandLogoAsset = {
 
 const brandLogos: Record<string, BrandLogoAsset> = {
   Honda: {
-    src: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Honda%20logo.svg',
+    src: '/images/brands/honda.svg',
     alt: 'Honda logo',
     widthRatio: 2.2,
   },
   Hyundai: {
-    src: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Hyundai%20Motor%20Company%20logo.svg',
+    src: '/images/brands/hyundai.svg',
     alt: 'Hyundai logo',
     widthRatio: 2.15,
   },
   Kia: {
-    src: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/KIA%20logo3.svg',
+    src: '/images/brands/kia.svg',
     alt: 'Kia logo',
     widthRatio: 2.15,
   },
   MG: {
-    src: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/MG%20Motor%202021%20logo.svg',
+    src: '/images/brands/mg.svg',
     alt: 'MG logo',
     widthRatio: 1.15,
   },
   'Maruti Suzuki': {
-    src: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Maruti%20Suzuki%20logo.svg',
+    src: '/images/brands/maruti-suzuki.svg',
     alt: 'Maruti Suzuki logo',
     widthRatio: 2.55,
   },
   TATA: {
-    src: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Tata%20Motors%20Logo.svg',
+    src: '/images/brands/tata.svg',
     alt: 'Tata Motors logo',
     widthRatio: 2.05,
   },
   Tata: {
-    src: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Tata%20Motors%20Logo.svg',
+    src: '/images/brands/tata.svg',
     alt: 'Tata Motors logo',
     widthRatio: 2.05,
   },

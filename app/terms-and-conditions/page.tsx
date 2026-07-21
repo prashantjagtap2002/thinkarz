@@ -13,7 +13,7 @@ export default function TermsPage() {
         eyebrow="LEGAL"
         title="Terms & Conditions"
         description="Please read these terms and conditions carefully before using our services."
-        image="https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg"
+        image="/images/hero-banner.jpg"
       />
 
       <section className="py-16 sm:py-24">

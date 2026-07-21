@@ -82,7 +82,7 @@ export default function SellYourCarPage() {
             </p>
             <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.13.41-PM-1024x768.jpeg"
+                src="/images/cars/mg-zs-ev.jpg"
                 alt="Sell your car with Thinkarz"
                 fill
                 priority
@@ -175,7 +175,7 @@ export default function SellYourCarPage() {
         <div className="relative overflow-hidden rounded-2xl bg-brand-navy">
           <div className="absolute inset-0">
             <Image
-              src="https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.04.01-PM-1-768x1024.jpeg"
+              src="/images/cars/tata-nexon-ev.jpg"
               alt=""
               fill
               className="object-cover opacity-20"

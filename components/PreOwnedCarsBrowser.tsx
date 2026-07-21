@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   Car as CarIcon,
@@ -123,6 +123,7 @@ export default function PreOwnedCarsBrowser() {
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [filterVersion, setFilterVersion] = useState(0);
   const budgetCounts = useMemo(
     () => countsForOptions(budgetLabels, (car, option) => matchesBudgetLabel(car, option)),
     [budgetLabels],
@@ -169,8 +170,24 @@ export default function PreOwnedCarsBrowser() {
     return result;
   }, [make, budget, sellerType, fuel, transmission, bodyType, age, owners, kms, color, certifiedOnly, priceMin, priceMax, sortBy]);
 
+  const prevFilteredLength = useRef(filtered.length);
+
+  useEffect(() => {
+    if (prevFilteredLength.current !== filtered.length) {
+      setFilterVersion((v) => v + 1);
+    }
+    prevFilteredLength.current = filtered.length;
+  }, [filtered.length]);
+
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  useEffect(() => {
+    if (prevFilteredLength.current !== filtered.length || filtered.length !== prevFilteredLength.current) {
+      setFilterVersion((v) => v + 1);
+    }
+    prevFilteredLength.current = filtered.length;
+  }, [filtered.length]);
 
   const stringSetters: Record<string, React.Dispatch<React.SetStateAction<string[]>>> = {
     make: setMake,
@@ -371,9 +388,11 @@ export default function PreOwnedCarsBrowser() {
               No cars match your filters. Try resetting them.
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {paginated.map((car) => (
-                <CarCard key={car.id} car={car} />
+            <div key={filterVersion} className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 animate-fade-up">
+              {paginated.map((car, i) => (
+                <div key={car.id} className="animate-fade-up" style={{ animationDelay: `${i * 80}ms` }}>
+                  <CarCard car={car} />
+                </div>
               ))}
             </div>
           )}

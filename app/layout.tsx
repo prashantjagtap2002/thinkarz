@@ -39,12 +39,6 @@ export const viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://thinkarz.com" />
-        <link rel="dns-prefetch" href="https://thinkarz.com" />
-        <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
-      </head>
       <body className={`${inter.variable} font-sans`} suppressHydrationWarning>
         <Header />
         <PageTransition>

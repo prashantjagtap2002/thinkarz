@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         eyebrow="LEGAL"
         title="Privacy Policy"
         description="Your privacy is extremely important to us. Here is how we manage your personal information."
-        image="https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg"
+        image="/images/hero-banner.jpg"
       />
 
       <section className="py-16 sm:py-24">

@@ -14,7 +14,7 @@ import {
   MoveRight,
   ChevronDown,
 } from 'lucide-react';
-import BookTestDriveCta from '@/components/BookTestDriveCta';
+import OtpGatedTestDriveForm from '@/components/forms/OtpGatedTestDriveForm';
 import { cars } from '@/lib/cars';
 
 export const metadata = {
@@ -81,7 +81,7 @@ export default function BookTestDrivePage() {
       <section className="relative overflow-hidden bg-brand-navy">
         <div className="absolute inset-0">
           <Image
-            src="https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg"
+            src="/images/hero-banner.jpg"
             alt=""
             fill
             priority
@@ -133,7 +133,11 @@ export default function BookTestDrivePage() {
             </div>
           </div>
 
-          <BookTestDriveCta />
+          <div className="flex items-start justify-center lg:justify-end">
+            <div className="w-full max-w-sm">
+              <OtpGatedTestDriveForm />
+            </div>
+          </div>
         </div>
       </section>
 

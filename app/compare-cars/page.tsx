@@ -117,7 +117,7 @@ export default function CompareCarsPage() {
       <section className="relative overflow-hidden bg-brand-navy">
         <div className="absolute inset-0">
           <Image
-            src="https://thinkarz.com/wp-content/uploads/2024/02/imt-revised-image-homepage-banner-3.jpg"
+            src="/images/hero-banner.jpg"
             alt=""
             fill
             priority

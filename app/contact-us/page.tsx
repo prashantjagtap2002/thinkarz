@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
-import ContactUsCta from '@/components/ContactUsCta';
+import OtpGatedContactForm from '@/components/forms/OtpGatedContactForm';
 import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
 
@@ -22,7 +22,7 @@ export default function ContactUsPage() {
       <section className="relative overflow-hidden bg-brand-navy">
         <div className="absolute inset-0">
           <Image
-            src="https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.13.41-PM-1024x768.jpeg"
+            src="/images/cars/mg-zs-ev.jpg"
             alt=""
             fill
             priority
@@ -45,7 +45,7 @@ export default function ContactUsPage() {
       </section>
 
       <section className="container-page py-14 sm:py-20">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
           <div>
             <span className="section-eyebrow">Get In Touch</span>
             <h2 className="mb-6 text-2xl font-extrabold text-slate-900">
@@ -75,7 +75,11 @@ export default function ContactUsPage() {
             </div>
           </div>
 
-          <ContactUsCta />
+          <div className="flex justify-center lg:justify-end">
+            <div className="w-full max-w-md">
+              <OtpGatedContactForm />
+            </div>
+          </div>
         </div>
       </section>
 

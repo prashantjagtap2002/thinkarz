@@ -134,7 +134,7 @@ export default function AboutPage() {
             <Reveal delay={150}>
               <div className="relative min-h-[260px] overflow-hidden rounded-lg">
                 <Image
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c"
+                  src="/images/team-culture.jpg"
                   alt="Our team"
                   fill
                   className="object-cover"

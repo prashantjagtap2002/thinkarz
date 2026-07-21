@@ -36,7 +36,7 @@ export const cars: Car[] = [
     price: 450000,
     emi: 8125,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-5.59.55-PM-1024x768.jpeg',
+      '/images/cars/mg-comet-ev.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'Hatchback',
@@ -62,7 +62,7 @@ export const cars: Car[] = [
     price: 1375000,
     emi: 24665,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.00.30-PM-1024x768.jpeg',
+      '/images/cars/kia-sonet.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -88,7 +88,7 @@ export const cars: Car[] = [
     price: 625000,
     emi: 11210,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.01.51-PM-1024x768.jpeg',
+      '/images/cars/maruti-ignis.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'Hatchback',
@@ -114,7 +114,7 @@ export const cars: Car[] = [
     price: 975000,
     emi: 17070,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.02.15-PM-1024x768.jpeg',
+      '/images/cars/hyundai-venue-dct.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -140,7 +140,7 @@ export const cars: Car[] = [
     price: 1295000,
     emi: 22140,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.04.01-PM-1-768x1024.jpeg',
+      '/images/cars/tata-nexon-ev.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -166,7 +166,7 @@ export const cars: Car[] = [
     price: 895000,
     emi: 15420,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.10.41-PM-768x1024.jpeg',
+      '/images/cars/mg-zs-astor.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -192,7 +192,7 @@ export const cars: Car[] = [
     price: 695000,
     emi: 12520,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.12.05-PM-1024x768.jpeg',
+      '/images/cars/hyundai-venue-mt.jpg',
     transmission: 'Manual',
     bodyType: 'SUV',
     owners: 2,
@@ -217,7 +217,7 @@ export const cars: Car[] = [
     price: 1550000,
     emi: 27930,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.13.41-PM-1024x768.jpeg',
+      '/images/cars/mg-zs-ev.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -243,7 +243,7 @@ export const cars: Car[] = [
     price: 1125000,
     emi: 20270,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.15.28-PM-1024x768.jpeg',
+      '/images/cars/kia-seltos.jpg',
     transmission: 'Automatic',
     bodyType: 'SUV',
     owners: 2,
@@ -268,7 +268,7 @@ export const cars: Car[] = [
     price: 745000,
     emi: 13420,
     image:
-      'https://thinkarz.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-03-at-6.16.42-PM-1024x768.jpeg',
+      '/images/cars/honda-amaze.jpg',
     transmission: 'Automatic',
     bodyType: 'Sedan',
     owners: 1,
