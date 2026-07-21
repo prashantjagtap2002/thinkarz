@@ -24,5 +24,9 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.19.0",
     "eslint-config-next": "16.2.10"
+  },
+  "browserslist": {
+    "production": [">0.3%", "not dead", "not op_mini all", "not ie 11"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   }
 }
