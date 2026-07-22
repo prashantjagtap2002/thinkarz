@@ -46,6 +46,7 @@ export default function SellValuationForm() {
 
   return (
     <SubmittableForm
+      formType="Sell Your Car / Valuation Form"
       submitLabel="Get Valuation"
       successTitle="Valuation Request Received!"
       successMessage="Our team will get back to you shortly to confirm your car's final value."

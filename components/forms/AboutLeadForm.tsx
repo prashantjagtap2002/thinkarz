@@ -2,6 +2,8 @@
 
 import { FormEvent, useState } from 'react';
 import { CheckCircle2, PhoneCall, ShieldCheck, X } from 'lucide-react';
+import { useUtmParams } from '@/hooks/useUtmParams';
+import { submitToGoogleSheets } from '@/lib/googleSheets';
 
 const carInterests = [
   'Hatchback',
@@ -20,6 +22,7 @@ export default function AboutLeadForm() {
   const [phoneError, setPhoneError] = useState('');
   const [otpError, setOtpError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const utm = useUtmParams();
 
   function validatePhone(value: string) {
     if (!value.trim()) {
@@ -69,6 +72,17 @@ export default function AboutLeadForm() {
 
   function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const payload: Record<string, any> = {
+      form_type: 'General Submittable Form',
+      phone,
+      ...utm,
+    };
+    formData.forEach((val, key) => {
+      payload[key] = val;
+    });
+
+    submitToGoogleSheets(payload);
     setStep('success');
     e.currentTarget.reset();
   }

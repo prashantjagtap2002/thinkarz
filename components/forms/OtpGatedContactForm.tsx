@@ -117,6 +117,7 @@ export default function OtpGatedContactForm() {
 
       {step === 'form' && (
         <SubmittableForm
+          formType="Contact Us Form"
           submitLabel="Send Message"
           successTitle="Message Sent!"
           successMessage="Thanks for reaching out. Our team will get back to you shortly."

@@ -201,6 +201,7 @@ export default function OtpGatedTestDriveForm() {
 
                 {step === 'form' && (
                   <SubmittableForm
+                    formType="Book a Test Drive Form"
                     submitLabel="Book Test Drive"
                     successTitle="Test Drive Booked!"
                     successMessage="We'll call you shortly to confirm your slot at our Malad (West) showroom."

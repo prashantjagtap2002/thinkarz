@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ageOptions, bodyTypes, budgetOptions } from '@/lib/cars';
-import { Calendar, ChevronDown, IndianRupee, Car } from 'lucide-react';
+import { Calendar, ChevronDown, IndianRupee, Car, Search, ArrowRight } from 'lucide-react';
 import BodyTypeIcon from './BodyTypeIcon';
 
 function CarTypeSelect({
@@ -34,31 +34,31 @@ function CarTypeSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className={`field-input flex items-center justify-between gap-3 text-left w-full ${
-          open ? 'border-brand-red ring-1 ring-brand-red' : ''
+        className={`field-input flex items-center justify-between gap-3 text-left w-full !rounded-lg !py-3 !border-slate-200 ${
+          open ? '!border-brand-red !ring-1 !ring-brand-red' : 'hover:!border-slate-300'
         }`}
       >
         <span className="flex items-center gap-2.5">
           {value ? (
             <>
               <BodyTypeIcon bodyType={value} size={16} className="text-brand-red" />
-              <span>{value}</span>
+              <span className="text-slate-800 font-medium">{value}</span>
             </>
           ) : (
             <>
               <Car size={16} className="text-slate-400" />
-              <span>Select Car Type</span>
+              <span className="text-slate-400">All Types</span>
             </>
           )}
         </span>
         <ChevronDown
-          size={16}
-          className={`shrink-0 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`}
+          size={14}
+          className={`shrink-0 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+        <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-30 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl max-h-[50vh] overflow-y-auto">
           <button
             type="button"
             onClick={() => {
@@ -75,7 +75,7 @@ function CarTypeSelect({
               size={18}
               className={value === '' ? 'text-brand-red' : 'text-slate-400'}
             />
-            <span>Select Car Type</span>
+            <span>All Types</span>
           </button>
           {bodyTypes.map((type) => {
             const selected = value === type;
@@ -147,32 +147,31 @@ function BudgetSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className={`field-input flex items-center justify-between gap-3 text-left w-full ${
-          open ? 'border-brand-red ring-1 ring-brand-red' : ''
+        className={`field-input flex items-center justify-between gap-3 text-left w-full !rounded-lg !py-3 !border-slate-200 ${
+          open ? '!border-brand-red !ring-1 !ring-brand-red' : 'hover:!border-slate-300'
         }`}
       >
         <span className="flex items-center gap-2.5">
           <IndianRupee size={16} className={value ? 'text-brand-red' : 'text-slate-400'} />
-          <span className={value ? 'text-slate-900 font-medium' : 'text-slate-500'}>
-            {value || 'Select Budget'}
+          <span className={value ? 'text-slate-800 font-medium' : 'text-slate-400'}>
+            {value || 'Any Budget'}
           </span>
         </span>
         <ChevronDown
-          size={16}
-          className={`shrink-0 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`}
+          size={14}
+          className={`shrink-0 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 sm:right-auto sm:w-72 top-[calc(100%+6px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up max-h-[60vh] overflow-y-auto">
+        <div className="absolute left-0 right-0 sm:right-auto sm:w-72 top-[calc(100%+4px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up max-h-[60vh] overflow-y-auto">
           <div className="flex justify-between items-center mb-3">
             <span className="text-xs font-semibold text-slate-500">Adjust Budget</span>
             <span className="text-xs font-bold text-brand-red bg-brand-red/5 px-2 py-0.5 rounded">
-              {value || 'Any Budget'}
+              {value || 'Any'}
             </span>
           </div>
 
-          {/* Range Slider */}
           <div className="flex flex-col gap-1 py-1">
             <input
               type="range"
@@ -194,7 +193,6 @@ function BudgetSelect({
 
           <div className="my-3 h-px bg-slate-100" />
 
-          {/* Quick Option Chips */}
           <div className="flex flex-wrap gap-1.5">
             {budgetSteps.map((step, idx) => {
               if (idx === 0) return null;
@@ -266,32 +264,31 @@ function AgeSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className={`field-input flex items-center justify-between gap-3 text-left w-full ${
-          open ? 'border-brand-red ring-1 ring-brand-red' : ''
+        className={`field-input flex items-center justify-between gap-3 text-left w-full !rounded-lg !py-3 !border-slate-200 ${
+          open ? '!border-brand-red !ring-1 !ring-brand-red' : 'hover:!border-slate-300'
         }`}
       >
         <span className="flex items-center gap-2.5">
           <Calendar size={16} className={value ? 'text-brand-red' : 'text-slate-400'} />
-          <span className={value ? 'text-slate-900 font-medium' : 'text-slate-500'}>
-            {value || 'Select Year'}
+          <span className={value ? 'text-slate-800 font-medium' : 'text-slate-400'}>
+            {value || 'Any Age'}
           </span>
         </span>
         <ChevronDown
-          size={16}
-          className={`shrink-0 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`}
+          size={14}
+          className={`shrink-0 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 sm:left-auto sm:right-0 sm:w-72 top-[calc(100%+6px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up max-h-[60vh] overflow-y-auto">
+        <div className="absolute left-0 right-0 sm:left-auto sm:right-0 sm:w-72 top-[calc(100%+4px)] z-30 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-up max-h-[60vh] overflow-y-auto">
           <div className="flex justify-between items-center mb-3">
             <span className="text-xs font-semibold text-slate-500">Adjust Car Age</span>
             <span className="text-xs font-bold text-brand-red bg-brand-red/5 px-2 py-0.5 rounded">
-              {value || 'Any Age'}
+              {value || 'Any'}
             </span>
           </div>
 
-          {/* Range Slider */}
           <div className="flex flex-col gap-1 py-1">
             <input
               type="range"
@@ -313,7 +310,6 @@ function AgeSelect({
 
           <div className="my-3 h-px bg-slate-100" />
 
-          {/* Quick Option Chips */}
           <div className="flex flex-wrap gap-1.5">
             {ageSteps.map((step, idx) => {
               if (idx === 0) return null;
@@ -351,7 +347,6 @@ function AgeSelect({
 
 export default function HeroSearchWidget() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
   const [budget, setBudget] = useState('');
   const [bodyType, setBodyType] = useState('');
   const [age, setAge] = useState('');
@@ -365,74 +360,38 @@ export default function HeroSearchWidget() {
   }
 
   return (
-    <div className="reveal-motion is-visible relative z-10 mt-8 overflow-visible rounded-2xl border border-white/20 bg-white/95 shadow-2xl backdrop-blur-md transition-all duration-500">
-      <div className="flex border-b border-slate-200 rounded-t-2xl overflow-hidden">
-        <button
-          onClick={() => setActiveTab('buy')}
-          className={`flex-1 py-4 text-sm font-bold transition-colors rounded-tl-2xl ${
-            activeTab === 'buy'
-              ? 'border-b-2 border-brand-red bg-white text-brand-red'
-              : 'bg-slate-50 text-slate-500 hover:text-slate-800'
-          }`}
-        >
-          Buy a Car
-        </button>
-        <button
-          onClick={() => setActiveTab('sell')}
-          className={`flex-1 py-4 text-sm font-bold transition-colors rounded-tr-2xl ${
-            activeTab === 'sell'
-              ? 'border-b-2 border-brand-red bg-white text-brand-red'
-              : 'bg-slate-50 text-slate-500 hover:text-slate-800'
-          }`}
-        >
-          Sell Your Car
-        </button>
-      </div>
-
-      <div className="p-5 sm:p-6">
-        {activeTab === 'buy' ? (
-          <>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="relative flex flex-col gap-2">
-                <label className="field-label flex items-center gap-1.5 !mb-0">
-                  <IndianRupee size={14} className="text-slate-500" /> Budget
-                </label>
-                <BudgetSelect value={budget} onChange={setBudget} />
-              </div>
-              <div className="relative flex flex-col gap-2">
-                <label className="field-label flex items-center gap-1.5 !mb-0">
-                  <Car size={14} className="text-slate-500" /> Car Type
-                </label>
-                <CarTypeSelect value={bodyType} onChange={setBodyType} />
-              </div>
-              <div className="relative flex flex-col gap-2">
-                <label className="field-label flex items-center gap-1.5 !mb-0">
-                  <Calendar size={14} className="text-slate-500" /> Car Age
-                </label>
-                <AgeSelect value={age} onChange={setAge} />
-              </div>
-            </div>
-            <button
-              onClick={handleSearch}
-              className="btn btn-primary mt-6 w-full bg-gradient-to-r from-brand-red to-[#cc181f] py-3.5 text-base hover:shadow-brand-red/30"
-            >
-              Search Cars
-            </button>
-          </>
-        ) : (
-          <div className="py-6 text-center">
-            <h3 className="mb-2 text-lg font-bold text-slate-900">Get the best price for your car</h3>
-            <p className="mb-6 text-sm text-slate-600">
-              Instant valuation, hassle-free paperwork, and payment in 24 hours.
-            </p>
-            <button
-              onClick={() => router.push('/sell-your-car')}
-              className="btn btn-primary w-full bg-gradient-to-r from-brand-red to-[#cc181f] py-3.5 text-base hover:shadow-brand-red/30"
-            >
-              Get Free Valuation
-            </button>
+    <div className="relative z-10 overflow-visible">
+      <div className="flex flex-col gap-4">
+        {/* Filter Fields */}
+        <div className="flex flex-col gap-3">
+          <div>
+            <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+              Budget
+            </label>
+            <BudgetSelect value={budget} onChange={setBudget} />
           </div>
-        )}
+          <div>
+            <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+              Car Type
+            </label>
+            <CarTypeSelect value={bodyType} onChange={setBodyType} />
+          </div>
+          <div>
+            <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+              Car Age
+            </label>
+            <AgeSelect value={age} onChange={setAge} />
+          </div>
+        </div>
+
+        {/* Search Button */}
+        <button
+          onClick={handleSearch}
+          className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-brand-red to-[#cc181f] px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-red/20 transition-all duration-300 hover:shadow-xl hover:shadow-brand-red/30 hover:-translate-y-0.5 active:translate-y-0 w-full"
+        >
+          Search Cars
+          <ArrowRight size={16} />
+        </button>
       </div>
     </div>
   );

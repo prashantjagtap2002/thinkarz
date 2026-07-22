@@ -90,63 +90,105 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-brand-navy">
+        {/* Gradient mesh background */}
         <div className="absolute inset-0">
-          <Image
-            src="/images/hero-banner.jpg"
-            alt="Thinkarz featured car"
-            fill
-            priority
-            className="hero-image-drift object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/70 to-brand-navy/20" />
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-navy via-brand-navyLight to-brand-navy" />
+          <div className="absolute -top-24 -right-24 h-[500px] w-[500px] rounded-full bg-brand-red/[0.07] blur-[120px]" />
+          <div className="absolute -bottom-32 -left-32 h-[400px] w-[400px] rounded-full bg-brand-blue/[0.08] blur-[100px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-white/[0.02] blur-[80px]" />
+          {/* Subtle grid pattern */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
         </div>
 
-        <div className="container-page relative pb-16 pt-16 sm:pb-24 sm:pt-20">
-          <div className="animate-fade-up max-w-xl">
-            <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
-              Trusted Cars.
-              <br />
-              Transparent Deals.
-            </h1>
-            <p className="mt-4 text-base text-slate-200">
-              Find quality pre-owned cars you can trust
-              <br className="hidden sm:block" /> at the best value.
-            </p>
+        <div className="container-page relative pb-10 pt-16 sm:pb-16 sm:pt-24">
+          {/* Two-column layout */}
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            {/* Left column — Copy */}
+            <div className="animate-fade-up">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-red animate-soft-pulse" />
+                <span className="text-xs font-medium text-slate-300">Trusted by 50,000+ customers across Mumbai</span>
+              </div>
+
+              <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.4rem]">
+                Find Your Perfect
+                <br />
+                <span className="bg-gradient-to-r from-brand-red via-[#FF4D52] to-brand-red bg-clip-text text-transparent">Pre-Owned Car</span>
+              </h1>
+
+              <p className="mt-5 max-w-md text-base leading-relaxed text-slate-300/90">
+                Quality-assured cars with transparent pricing, complete documentation, and hassle-free ownership transfer.
+              </p>
+
+              {/* Trust checkmarks */}
+              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+                {[
+                  '140+ Quality Checks',
+                  '7-Day Easy Returns',
+                  'Best Price Guarantee',
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-brand-red shrink-0" />
+                    <span className="text-sm text-slate-300">{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA buttons */}
+              <div
+                className="mt-8 flex flex-wrap gap-3 animate-fade-up"
+                style={{ animationDelay: '200ms' }}
+              >
+                <Link href="/pre-owned-cars" className="btn btn-primary px-8">
+                  Browse All Cars
+                  <ArrowRight size={16} />
+                </Link>
+                <Link href="/sell-your-car" className="btn btn-outline-white">
+                  Sell Your Car
+                </Link>
+              </div>
+            </div>
+
+            {/* Right column — Search widget */}
+            <div className="animate-fade-up relative z-20" style={{ animationDelay: '150ms' }}>
+              <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-2xl shadow-black/25 ring-1 ring-black/5">
+                {/* Red accent bar */}
+                <div className="h-1 w-12 rounded-full bg-brand-red mb-5" />
+                <h2 className="text-xl font-extrabold text-slate-900 mb-1">Find Your Car</h2>
+                <p className="text-sm text-slate-500 mb-6">Search from our curated collection</p>
+                <HeroSearchWidget />
+                {/* Sell CTA */}
+                <div className="mt-5 pt-5 border-t border-slate-100 text-center">
+                  <p className="text-xs text-slate-400 mb-2">Want to sell instead?</p>
+                  <a
+                    href="/sell-your-car"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-red hover:underline transition-colors"
+                  >
+                    Get Free Valuation
+                    <ArrowRight size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Search widget */}
-          <div className="animate-fade-up relative z-20" style={{ animationDelay: '120ms' }}>
-            <HeroSearchWidget />
-          </div>
-
+          {/* Trust strip */}
           <div
-            className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:gap-4 animate-fade-up relative z-10"
-            style={{ animationDelay: '220ms' }}
+            className="mt-12 grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-8 sm:grid-cols-4 animate-fade-up"
+            style={{ animationDelay: '300ms' }}
           >
-            <Link href="/pre-owned-cars" className="btn btn-primary w-full sm:w-auto">
-              Browse Cars
-            </Link>
-            <Link href="/sell-your-car" className="btn btn-outline-white w-full sm:w-auto">
-              Sell Your Car
-            </Link>
+            {trustBadges.map(({ icon: Icon, value, label }) => (
+              <div key={label} className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-slate-300">
+                  <Icon size={18} />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-white">{value}</p>
+                  <p className="text-[11px] text-slate-400">{label}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      </section>
-
-      {/* Trust badges */}
-      <section className="border-b border-slate-100 bg-white py-10">
-        <div className="container-page grid grid-cols-2 gap-6 sm:grid-cols-4">
-          {trustBadges.map(({ icon: Icon, value, label }, i) => (
-            <Reveal key={label} className="flex items-center gap-3" delay={i * 80}>
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
-                <Icon size={22} />
-              </div>
-              <div>
-                <p className="text-lg font-bold text-slate-900">{value}</p>
-                <p className="text-xs text-slate-500">{label}</p>
-              </div>
-            </Reveal>
-          ))}
         </div>
       </section>
 

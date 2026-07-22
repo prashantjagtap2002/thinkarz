@@ -2,14 +2,26 @@
 
 import { FormEvent, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
+import { useUtmParams } from '@/hooks/useUtmParams';
+import { submitToGoogleSheets } from '@/lib/googleSheets';
 
 export default function NewsletterSignup() {
   const [subscribed, setSubscribed] = useState(false);
+  const [email, setEmail] = useState('');
+  const utm = useUtmParams();
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!email.trim()) return;
+
+    submitToGoogleSheets({
+      form_type: 'Newsletter Signup',
+      email,
+      ...utm,
+    });
+
     setSubscribed(true);
-    e.currentTarget.reset();
+    setEmail('');
   }
 
   if (subscribed) {
@@ -26,6 +38,8 @@ export default function NewsletterSignup() {
       <input
         required
         type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your email"
         className="mb-3 w-full rounded-md border border-slate-600 bg-transparent px-3 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-red focus:outline-none"
       />

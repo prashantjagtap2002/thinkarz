@@ -5,6 +5,8 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X, CheckCircle2 } from 'lucide-react';
 import { Car, formatPrice } from '@/lib/cars';
+import { useUtmParams } from '@/hooks/useUtmParams';
+import { submitToGoogleSheets } from '@/lib/googleSheets';
 
 interface MakeOfferModalProps {
   car: Car;
@@ -13,9 +15,12 @@ interface MakeOfferModalProps {
 
 export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
   const [mounted, setMounted] = useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [offerValue, setOfferValue] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [selectedChipIndex, setSelectedChipIndex] = useState<number | null>(null);
+  const utm = useUtmParams();
 
   useEffect(() => {
     setMounted(true);
@@ -49,13 +54,24 @@ export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!offerValue.trim()) return;
+
+    submitToGoogleSheets({
+      form_type: 'Make an Offer / Buy Enquiry Modal',
+      name,
+      phone,
+      offer_amount: offerValue,
+      car_model: `${car.make} ${car.model} ${car.variant}`,
+      car_id: car.id,
+      ...utm,
+    });
+
     setSubmitted(true);
   };
 
   return createPortal(
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
       <div 
-        className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl p-6 overflow-hidden flex flex-col gap-5 border border-slate-100 transition-all duration-300 scale-100"
+        className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl p-6 overflow-hidden flex flex-col gap-5 border border-slate-100 transition-all duration-300 scale-100 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -105,17 +121,38 @@ export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
                 <span className="text-slate-500">Car Price</span>
                 <span className="font-bold text-slate-900">{formatPrice(car.price)}</span>
               </div>
-              <div className="border-t border-slate-200" />
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-slate-500">Total Interested Buyers</span>
-                <span className="font-bold text-slate-900">-</span>
-              </div>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-left">
+              <div>
+                <label className="field-label">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name"
+                  className="field-input w-full"
+                />
+              </div>
+
+              <div>
+                <label className="field-label">Mobile Number</label>
+                <input
+                  type="tel"
+                  required
+                  pattern="[6-9]\d{9}"
+                  maxLength={10}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                  placeholder="10-digit mobile number"
+                  className="field-input w-full"
+                />
+              </div>
+
               <div className="space-y-3">
-                <h4 className="text-sm font-semibold text-slate-900 text-left">
+                <h4 className="text-sm font-semibold text-slate-900">
                   How much do you want to offer?
                 </h4>
                 
@@ -153,7 +190,7 @@ export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
                 type="submit"
                 className="w-full rounded-xl bg-brand-red hover:bg-brand-red/90 text-white font-bold py-3 text-sm shadow-md transition-colors mt-2"
               >
-                Submit
+                Submit Offer
               </button>
             </form>
           </>

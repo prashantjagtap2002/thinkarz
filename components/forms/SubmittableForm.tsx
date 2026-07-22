@@ -3,6 +3,7 @@
 import { createContext, FormEvent, ReactNode, Suspense, useContext, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { useUtmParams } from '@/hooks/useUtmParams';
+import { submitToGoogleSheets } from '@/lib/googleSheets';
 
 function UtmHiddenFields() {
   const utm = useUtmParams();
@@ -43,6 +44,7 @@ export default function SubmittableForm({
   successMessage,
   successExtra,
   className = '',
+  formType = 'General Submittable Form',
   validations,
   onSubmit,
 }: {
@@ -52,11 +54,13 @@ export default function SubmittableForm({
   successMessage: string;
   successExtra?: ReactNode;
   className?: string;
+  formType?: string;
   validations?: FieldValidation[];
   onSubmit?: () => void;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const utm = useUtmParams();
 
   function validate(form: HTMLFormElement): boolean {
     const newErrors: Record<string, string> = {};
@@ -84,10 +88,26 @@ export default function SubmittableForm({
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!validate(e.currentTarget)) return;
+    const formElement = e.currentTarget;
+    if (!validate(formElement)) return;
+
+    // Collect all form data including UTMs and formType
+    const formData = new FormData(formElement);
+    const payload: Record<string, any> = {
+      form_type: formType,
+      ...utm,
+    };
+
+    formData.forEach((value, key) => {
+      payload[key] = value;
+    });
+
+    // Send payload asynchronously to Google Sheets
+    submitToGoogleSheets(payload);
+
     onSubmit?.();
     setSubmitted(true);
-    e.currentTarget.reset();
+    formElement.reset();
     setErrors({});
   }
 

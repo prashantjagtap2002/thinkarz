@@ -55,6 +55,9 @@
   .glassmorphism {
     @apply bg-white/10 backdrop-blur-md border border-white/20;
   }
+  .hero-field {
+    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-400 transition-all duration-200 hover:bg-white/10 hover:border-white/20;
+  }
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -75,9 +78,6 @@
 
   .page-transition.is-ready {
     opacity: 1;
-    /* `none` (not translateY(0)) once settled: any non-none transform on an
-       ancestor creates a new containing block, which silently breaks
-       `position: sticky` for every descendant (e.g. the filter sidebar). */
     transform: none;
   }
 
