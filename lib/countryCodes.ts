@@ -1,3 +1,11 @@
+export function getFlagEmoji(countryCode: string) {
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+}
+
 export const countryCodes = [
   { code: 'AF', dial: '+93' },
   { code: 'AL', dial: '+355' },
@@ -239,4 +247,4 @@ export const countryCodes = [
   { code: 'YE', dial: '+967' },
   { code: 'ZM', dial: '+260' },
   { code: 'ZW', dial: '+263' }
-];
+].map(country => ({ ...country, flag: getFlagEmoji(country.code) }));

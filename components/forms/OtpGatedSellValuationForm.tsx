@@ -181,7 +181,7 @@ export default function OtpGatedSellValuationForm() {
                 >
                   {countryCodes.sort((a, b) => a.code.localeCompare(b.code)).map((c) => (
                     <option key={`${c.code}-${c.dial}`} value={c.dial}>
-                      {c.code} ({c.dial})
+                      {c.flag} {c.code} ({c.dial})
                     </option>
                   ))}
                 </select>
