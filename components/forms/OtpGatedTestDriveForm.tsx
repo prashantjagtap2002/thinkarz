@@ -6,6 +6,8 @@ import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm'
 import AppointmentFields from '@/components/forms/AppointmentFields';
 import { cars } from '@/lib/cars';
 
+import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
+
 const popularCars = cars.slice(0, 5);
 
 type PopupStep = 'otp' | 'form' | 'success';
@@ -19,6 +21,7 @@ export default function OtpGatedTestDriveForm() {
   const [phoneError, setPhoneError] = useState('');
   const [otpError, setOtpError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [serverHash, setServerHash] = useState('');
 
   function closePopup() {
     setIsOpen(false);
@@ -44,22 +47,28 @@ export default function OtpGatedTestDriveForm() {
     return true;
   }
 
-  function handleSendOtp(e: FormEvent) {
+  async function handleSendOtp(e: FormEvent) {
     e.preventDefault();
     const clean = phone.replace(/\s/g, '');
     if (!validatePhone(clean)) return;
     setIsLoading(true);
     setPhone(clean);
-    setTimeout(() => {
-      setIsLoading(false);
+
+    const res = await sendWhatsAppOtp(countryCode, clean);
+    setIsLoading(false);
+
+    if (res.success && res.hash) {
+      setServerHash(res.hash);
       setStep('otp');
       setOtp('');
       setOtpError('');
       setIsOpen(true);
-    }, 1200);
+    } else {
+      setPhoneError(res.error || 'Failed to send OTP');
+    }
   }
 
-  function handleVerifyOtp(e: FormEvent) {
+  async function handleVerifyOtp(e: FormEvent) {
     e.preventDefault();
     if (otp.length < 4) {
       setOtpError('Please enter the 4-digit OTP');
@@ -67,10 +76,15 @@ export default function OtpGatedTestDriveForm() {
     }
     setIsLoading(true);
     setOtpError('');
-    setTimeout(() => {
-      setIsLoading(false);
+
+    const res = await verifyWhatsAppOtp(countryCode, phone, otp, serverHash);
+    setIsLoading(false);
+
+    if (res.success) {
       setStep('form');
-    }, 800);
+    } else {
+      setOtpError(res.error || 'Invalid OTP');
+    }
   }
 
   function handleFormSuccess() {

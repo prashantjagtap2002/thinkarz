@@ -4,6 +4,8 @@ import { FormEvent, useEffect, useState } from 'react';
 import { PhoneCall, ShieldCheck, X, CheckCircle2, BadgeIndianRupee } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 
+import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
+
 const BASE_VALUE: Record<string, number> = {
   Hatchback: 500000,
   Sedan: 700000,
@@ -42,6 +44,7 @@ export default function OtpGatedSellValuationForm() {
   const [phoneError, setPhoneError] = useState('');
   const [otpError, setOtpError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [serverHash, setServerHash] = useState('');
 
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
@@ -73,22 +76,28 @@ export default function OtpGatedSellValuationForm() {
     return true;
   }
 
-  function handleSendOtp(e: FormEvent) {
+  async function handleSendOtp(e: FormEvent) {
     e.preventDefault();
     const clean = phone.replace(/\s/g, '');
     if (!validatePhone(clean)) return;
     setIsLoading(true);
     setPhone(clean);
-    setTimeout(() => {
-      setIsLoading(false);
+    
+    const res = await sendWhatsAppOtp(countryCode, clean);
+    setIsLoading(false);
+
+    if (res.success && res.hash) {
+      setServerHash(res.hash);
       setStep('otp');
       setOtp('');
       setOtpError('');
       setIsOpen(true);
-    }, 1200);
+    } else {
+      setPhoneError(res.error || 'Failed to send OTP');
+    }
   }
 
-  function handleVerifyOtp(e: FormEvent) {
+  async function handleVerifyOtp(e: FormEvent) {
     e.preventDefault();
     if (otp.length < 4) {
       setOtpError('Please enter the 4-digit OTP');
@@ -96,10 +105,15 @@ export default function OtpGatedSellValuationForm() {
     }
     setIsLoading(true);
     setOtpError('');
-    setTimeout(() => {
-      setIsLoading(false);
+    
+    const res = await verifyWhatsAppOtp(countryCode, phone, otp, serverHash);
+    setIsLoading(false);
+
+    if (res.success) {
       setStep('form');
-    }, 800);
+    } else {
+      setOtpError(res.error || 'Invalid OTP');
+    }
   }
 
   function handleFormSuccess() {
