@@ -83,17 +83,23 @@ export default function OtpGatedSellValuationForm() {
     setIsLoading(true);
     setPhone(clean);
     
-    const res = await sendWhatsAppOtp(countryCode, clean);
-    setIsLoading(false);
+    try {
+      const res = await sendWhatsAppOtp(countryCode, clean);
+      setIsLoading(false);
 
-    if (res.success && res.hash) {
-      setServerHash(res.hash);
-      setStep('otp');
-      setOtp('');
-      setOtpError('');
-      setIsOpen(true);
-    } else {
-      setPhoneError(res.error || 'Failed to send OTP');
+      if (res.success && res.hash) {
+        setServerHash(res.hash);
+        setStep('otp');
+        setOtp('');
+        setOtpError('');
+        setIsOpen(true);
+      } else {
+        setPhoneError(res.error || 'Failed to send OTP');
+      }
+    } catch (err) {
+      console.error('Client action error:', err);
+      setIsLoading(false);
+      setPhoneError('Server unreachable. Please try again.');
     }
   }
 
@@ -106,13 +112,19 @@ export default function OtpGatedSellValuationForm() {
     setIsLoading(true);
     setOtpError('');
     
-    const res = await verifyWhatsAppOtp(countryCode, phone, otp, serverHash);
-    setIsLoading(false);
+    try {
+      const res = await verifyWhatsAppOtp(countryCode, phone, otp, serverHash);
+      setIsLoading(false);
 
-    if (res.success) {
-      setStep('form');
-    } else {
-      setOtpError(res.error || 'Invalid OTP');
+      if (res.success) {
+        setStep('form');
+      } else {
+        setOtpError(res.error || 'Invalid OTP');
+      }
+    } catch (err) {
+      console.error('Client verify error:', err);
+      setIsLoading(false);
+      setOtpError('Server unreachable. Please try again.');
     }
   }
 
