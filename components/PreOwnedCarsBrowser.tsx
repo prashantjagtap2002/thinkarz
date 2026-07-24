@@ -86,7 +86,7 @@ function getBaseColor(color: string): string {
   return 'Other';
 }
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 9;
 
 const colorLabels = ['White', 'Grey', 'Red', 'Silver', 'Black', 'Blue', 'Other'] as const;
 
