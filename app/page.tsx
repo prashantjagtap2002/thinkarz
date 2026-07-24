@@ -356,14 +356,17 @@ export default function HomePage() {
 
       {/* Promo banners */}
       <section className="container-page grid grid-cols-1 gap-6 py-16 sm:py-20 lg:grid-cols-2">
-        <Reveal className="flex flex-col items-start gap-6 rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10">
+        <Reveal className="flex h-full flex-col items-start justify-between gap-6 rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10">
           <div>
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
+              <Tag size={22} />
+            </div>
             <h3 className="text-xl font-bold text-white sm:text-2xl">Looking to sell your car?</h3>
             <p className="mt-2 max-w-md text-sm text-slate-300">
               Get the best value for your car with a quick, free and hassle-free valuation.
             </p>
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link href="/sell-your-car" className="btn btn-primary w-full sm:w-auto">
               Get Free Valuation
             </Link>
@@ -375,7 +378,7 @@ export default function HomePage() {
 
         <Reveal
           delay={90}
-          className="flex flex-col items-start gap-6 rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10"
+          className="flex h-full flex-col items-start justify-between gap-6 rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10"
         >
           <div>
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
