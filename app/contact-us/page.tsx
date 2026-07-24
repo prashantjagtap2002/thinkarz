@@ -46,22 +46,20 @@ export default function ContactUsPage() {
       </section>
 
       <section className="container-page py-14 sm:py-20">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
-            <span className="section-eyebrow">Get In Touch</span>
-            <h2 className="mb-6 text-2xl font-extrabold text-slate-900">
-              Our team is here to assist you
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-10 lg:p-12">
+            <h2 className="mb-4 text-[22px] font-bold text-[#1e293b]">
+              Contact Information
             </h2>
-            <p className="mb-8 text-sm leading-relaxed text-slate-600">
-              Our team is here to assist you with all your car buying, selling, and after-sales
-              service needs.
+            <p className="mb-8 text-sm leading-[1.6] text-slate-500">
+              We are here to help with bookings, service queries, finance questions and anything else you need.
             </p>
 
             <div className="space-y-6">
               {touchPoints.map(({ icon: Icon, title, lines }) => (
                 <div key={title} className="flex gap-4">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
-                    <Icon size={20} />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e2e8f0] text-[#475569]">
+                    <Icon size={18} />
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-bold text-slate-900">{title}</p>
