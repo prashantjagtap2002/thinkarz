@@ -149,7 +149,7 @@ export default function OtpGatedSellValuationForm() {
   return (
     <>
       <div id="valuation-form" className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 lg:p-12">
-        <div className="mx-auto w-full max-w-md">
+        <div className="mx-auto w-full">
           <h2 className="text-[22px] font-bold text-slate-900">Request a Free Valuation</h2>
           <p className="mb-8 text-[13px] text-slate-500 leading-relaxed mt-1">
             Enter your car details and our team will get back to you with an expert valuation estimate.
