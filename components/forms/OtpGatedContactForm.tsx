@@ -67,10 +67,10 @@ export default function OtpGatedContactForm() {
   }
 
   return (
-    <div className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_4px_24px_-10px_rgba(0,0,0,0.05)] p-6 sm:p-12">
+    <div className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white shadow-sm p-6 sm:p-10">
       {step === 'phone' && (
         <form onSubmit={handleSendOtp} className="w-full text-center">
-          <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
+          <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-red/10 text-brand-red">
             <PhoneCall size={26} strokeWidth={2} />
           </div>
           <h2 className="mb-2 text-2xl font-bold text-slate-900">Verify to Send a Message</h2>
@@ -78,7 +78,7 @@ export default function OtpGatedContactForm() {
             Enter your phone number to unlock the contact form.
           </p>
 
-          <div className="mx-auto mb-6 flex h-14 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/50 transition-colors focus-within:border-slate-300 focus-within:bg-white">
+          <div className="mx-auto mb-6 flex h-14 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition-colors focus-within:border-brand-navy focus-within:bg-white focus-within:ring-1 focus-within:ring-brand-navy">
             <div className="flex items-center justify-center border-r border-slate-200 bg-slate-100/50 px-4 text-[15px] font-semibold text-slate-700">
               IN +91 <ChevronDown size={16} className="ml-1 text-slate-400" />
             </div>
@@ -107,19 +107,19 @@ export default function OtpGatedContactForm() {
                 setHasConsent(e.target.checked);
                 if (e.target.checked) setConsentError('');
               }}
-              className="mt-[3px] h-[18px] w-[18px] shrink-0 rounded border-slate-300 text-[#001D3D] focus:ring-[#001D3D]"
+              className="mt-[3px] h-[18px] w-[18px] shrink-0 rounded border-slate-300 text-brand-navy focus:ring-brand-navy"
             />
             <span className="text-[13px] leading-[1.6] text-slate-500">
               I agree to Thinkarz's{' '}
-              <Link href="/terms-and-conditions" className="font-semibold text-slate-800 underline hover:text-[#001D3D]">T&amp;C</Link>{' '}
+              <Link href="/terms-and-conditions" className="font-semibold text-brand-navy underline hover:text-brand-red">T&amp;C</Link>{' '}
               and{' '}
-              <Link href="/privacy-policy" className="font-semibold text-slate-800 underline hover:text-[#001D3D]">Privacy Policy</Link>. 
+              <Link href="/privacy-policy" className="font-semibold text-brand-navy underline hover:text-brand-red">Privacy Policy</Link>. 
               This consent overrides any DNC/NDNC registrations.
             </span>
           </label>
           {consentError && <p className="-mt-6 mb-4 text-left text-xs text-red-600">{consentError}</p>}
 
-          <button type="submit" disabled={isLoading} className="h-14 w-full rounded-xl bg-[#002f5d] text-[15px] font-semibold text-white shadow-md shadow-[#002f5d]/20 transition-all hover:bg-[#001d3d] active:scale-[0.99] disabled:opacity-70">
+          <button type="submit" disabled={isLoading} className="btn btn-primary h-14 w-full !rounded-xl !text-[15px]">
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
         </form>
