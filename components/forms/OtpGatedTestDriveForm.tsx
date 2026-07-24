@@ -14,6 +14,7 @@ export default function OtpGatedTestDriveForm() {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<PopupStep>('otp');
   const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
   const [otp, setOtp] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [otpError, setOtpError] = useState('');
@@ -23,14 +24,21 @@ export default function OtpGatedTestDriveForm() {
     setIsOpen(false);
   }
 
-  function validatePhone(value: string) {
+  function validatePhone(value: string, code = countryCode) {
     if (!value.trim()) {
       setPhoneError('Phone number is required');
       return false;
     }
-    if (!/^[6-9]\d{9}$/.test(value.replace(/\s/g, ''))) {
-      setPhoneError('Enter a valid 10-digit mobile number');
-      return false;
+    if (code === '+91') {
+      if (!/^[6-9]\d{9}$/.test(value.replace(/\s/g, ''))) {
+        setPhoneError('Enter a valid 10-digit mobile number');
+        return false;
+      }
+    } else {
+      if (!/^\d{7,15}$/.test(value.replace(/\s/g, ''))) {
+        setPhoneError('Enter a valid mobile number');
+        return false;
+      }
     }
     setPhoneError('');
     return true;
@@ -102,17 +110,30 @@ export default function OtpGatedTestDriveForm() {
           <div className="mb-6">
             <label htmlFor="td-phone" className="mb-1.5 block text-[13px] font-semibold text-slate-700">Mobile Number</label>
             <div className="flex h-[42px] overflow-hidden rounded-[6px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
-              <div className="flex items-center justify-center border-r border-[#cbd5e1] bg-white px-3.5 text-[14px] text-slate-600">
-                +91
-              </div>
+              <select
+                value={countryCode}
+                onChange={(e) => {
+                  setCountryCode(e.target.value);
+                  if (phoneError) validatePhone(phone, e.target.value);
+                }}
+                className="flex items-center justify-center border-r border-[#cbd5e1] bg-slate-50 px-3.5 text-[14px] text-slate-600 outline-none appearance-none cursor-pointer hover:bg-slate-100 transition-colors"
+                style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23475569\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 8px center', backgroundRepeat: 'no-repeat', paddingRight: '24px' }}
+              >
+                <option value="+91">IN (+91)</option>
+                <option value="+1">US/CA (+1)</option>
+                <option value="+44">UK (+44)</option>
+                <option value="+971">UAE (+971)</option>
+                <option value="+61">AU (+61)</option>
+              </select>
               <input
                 id="td-phone"
                 type="tel"
-                maxLength={10}
-                placeholder="9876543210"
+                maxLength={countryCode === '+91' ? 10 : 15}
+                placeholder={countryCode === '+91' ? "9876543210" : "Enter phone number"}
                 value={phone}
                 onChange={(e) => {
-                  const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                  const maxLen = countryCode === '+91' ? 10 : 15;
+                  const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
                   setPhone(val);
                   if (phoneError) validatePhone(val);
                 }}
@@ -162,7 +183,7 @@ export default function OtpGatedTestDriveForm() {
                       <div>
                         <p className="text-sm font-bold text-slate-900">Verify OTP</p>
                         <p className="text-xs text-slate-500">
-                          Sent to <span className="font-semibold text-slate-700">+91 {phone}</span>
+                          Sent to <span className="font-semibold text-slate-700">{countryCode} {phone}</span>
                         </p>
                       </div>
                     </div>
@@ -213,12 +234,12 @@ export default function OtpGatedTestDriveForm() {
                     ]}
                     onSubmit={handleFormSuccess}
                   >
-                    <input type="hidden" name="mobile" value={phone} />
-                    <input type="hidden" name="phone" value={phone} />
+                    <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
+                    <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
                     <div className="rounded-lg border border-blue-100 bg-blue-50/50 px-4 py-3">
                       <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-600">Verified Number</p>
-                      <p className="text-sm font-bold text-slate-900">+91 {phone}</p>
+                      <p className="text-sm font-bold text-slate-900">{countryCode} {phone}</p>
                     </div>
 
                     <div>
