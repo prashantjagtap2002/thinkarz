@@ -29,19 +29,9 @@ export default function CarCard({ car }: { car: Car }) {
         </h3>
         <p className="mb-2 text-xs font-medium text-slate-500">{car.variant}</p>
 
-        <div className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-medium text-slate-500">
-          <span>{car.year}</span>
-          <span className="text-slate-300">&bull;</span>
-          <span>{formatKms(car.kms)}</span>
-          <span className="text-slate-300">&bull;</span>
-          <span>{car.fuel}</span>
-          <span className="text-slate-300">&bull;</span>
-          <span>{car.transmission}</span>
-          <span className="text-slate-300">&bull;</span>
-          <span>{car.owners === 1 ? '1st Owner' : `${car.owners}nd Owner`}</span>
-          <span className="text-slate-300">&bull;</span>
-          <span>{car.city}</span>
-        </div>
+        <p className="mb-3 text-xs text-slate-500">
+          {car.year} &middot; {car.fuel} &middot; {formatKms(car.kms)} &middot; {car.color}
+        </p>
 
         <p className="text-lg font-bold text-slate-900">{formatPrice(car.price)}</p>
         <p className="mb-4 text-xs text-slate-500">

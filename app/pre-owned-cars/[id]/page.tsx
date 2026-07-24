@@ -233,6 +233,23 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
         </div>
       </div>
 
+      {/* Features */}
+      {car.features && car.features.length > 0 && (
+        <div className="mt-10">
+          <h2 className="mb-6 text-xl font-extrabold text-slate-900">Key Features</h2>
+          <div className="rounded-2xl border border-slate-200 p-6 sm:p-8">
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {car.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-2.5 text-sm font-medium text-slate-700">
+                  <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-brand-red" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
       {/* Inspection report */}
       <div className="mt-10">
         <InspectionReport certified={car.certified} />

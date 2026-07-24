@@ -22,6 +22,7 @@ export type Car = {
   power: string;
   mileage: string;
   insuranceValidTill: string;
+  features?: string[];
 };
 
 export const cars: Car[] = [
@@ -50,6 +51,14 @@ export const cars: Car[] = [
     power: '41.42 bhp',
     mileage: '230 km / full charge',
     insuranceValidTill: 'Dec 2028',
+    features: [
+      'Dual 10.25-inch Screens',
+      'Wireless Android Auto & Apple CarPlay',
+      'Smart Start System',
+      'Reverse Parking Camera',
+      'LED Headlamps & Taillamps',
+      'Keyless Entry'
+    ],
   },
   {
     id: 'kia-sonet-gtx-plus',
