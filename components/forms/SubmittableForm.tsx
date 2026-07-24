@@ -4,6 +4,7 @@ import { createContext, FormEvent, ReactNode, Suspense, useContext, useState } f
 import { CheckCircle2 } from 'lucide-react';
 import { useUtmParams } from '@/hooks/useUtmParams';
 import { submitToGoogleSheets } from '@/lib/googleSheets';
+import { submitToSupabase } from '@/lib/supabaseSubmit';
 
 function UtmHiddenFields() {
   const utm = useUtmParams();
@@ -44,7 +45,7 @@ export default function SubmittableForm({
   successMessage,
   successExtra,
   className = '',
-  formType = 'General Submittable Form',
+  formType,
   validations,
   onSubmit,
 }: {
@@ -100,8 +101,9 @@ export default function SubmittableForm({
       payload[key] = value;
     });
 
-    // Send payload asynchronously to Google Sheets
+    // Send payload asynchronously to Google Sheets and Supabase
     submitToGoogleSheets(payload);
+    submitToSupabase(payload);
 
     onSubmit?.();
     setSubmitted(true);
