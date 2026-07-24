@@ -1,18 +1,20 @@
 import { Suspense } from 'react';
 import Image from 'next/image';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, MessageCircle, ArrowRight } from 'lucide-react';
 import OtpGatedContactForm from '@/components/forms/OtpGatedContactForm';
 import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
 
 export const metadata = {
   title: 'Contact Us | Thinkarz',
-  description: 'Get in touch with Thinkarz for pre-owned car inquiries, test drives, and expert guidance. Visit our Malad West showroom or call us today.',
+  description:
+    'Get in touch with Thinkarz for pre-owned car inquiries, test drives, and expert guidance. Visit our Malad West showroom or call us today.',
 };
 
 const touchPoints = [
   { icon: MapPin, title: 'Visit Our Showroom', lines: contactInfo.address },
   { icon: Phone, title: 'Call Us', lines: [contactInfo.phone] },
+  { icon: MessageCircle, title: 'WhatsApp', lines: [contactInfo.whatsappPhone.replace(/^91/, '+91 ')] },
   { icon: Mail, title: 'Email Us', lines: [contactInfo.email] },
   { icon: Clock, title: 'Business Hours', lines: contactInfo.hours },
 ];
@@ -27,66 +29,95 @@ export default function ContactUsPage() {
             alt="MG ZS EV - Thinkarz showroom"
             fill
             priority
-            className="object-cover opacity-30"
+            className="object-cover opacity-25"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/85 to-brand-navy/40" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.14),transparent_30%),linear-gradient(110deg,rgba(3,15,38,0.96),rgba(6,23,55,0.9),rgba(9,30,64,0.68))]" />
         </div>
         <div className="container-page relative py-16 sm:py-20">
-          <span className="section-eyebrow">Contact Us</span>
-          <h1 className="max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-            We&apos;re Here
-            <br />
-            To Help You.
+          <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-slate-100 backdrop-blur">
+            Contact Us
+          </span>
+          <h1 className="mt-5 max-w-2xl text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
+            Reach our team for buying advice, test drives, and fast support.
           </h1>
-          <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300">
-            Have a question or need assistance? Reach out to us &ndash; we&apos;d love to hear
-            from you.
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
+            Call, WhatsApp, email, or send a quick message here. We kept this page simple so it
+            feels easy to use on both desktop and mobile.
           </p>
         </div>
       </section>
 
-      <section className="container-page py-14 sm:py-20">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
-            <span className="section-eyebrow">Get In Touch</span>
-            <h2 className="mb-6 text-2xl font-extrabold text-slate-900">
-              Our team is here to assist you
-            </h2>
-            <p className="mb-8 text-sm leading-relaxed text-slate-600">
-              Our team is here to assist you with all your car buying, selling, and after-sales
-              service needs.
+      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#f7f9fc_0%,#ffffff_18%,#ffffff_100%)] py-14 sm:py-20">
+        <div className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(circle_at_top,rgba(0,40,85,0.08),transparent_70%)]" />
+        <div className="container-page relative">
+          <div className="mb-8 text-center">
+            <p className="text-sm text-slate-500 sm:text-base">
+              Reach our team by call, WhatsApp, email, or send a message here.
             </p>
-
-            <div className="space-y-6">
-              {touchPoints.map(({ icon: Icon, title, lines }) => (
-                <div key={title} className="flex gap-4">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
-                    <Icon size={20} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-slate-900">{title}</p>
-                    {lines.map((line) => (
-                      <p key={line} className="text-sm text-slate-600 break-words">
-                        {line}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end">
-            <div className="w-full max-w-md">
-              <Suspense fallback={null}>
-                <OtpGatedContactForm />
-              </Suspense>
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.92fr_1.08fr]">
+            <div className="rounded-[30px] border border-slate-200/80 bg-[#f4f7fb] p-6 shadow-[0_18px_60px_rgba(15,23,42,0.07)] sm:p-8 lg:p-10">
+              <h2 className="mb-4 text-2xl font-extrabold text-slate-900">Contact Information</h2>
+              <p className="mb-8 max-w-md text-sm leading-relaxed text-slate-600 sm:text-[15px]">
+                We are here to help with bookings, car queries, finance questions, and anything
+                else you need before your next visit.
+              </p>
+
+              <div className="space-y-5">
+                {touchPoints.map(({ icon: Icon, title, lines }) => (
+                  <div
+                    key={title}
+                    className="flex items-start gap-4 rounded-2xl bg-white/55 p-3.5 backdrop-blur-sm"
+                  >
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#dbe7f6] text-[#173a67] shadow-inner">
+                      <Icon size={19} />
+                    </div>
+                    <div className="min-w-0 pt-0.5">
+                      <p className="mb-0.5 text-sm font-semibold text-slate-500">{title}</p>
+                      {lines.map((line) => (
+                        <p
+                          key={line}
+                          className="break-words text-base font-bold leading-snug text-slate-900"
+                        >
+                          {line}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={`tel:${contactInfo.phone}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-navy px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0b2f5c]"
+                >
+                  Call Now
+                  <ArrowRight size={16} />
+                </a>
+                <a
+                  href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent('Hello Thinkarz, I need help with a car enquiry.')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-900 hover:bg-slate-50"
+                >
+                  Chat on WhatsApp
+                </a>
+              </div>
+            </div>
+
+            <div className="flex w-full items-stretch">
+              <div className="w-full">
+                <Suspense fallback={null}>
+                  <OtpGatedContactForm />
+                </Suspense>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Map + showroom */}
       <section className="container-page pb-14 sm:pb-20">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200">
@@ -101,12 +132,7 @@ export default function ContactUsPage() {
           </div>
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
             <div className="relative aspect-[16/10] w-full">
-              <Image
-                src="/showroom.jpeg"
-                alt="Thinkarz showroom"
-                fill
-                className="object-cover"
-              />
+              <Image src="/showroom.jpeg" alt="Thinkarz showroom" fill className="object-cover" />
             </div>
             <div className="p-6">
               <h3 className="mb-1.5 text-lg font-bold text-slate-900">Visit Our Showroom</h3>
@@ -121,17 +147,15 @@ export default function ContactUsPage() {
                 rel="noopener noreferrer"
                 className="btn btn-outline"
               >
-                Get Directions ↗
+                Get Directions
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="bg-slate-50 py-16 sm:py-24">
         <div className="container-page grid grid-cols-1 gap-12 lg:grid-cols-[340px_1fr] lg:gap-20">
-          {/* Left — heading */}
           <div className="lg:sticky lg:top-28 lg:self-start">
             <h2 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
               Questions,
@@ -148,11 +172,10 @@ export default function ContactUsPage() {
               href={`tel:${contactInfo.phone}`}
               className="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-slate-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-slate-900 transition-all duration-300 hover:bg-slate-900 hover:text-white"
             >
-              Ask Us Directly →
+              Ask Us Directly
             </a>
           </div>
 
-          {/* Right — accordion */}
           <div className="border-t border-slate-200">
             <FaqAccordion />
           </div>
