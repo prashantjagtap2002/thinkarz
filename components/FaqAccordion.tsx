@@ -24,18 +24,14 @@ function FaqItem({
         className="flex w-full items-center justify-between gap-6 py-5 text-left"
       >
         <span
-          className={`text-base font-semibold transition-colors duration-300 sm:text-lg ${
-            isOpen ? 'text-brand-red' : 'text-slate-900 hover:text-slate-700'
-          }`}
+          className={`text-[15px] font-bold transition-colors duration-300 sm:text-base text-slate-900 hover:text-slate-700`}
         >
           {faq.question}
         </span>
         <span
-          className={`flex h-6 w-6 shrink-0 items-center justify-center transition-all duration-300 ${
-            isOpen ? 'text-brand-red' : 'text-slate-400'
-          }`}
+          className={`flex h-6 w-6 shrink-0 items-center justify-center transition-all duration-300 text-slate-500`}
         >
-          {isOpen ? <X size={18} strokeWidth={2} /> : <Plus size={18} strokeWidth={2} />}
+          {isOpen ? <X size={16} strokeWidth={2.5} /> : <Plus size={16} strokeWidth={2.5} />}
         </span>
       </button>
 
@@ -45,7 +41,7 @@ function FaqItem({
         }`}
       >
         <div className="overflow-hidden">
-          <p className="pb-5 pr-12 text-sm leading-relaxed text-slate-500 sm:text-[15px] sm:leading-7">
+          <p className="pb-6 pr-12 text-[14px] leading-relaxed text-slate-500 sm:text-[14px] sm:leading-[1.7]">
             {faq.answer}
           </p>
         </div>

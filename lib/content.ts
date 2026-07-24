@@ -46,24 +46,29 @@ export const contactInfo = {
 
 export const faqs = [
   {
-    question: 'What are your showroom hours?',
+    question: 'Who owns Thinkarz?',
     answer:
-      'Our showroom is open Monday to Saturday from 10:00 AM to 7:00 PM, and Sunday from 10:00 AM to 5:00 PM.',
+      'Thinkarz is a premium automotive business group dedicated to providing transparent and reliable pre-owned car services in India.',
   },
   {
-    question: 'Can I sell my car to Thinkarz?',
+    question: 'Is Thinkarz an authorised dealership?',
     answer:
-      'Yes. Get an instant valuation online, book a free inspection, and receive payment the same day once the deal is finalized.',
+      'While we operate independently to offer you a diverse selection of brands, every vehicle we sell undergoes rigorous multi-point inspection to ensure authorised-level quality and reliability.',
   },
   {
-    question: 'Do you offer financing options?',
+    question: 'What can I do at Thinkarz?',
     answer:
-      'We work with leading banks and NBFCs to offer flexible financing options with quick approvals on both purchases.',
+      'You can buy certified premium pre-owned cars, sell your current vehicle for an instant and fair valuation, exchange your car, and arrange flexible financing options all under one roof.',
   },
   {
-    question: 'Do you provide vehicle warranty?',
+    question: 'Which areas does Thinkarz serve?',
     answer:
-      'All certified cars come with a warranty package, and extended warranty plans are available for added peace of mind.',
+      'Our flagship showroom is located in Malad West, Mumbai, and we proudly serve customers across the Mumbai Metropolitan Region (MMR) and surrounding areas.',
+  },
+  {
+    question: 'When did Thinkarz enter the Indian market?',
+    answer:
+      'Thinkarz was established with the vision of organizing the pre-owned car market, bringing transparency, trust, and a premium customer experience to the Indian automotive sector.',
   },
 ];
 

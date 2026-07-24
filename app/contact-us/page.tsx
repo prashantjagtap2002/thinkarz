@@ -128,21 +128,23 @@ export default function ContactUsPage() {
       <section className="bg-slate-50 py-16 sm:py-24">
         <div className="container-page grid grid-cols-1 gap-12 lg:grid-cols-[340px_1fr] lg:gap-20">
           {/* Left — heading */}
-          <div className="lg:sticky lg:top-28 lg:self-start">
-            <h2 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-              Questions,
+          <div className="lg:sticky lg:top-28 lg:self-start lg:max-w-[300px]">
+            <h2 className="text-[32px] font-extrabold leading-[1.1] text-slate-900 sm:text-[38px]">
+              About Thinkarz:
+              <br />
+              Frequently Asked
               <br />
               <span className="relative inline-block">
-                answered.
-                <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-brand-red" />
+                Questions
+                <span className="absolute -bottom-0.5 left-0 h-[4px] w-full bg-slate-900" />
               </span>
             </h2>
-            <p className="mt-5 text-sm leading-relaxed text-slate-500 sm:text-[15px]">
-              Still unsure about something? A quick call clears it up faster than any FAQ.
+            <p className="mt-5 text-[14px] leading-relaxed text-slate-500 font-medium">
+              Quick answers about our ownership, group and track record.
             </p>
             <a
               href={`tel:${contactInfo.phone}`}
-              className="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-slate-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-slate-900 transition-all duration-300 hover:bg-slate-900 hover:text-white"
+              className="mt-8 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-700 shadow-sm transition-all hover:border-slate-300 hover:shadow-md"
             >
               Ask Us Directly →
             </a>
