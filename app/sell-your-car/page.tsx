@@ -130,17 +130,7 @@ export default function SellYourCarPage() {
             ))}
           </div>
 
-          <div className="mt-12 flex flex-col items-center justify-between gap-4 rounded-xl bg-white p-6 shadow-sm sm:flex-row">
-            <div className="flex items-center gap-3">
-              <CalendarClock className="text-brand-blue" size={22} />
-              <p className="text-sm font-medium text-slate-700">
-                Book a free inspection at your convenience.
-              </p>
-            </div>
-            <Link href="/contact-us" className="btn btn-primary">
-              Book Free Inspection
-            </Link>
-          </div>
+
         </div>
       </section>
 
