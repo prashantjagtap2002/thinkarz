@@ -6,6 +6,7 @@ import { ChevronDown, PhoneCall, ShieldCheck, X, Mail } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
+import { countryCodes } from '@/lib/countryCodes';
 
 export default function OtpGatedContactForm() {
   const [isFormOpen, setIsFormOpen] = useState(true);
@@ -123,11 +124,11 @@ export default function OtpGatedContactForm() {
               className="w-[105px] shrink-0 border-r border-[#cbd5e1] bg-slate-50 pl-3 text-[14px] font-medium text-slate-600 outline-none appearance-none cursor-pointer hover:bg-slate-100 transition-colors"
               style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2364748b\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 8px center', backgroundRepeat: 'no-repeat', paddingRight: '24px' }}
             >
-              <option value="+91">IN (+91)</option>
-              <option value="+1">US (+1)</option>
-              <option value="+44">UK (+44)</option>
-              <option value="+971">UAE (+971)</option>
-              <option value="+61">AU (+61)</option>
+                {countryCodes.sort((a, b) => a.code.localeCompare(b.code)).map((c) => (
+                  <option key={`${c.code}-${c.dial}`} value={c.dial}>
+                    {c.code} ({c.dial})
+                  </option>
+                ))}
             </select>
             <input
               id="gate-phone"
