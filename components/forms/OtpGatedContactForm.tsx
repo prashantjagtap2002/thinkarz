@@ -2,12 +2,13 @@
 
 import { FormEvent, useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, PhoneCall, ShieldCheck, X } from 'lucide-react';
+import { ChevronDown, PhoneCall, ShieldCheck, X, Mail } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 
 export default function OtpGatedContactForm() {
+  const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<'phone' | 'form'>('phone');
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [phone, setPhone] = useState('');
@@ -99,8 +100,38 @@ export default function OtpGatedContactForm() {
     setOtpError('');
   }
 
+  function closePopup() {
+    setIsOpen(false);
+  }
+
   return (
-    <div className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_4px_24px_-10px_rgba(0,0,0,0.05)] p-6 sm:p-12">
+    <>
+      <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_4px_24px_-10px_rgba(0,0,0,0.05)] p-6 text-center sm:p-12">
+        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
+          <Mail size={32} />
+        </div>
+        <h2 className="mb-3 text-2xl font-bold text-slate-900">Send us a Message</h2>
+        <p className="mb-8 text-[15px] text-slate-500 max-w-sm">
+          Have a specific question or want to reach out to our support team? Drop us a message and we'll get back to you shortly.
+        </p>
+        <button onClick={() => setIsOpen(true)} className="btn btn-primary w-full max-w-[280px]">
+          Get Started
+        </button>
+      </div>
+
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closePopup} />
+          
+          <div className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto rounded-2xl bg-white shadow-2xl animate-fade-up">
+            <button
+              onClick={closePopup}
+              className="absolute right-4 top-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 z-20"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="p-6 sm:p-10">
       {step === 'phone' && (
         <form onSubmit={handleSendOtp} className="w-full text-center">
           <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
@@ -225,7 +256,7 @@ export default function OtpGatedContactForm() {
 
       {/* OTP Popup */}
       {showOtpPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeOtpPopup} />
           <div className="relative mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-fade-up sm:p-8">
             <button
@@ -284,7 +315,10 @@ export default function OtpGatedContactForm() {
             </form>
           </div>
         </div>
+            </div>
+          </div>
+        </div>
       )}
-    </div>
+    </>
   );
 }
