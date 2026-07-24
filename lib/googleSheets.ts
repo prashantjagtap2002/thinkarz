@@ -8,7 +8,11 @@ export async function submitToGoogleSheets(payload: Record<string, any>): Promis
     const params = new URLSearchParams();
     Object.keys(payload).forEach((key) => {
       if (payload[key] !== undefined && payload[key] !== null) {
-        params.append(key, String(payload[key]));
+        let val = String(payload[key]);
+        if (val.startsWith('+')) {
+          val = `'${val}`;
+        }
+        params.append(key, val);
       }
     });
 
