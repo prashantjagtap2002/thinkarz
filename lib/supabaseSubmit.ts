@@ -9,16 +9,19 @@ export async function submitToSupabase(payload: Record<string, any>): Promise<bo
       Object.entries(payload).map(([k, v]) => [k, v === undefined ? null : v])
     );
     
-    const formType = cleanPayload.form_type || 'General Submittable Form';
-    let tableName = 'general_submittable_form';
+    const formType = cleanPayload.form_type;
+    let tableName = '';
 
     // Map form types to their corresponding Supabase table names
     if (formType === 'Sell Your Car / Valuation Form') tableName = 'sell_your_car_valuation_form';
     else if (formType === 'Contact Us Form') tableName = 'contact_us_form';
     else if (formType === 'Book a Test Drive Form') tableName = 'book_a_test_drive_form';
-    else if (formType === 'Car Request / Sourcing Form') tableName = 'car_request_sourcing_form';
     else if (formType === 'Make an Offer / Buy Enquiry Modal') tableName = 'make_an_offer_buy_enquiry_modal';
     else if (formType === 'Newsletter Signup') tableName = 'newsletter_signup';
+    else {
+      console.warn('Unknown or missing form type, dropping submission:', formType);
+      return false;
+    }
     
     // We pass the raw payload directly. Supabase will map matching JSON keys to table columns.
     // Any extra keys that don't match a column will just be ignored by Supabase automatically (if the table doesn't have them).
