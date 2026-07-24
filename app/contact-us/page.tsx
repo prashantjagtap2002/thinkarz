@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import Image from 'next/image';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, PhoneCall } from 'lucide-react';
 import OtpGatedContactForm from '@/components/forms/OtpGatedContactForm';
 import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
@@ -134,19 +134,21 @@ export default function ContactUsPage() {
               <br />
               Frequently Asked
               <br />
-              <span className="relative inline-block">
+              <span className="relative inline-block text-slate-900">
                 Questions
-                <span className="absolute -bottom-0.5 left-0 h-[4px] w-full bg-slate-900" />
+                <span className="absolute -bottom-1 left-0 h-[6px] w-full rounded bg-brand-red/20" />
+                <span className="absolute -bottom-1 left-0 h-[6px] w-1/3 rounded bg-brand-red" />
               </span>
             </h2>
-            <p className="mt-5 text-[14px] leading-relaxed text-slate-500 font-medium">
+            <p className="mt-6 text-[15px] leading-relaxed text-slate-500 font-medium">
               Quick answers about our ownership, group and track record.
             </p>
             <a
               href={`tel:${contactInfo.phone}`}
-              className="mt-8 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-700 shadow-sm transition-all hover:border-slate-300 hover:shadow-md"
+              className="mt-8 inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-brand-red to-[#cc181f] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-red/20 transition-all duration-300 hover:shadow-xl hover:shadow-brand-red/30 hover:-translate-y-0.5 active:translate-y-0"
             >
-              Ask Us Directly →
+              <PhoneCall size={18} />
+              Ask Us Directly
             </a>
           </div>
 

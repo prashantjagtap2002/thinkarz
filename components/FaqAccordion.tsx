@@ -21,17 +21,17 @@ function FaqItem({
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="flex w-full items-center justify-between gap-6 py-5 text-left"
+        className={`group flex w-full items-center justify-between gap-6 py-5 text-left ${isOpen ? 'pb-4' : ''}`}
       >
         <span
-          className={`text-[15px] font-bold transition-colors duration-300 sm:text-base text-slate-900 hover:text-slate-700`}
+          className={`text-[15px] sm:text-base font-bold transition-colors duration-300 ${isOpen ? 'text-brand-red' : 'text-slate-900 hover:text-brand-red/80'}`}
         >
           {faq.question}
         </span>
         <span
-          className={`flex h-6 w-6 shrink-0 items-center justify-center transition-all duration-300 text-slate-500`}
+          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${isOpen ? 'bg-brand-red/10 text-brand-red' : 'text-slate-400 bg-slate-100 group-hover:bg-slate-200'}`}
         >
-          {isOpen ? <X size={16} strokeWidth={2.5} /> : <Plus size={16} strokeWidth={2.5} />}
+          {isOpen ? <X size={14} strokeWidth={3} /> : <Plus size={14} strokeWidth={3} />}
         </span>
       </button>
 
