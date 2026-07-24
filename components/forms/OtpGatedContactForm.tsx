@@ -127,6 +127,7 @@ export default function OtpGatedContactForm() {
           ]}
         >
           <input type="hidden" name="mobile" value={phone} />
+          <input type="hidden" name="phone" value={phone} />
 
           <div className="rounded-lg border border-blue-100 bg-blue-50/50 px-4 py-3">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-600">

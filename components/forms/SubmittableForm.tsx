@@ -60,7 +60,6 @@ export default function SubmittableForm({
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const utm = useUtmParams();
 
   function validate(form: HTMLFormElement): boolean {
     const newErrors: Record<string, string> = {};
@@ -95,7 +94,6 @@ export default function SubmittableForm({
     const formData = new FormData(formElement);
     const payload: Record<string, any> = {
       form_type: formType,
-      ...utm,
     };
 
     formData.forEach((value, key) => {

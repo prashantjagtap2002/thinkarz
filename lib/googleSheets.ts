@@ -3,15 +3,19 @@ export const GOOGLE_SHEETS_WEB_APP_URL =
 
 export async function submitToGoogleSheets(payload: Record<string, any>): Promise<boolean> {
   try {
-    // Using no-cors mode as Google Apps Script web apps return a 302 redirect that browsers block in normal CORS mode.
+    console.log('Sending payload to Google Sheets:', payload);
+
     await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
+      keepalive: true,
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
       },
       body: JSON.stringify(payload),
     });
+
+    console.log('Successfully posted payload to Google Sheets Web App');
     return true;
   } catch (error) {
     console.error('Error submitting lead to Google Sheets:', error);

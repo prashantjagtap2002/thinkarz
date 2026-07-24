@@ -1,5 +1,7 @@
 'use client';
 
+import { contactInfo } from '@/lib/content';
+
 function WhatsAppIcon({ size = 26 }: { size?: number }) {
   return (
     <svg
@@ -17,7 +19,7 @@ function WhatsAppIcon({ size = 26 }: { size?: number }) {
 export default function FloatingWhatsAppButton() {
   return (
     <a
-      href={`https://wa.me/919892929363?text=${encodeURIComponent('Hello.')}`}
+      href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent('Hello.')}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"

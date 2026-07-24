@@ -11,7 +11,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = blogs.find((b) => b.slug === slug);
-  return { title: post ? `${post.title} | ThinkArz Blog` : 'Blog Not Found | ThinkArz' };
+  return { title: post ? `${post.title} | Thinkarz Blog` : 'Blog Not Found | Thinkarz' };
 }
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -50,13 +50,12 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       </div>
 
       <div className="max-w-3xl space-y-4 text-sm leading-relaxed text-slate-700">
-        <p>{post.excerpt}</p>
-        <p>
-          Our team at ThinkArz put this guide together to help you make confident, informed
-          decisions &mdash; whether you&apos;re buying, selling, maintaining or insuring your
-          car. Reach out to our experts if you have any questions specific to your situation.
-        </p>
-        <p>
+        {post.content.split('\n\n').map((paragraph, i) => (
+          <p key={i}>{paragraph.replace(/\n/g, '<br/>').split('<br/>').map((line, j, arr) => (
+            <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
+          ))}</p>
+        ))}
+        <p className="pt-4 border-t border-slate-100">
           Have more questions? Our team is always happy to help &mdash; visit our showroom in
           Malad (West), Mumbai, or reach out through our{' '}
           <Link href="/contact-us" className="font-semibold text-brand-red hover:underline">

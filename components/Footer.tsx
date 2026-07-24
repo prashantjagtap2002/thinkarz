@@ -22,7 +22,6 @@ const services = [
 
 const company = [
   { name: 'About Gautam Modi Group', href: '/about-us' },
-  { name: 'Careers', href: '#' },
   { name: 'Terms & Conditions', href: '/terms-and-conditions' },
   { name: 'Privacy Policy', href: '/privacy-policy' },
 ];
@@ -57,18 +56,23 @@ export default function Footer() {
             customer first approach, and a passion for mobility.
           </p>
           <div className="mt-5 flex gap-3">
-            {[Facebook, Instagram, Youtube, Linkedin].map((Icon, index) => (
+            {[
+              { icon: Facebook, href: '#', label: 'Facebook' },
+              { icon: Instagram, href: '#', label: 'Instagram' },
+              { icon: Youtube, href: '#', label: 'YouTube' },
+              { icon: Linkedin, href: '#', label: 'LinkedIn' },
+            ].map(({ icon: Icon, href, label }) => (
               <a
-                key={index}
-                href="#"
+                key={label}
+                href={href}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red"
-                aria-label="social link"
+                aria-label={label}
               >
                 <Icon size={16} />
               </a>
             ))}
             <a
-              href={`https://wa.me/919892929363?text=${encodeURIComponent('Hello.')}`}
+              href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent('Hello.')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-green-500 hover:text-green-500"

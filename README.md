@@ -1,6 +1,6 @@
-# ThinkArz
+# Thinkarz
 
-Marketing website for ThinkArz, the pre-owned car venture of Gautam Modi Group. Built with Next.js (App Router), TypeScript and Tailwind CSS.
+Marketing website for Thinkarz, the pre-owned car venture of Gautam Modi Group. Built with Next.js (App Router), TypeScript and Tailwind CSS.
 
 ## Pages
 

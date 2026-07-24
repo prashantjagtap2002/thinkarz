@@ -16,7 +16,6 @@ import {
   FileCheck,
   Star,
   Scale,
-  Truck,
   Clock,
   MoveRight,
   ChevronDown,
@@ -160,13 +159,13 @@ export default function HomePage() {
                 {/* Sell CTA */}
                 <div className="mt-5 pt-5 border-t border-slate-100 text-center">
                   <p className="text-xs text-slate-400 mb-2">Want to sell instead?</p>
-                  <a
+                  <Link
                     href="/sell-your-car"
                     className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-red hover:underline transition-colors"
                   >
                     Get Free Valuation
                     <ArrowRight size={14} />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

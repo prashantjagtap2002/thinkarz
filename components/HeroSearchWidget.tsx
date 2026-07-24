@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ageOptions, bodyTypes, budgetOptions } from '@/lib/cars';
-import { Calendar, ChevronDown, IndianRupee, Car, Search, ArrowRight } from 'lucide-react';
+import { Calendar, ChevronDown, IndianRupee, Car, ArrowRight } from 'lucide-react';
 import BodyTypeIcon from './BodyTypeIcon';
 
 function CarTypeSelect({
@@ -181,6 +181,7 @@ function BudgetSelect({
               value={budgetIndex}
               onChange={(e) => handleSliderChange(Number(e.target.value))}
               className="accent-brand-red w-full h-1.5 bg-slate-100 rounded-lg cursor-pointer appearance-none"
+              aria-label="Adjust budget range"
             />
             <div className="flex justify-between text-[9px] font-semibold text-slate-400 mt-1 select-none">
               <span>Any</span>
@@ -298,6 +299,7 @@ function AgeSelect({
               value={ageIndex}
               onChange={(e) => handleSliderChange(Number(e.target.value))}
               className="accent-brand-red w-full h-1.5 bg-slate-100 rounded-lg cursor-pointer appearance-none"
+              aria-label="Adjust car age range"
             />
             <div className="flex justify-between text-[9px] font-semibold text-slate-400 mt-1 select-none">
               <span>Any</span>

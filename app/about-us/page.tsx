@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  Car,
   ShieldCheck,
   Award,
   MessageCircleHeart,
@@ -83,7 +82,7 @@ export default function AboutPage() {
         <div className="absolute inset-0">
           <Image
             src="/showroom_image/thinkarz-malad-west-mumbai-second-hand-car-dealers-tinbrdbc9n.webp"
-            alt=""
+            alt="Thinkarz showroom in Malad West, Mumbai"
             fill
             priority
             className="object-cover"

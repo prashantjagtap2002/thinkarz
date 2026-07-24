@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Phone } from 'lucide-react';
 import Logo from './Logo';
-import { navLinks } from '@/lib/content';
+import { navLinks, contactInfo } from '@/lib/content';
 
 export default function Header() {
   const pathname = usePathname();
@@ -37,7 +37,7 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
           <a
-            href="tel:02242125678"
+            href={`tel:${contactInfo.landlinePhone}`}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-blue text-white transition-[transform,background-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:bg-brand-red hover:shadow-md sm:h-10 sm:w-10"
             aria-label="Call Thinkarz"
           >
@@ -87,11 +87,11 @@ export default function Header() {
             </div>
             <div className="container-page border-t border-slate-100 py-4">
               <a
-                href="tel:02242125678"
+                href={`tel:${contactInfo.landlinePhone}`}
                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-red py-3 text-sm font-semibold text-white"
               >
                 <Phone size={16} />
-                Call Us: 022 4212 5678
+                Call Us: {contactInfo.landlinePhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1 $2 $3')}
               </a>
             </div>
           </nav>

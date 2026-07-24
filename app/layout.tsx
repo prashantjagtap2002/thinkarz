@@ -44,7 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PageTransition>
           <main>{children}</main>
         </PageTransition>
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
         <Suspense fallback={null}>
           <FloatingWhatsAppButton />
         </Suspense>

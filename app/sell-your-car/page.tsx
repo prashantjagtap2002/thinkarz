@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ScrollToTopButton from '@/components/ScrollToTopButton';
@@ -96,7 +97,9 @@ export default function SellYourCarPage() {
             <p className="mb-6 text-sm text-slate-500">
               Enter your car details and our team will get back to you with an expert valuation estimate.
             </p>
-            <SellValuationForm />
+            <Suspense fallback={null}>
+              <SellValuationForm />
+            </Suspense>
           </div>
         </div>
       </section>

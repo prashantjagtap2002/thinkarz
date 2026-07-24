@@ -18,13 +18,14 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import { cars, formatKms, formatPrice, getHighlights } from '@/lib/cars';
-import { carFaqs } from '@/lib/content';
+import { carFaqs, contactInfo } from '@/lib/content';
 import CarCard from '@/components/CarCard';
 import CarGallery from '@/components/car-detail/CarGallery';
 import CarComparison from '@/components/car-detail/CarComparison';
 import EmiCalculator from '@/components/car-detail/EmiCalculator';
 import InspectionReport from '@/components/car-detail/InspectionReport';
 import FaqAccordion from '@/components/FaqAccordion';
+import MakeOfferButton from '@/components/MakeOfferButton';
 
 const trustBadges = [
   { icon: ShieldCheck, label: '140-Point Inspection' },
@@ -39,7 +40,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const car = cars.find((c) => c.id === id);
-  return { title: car ? `${car.make} ${car.model} | ThinkArz` : 'Car Not Found | ThinkArz' };
+  return { title: car ? `${car.make} ${car.model} | Thinkarz` : 'Car Not Found | Thinkarz' };
 }
 
 export default async function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -86,7 +87,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
         ['Colour', car.color],
         ['Seating Capacity', `${car.seats} Seater`],
         ['Kilometers Driven', formatKms(car.kms)],
-        ['Certification', car.certified ? 'ThinkArz Certified' : 'Standard Listing'],
+        ['Certification', car.certified ? 'Thinkarz Certified' : 'Standard Listing'],
       ],
     },
   ];
@@ -145,11 +146,9 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
               <Link href="/book-a-test-drive" className="btn btn-primary w-full">
                 Book Test Drive
               </Link>
-              <Link href="/contact-us" className="btn btn-outline w-full">
-                Buy Now
-              </Link>
+              <MakeOfferButton car={car} />
               <a
-                href={`https://wa.me/912242125678?text=${encodeURIComponent(
+                  href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent(
                   `Hi, I'm interested in the ${car.year} ${car.make} ${car.model} (${car.variant}) listed at ${formatPrice(car.price)} on Thinkarz.`
                 )}`}
                 target="_blank"
@@ -187,8 +186,8 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
             <p className="text-sm font-semibold text-slate-900">Need help deciding?</p>
             <p className="mt-1 text-sm text-slate-600">
               Call our team at{' '}
-              <a href="tel:02242125678" className="font-semibold text-brand-red">
-                022 4212 5678
+              <a href={`tel:${contactInfo.landlinePhone}`} className="font-semibold text-brand-red">
+                {contactInfo.landlinePhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1 $2 $3')}
               </a>{' '}
               for expert guidance.
             </p>

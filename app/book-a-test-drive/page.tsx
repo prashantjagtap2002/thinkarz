@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ScrollToTopButton from '@/components/ScrollToTopButton';
@@ -135,7 +136,9 @@ export default function BookTestDrivePage() {
 
           <div className="flex items-start justify-center lg:justify-end">
             <div className="w-full max-w-sm">
-              <OtpGatedTestDriveForm />
+              <Suspense fallback={null}>
+                <OtpGatedTestDriveForm />
+              </Suspense>
             </div>
           </div>
         </div>

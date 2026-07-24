@@ -1,5 +1,6 @@
 import PageHero from '@/components/PageHero';
 import Reveal from '@/components/Reveal';
+import { contactInfo } from '@/lib/content';
 
 export const metadata = {
   title: 'Privacy Policy | Thinkarz',
@@ -96,9 +97,9 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold text-slate-900 mb-4">Contact Us</h2>
             <p className="text-sm text-slate-600 leading-relaxed mb-6">
               If you have any questions, concerns, or requests regarding this Privacy Policy or
-              our handling of your personal information, please contact us at{' '}
-              <a href="mailto:info.thinkarz@gmail.com" className="text-brand-red hover:underline">
-                info.thinkarz@gmail.com
+              our handling of your personal information,               please contact us at{' '}
+              <a href={`mailto:${contactInfo.email}`} className="text-brand-red hover:underline">
+                {contactInfo.email}
               </a>.
             </p>
           </Reveal>

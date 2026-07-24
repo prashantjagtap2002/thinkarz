@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import OtpGatedContactForm from '@/components/forms/OtpGatedContactForm';
@@ -23,7 +24,7 @@ export default function ContactUsPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/cars/mg-zs-ev.jpg"
-            alt=""
+            alt="MG ZS EV - Thinkarz showroom"
             fill
             priority
             className="object-cover opacity-30"
@@ -77,7 +78,9 @@ export default function ContactUsPage() {
 
           <div className="flex justify-center lg:justify-end">
             <div className="w-full max-w-md">
-              <OtpGatedContactForm />
+              <Suspense fallback={null}>
+                <OtpGatedContactForm />
+              </Suspense>
             </div>
           </div>
         </div>
@@ -115,7 +118,7 @@ export default function ContactUsPage() {
               <a
                 href="https://maps.app.goo.gl/j1DSAt9Dy3wuXHwy6"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="btn btn-outline"
               >
                 Get Directions ↗

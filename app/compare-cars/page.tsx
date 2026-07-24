@@ -34,14 +34,16 @@ const rows: Row[] = [
   { label: 'Insurance Valid Till', render: (c) => c.insuranceValidTill },
 ];
 
-// Higher mileage (km/l or km/charge) is better — parsed from the leading number.
-function higherIsBetterRow(label: string) {
-  return label === 'Mileage';
+// Higher mileage (km/l or km/charge) is better. Only meaningful when comparing same fuel type.
+function higherIsBetterRow(label: string, columns: Car[]) {
+  if (label !== 'Mileage') return false;
+  const fuelTypes = new Set(columns.map((c) => c.fuel));
+  return fuelTypes.size === 1;
 }
 
 function bestIndex(columns: Car[], row: Row): number {
   const wantsLower = row.lowerIsBetter;
-  const wantsHigher = higherIsBetterRow(row.label);
+  const wantsHigher = higherIsBetterRow(row.label, columns);
   if (!wantsLower && !wantsHigher) return -1;
 
   let bestIdx = -1;
