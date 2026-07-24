@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, PhoneCall } from 'lucide-react';
 import OtpGatedContactForm from '@/components/forms/OtpGatedContactForm';
-import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
 
 export const metadata = {
@@ -124,40 +123,7 @@ export default function ContactUsPage() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="bg-slate-50 py-16 sm:py-24">
-        <div className="container-page grid grid-cols-1 gap-12 lg:grid-cols-[340px_1fr] lg:gap-20">
-          {/* Left — heading */}
-          <div className="lg:sticky lg:top-28 lg:self-start lg:max-w-[300px]">
-            <h2 className="text-[32px] font-extrabold leading-[1.1] text-slate-900 sm:text-[38px]">
-              About Thinkarz:
-              <br />
-              Frequently Asked
-              <br />
-              <span className="relative inline-block text-slate-900">
-                Questions
-                <span className="absolute -bottom-1 left-0 h-[6px] w-full rounded bg-brand-red/20" />
-                <span className="absolute -bottom-1 left-0 h-[6px] w-1/3 rounded bg-brand-red" />
-              </span>
-            </h2>
-            <p className="mt-6 text-[15px] leading-relaxed text-slate-500 font-medium">
-              Quick answers about our ownership, group and track record.
-            </p>
-            <a
-              href={`tel:${contactInfo.phone}`}
-              className="mt-8 inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-brand-red to-[#cc181f] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-red/20 transition-all duration-300 hover:shadow-xl hover:shadow-brand-red/30 hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <PhoneCall size={18} />
-              Ask Us Directly
-            </a>
-          </div>
 
-          {/* Right — accordion */}
-          <div className="border-t border-slate-200">
-            <FaqAccordion />
-          </div>
-        </div>
-      </section>
     </>
   );
 }

@@ -3,17 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ScrollToTopButton from '@/components/ScrollToTopButton';
 import {
-  CalendarHeart,
   MapPinned,
   CarFront,
-  CircleHelp,
-  Sparkles,
-  BadgeDollarSign,
-  Route,
-  GaugeCircle,
-  MessageCircleMore,
   MoveRight,
   ChevronDown,
+  CheckCircle2,
 } from 'lucide-react';
 import OtpGatedTestDriveForm from '@/components/forms/OtpGatedTestDriveForm';
 import { cars } from '@/lib/cars';
@@ -25,50 +19,41 @@ export const metadata = {
 
 const steps = [
   {
-    icon: CalendarHeart,
-    title: '1. Choose Car & Slot',
+    title: 'Choose Car & Slot',
     desc: 'Select your preferred car, date and time.',
   },
   {
-    icon: MapPinned,
-    title: '2. Visit Our Location',
+    title: 'Visit Our Location',
     desc: 'Reach our showroom at Malad (West) on time.',
   },
   {
-    icon: CarFront,
-    title: '3. Test Drive',
+    title: 'Test Drive',
     desc: 'Experience the car and get all your questions answered.',
   },
   {
-    icon: CircleHelp,
-    title: '4. Make the Right Choice',
+    title: 'Make the Right Choice',
     desc: 'Our experts help you choose the best fit.',
   },
 ];
 
 const reasons = [
   {
-    icon: Sparkles,
     title: 'Real Experience',
     desc: 'Feel the performance, comfort and features firsthand.',
   },
   {
-    icon: BadgeDollarSign,
     title: 'Better Decision',
     desc: "Make a confident choice that's right for you.",
   },
   {
-    icon: Route,
     title: 'Know the Drive',
     desc: 'Understand the handling, pickup and overall driving experience.',
   },
   {
-    icon: GaugeCircle,
     title: 'No Obligation',
     desc: "It's completely free with no commitment.",
   },
   {
-    icon: MessageCircleMore,
     title: 'Expert Guidance',
     desc: 'Get your queries answered by our product experts.',
   },
@@ -144,51 +129,53 @@ export default function BookTestDrivePage() {
         </div>
       </section>
 
-      <section className="py-16 sm:py-20">
+      <section className="py-16 sm:py-24">
         <div className="container-page">
-          <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
+          <h2 className="mb-14 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             How It Works
           </h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
-            {steps.map(({ icon: Icon, title, desc }, index) => (
+            {steps.map(({ title, desc }, index) => (
               <div key={title} className="relative text-center">
                 {index < steps.length - 1 && (
                   <>
-                    <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center lg:flex">
-                      <MoveRight size={28} className="text-slate-400" />
+                    <div className="absolute right-[-2rem] top-6 hidden -translate-y-1/2 items-center lg:flex">
+                      <MoveRight size={24} className="text-slate-300" />
                     </div>
-                    <div className="mb-4 flex justify-center text-slate-400 lg:hidden">
+                    <div className="mb-6 flex justify-center text-slate-300 lg:hidden">
                       <ChevronDown size={20} />
                     </div>
                   </>
                 )}
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-800 border border-slate-200/60 shadow-sm">
-                  <Icon size={24} />
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-slate-50 text-lg font-black text-slate-400 border-2 border-slate-100">
+                  {index + 1}
                 </div>
-                <h3 className="mb-1 font-bold text-slate-900">{title}</h3>
-                <p className="text-sm text-slate-600">{desc}</p>
+                <h3 className="mb-2 font-bold text-slate-900">{title}</h3>
+                <p className="text-[13px] leading-relaxed text-slate-600 max-w-[200px] mx-auto">{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-slate-50 py-16 sm:py-20">
+      <section className="bg-slate-50 py-16 sm:py-24">
         <div className="container-page">
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             Why Take a Test Drive?
           </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            {reasons.map(({ icon: Icon, title, desc }) => (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+            {reasons.map(({ title, desc }) => (
               <div
                 key={title}
-                className="rounded-xl border border-slate-200 bg-white p-6 text-center"
+                className="flex gap-4 rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-brand-red/30 hover:shadow-sm"
               >
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800 border border-slate-200/60 shadow-sm">
-                  <Icon size={18} />
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
+                  <CheckCircle2 size={14} strokeWidth={3} />
                 </div>
-                <h3 className="mb-1.5 text-sm font-bold text-slate-900">{title}</h3>
-                <p className="text-xs leading-relaxed text-slate-600">{desc}</p>
+                <div>
+                  <h3 className="mb-1 text-[14px] font-bold text-slate-900">{title}</h3>
+                  <p className="text-[13px] leading-relaxed text-slate-600">{desc}</p>
+                </div>
               </div>
             ))}
           </div>
