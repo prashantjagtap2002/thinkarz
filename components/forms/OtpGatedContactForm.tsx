@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import { PhoneCall, ShieldCheck, X } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
@@ -61,25 +60,32 @@ export default function OtpGatedContactForm() {
   }
 
   return (
-    <div className="relative flex h-full flex-col justify-center overflow-hidden rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:p-8 lg:p-10">
-      <div className="pointer-events-none absolute inset-x-8 top-0 h-24 rounded-b-[40px] bg-[radial-gradient(circle_at_top,rgba(23,58,103,0.08),transparent_72%)]" />
-      {step === 'phone' && (
-        <div className="relative flex flex-col items-center text-center">
-          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-[26px] bg-[#edf3fb] text-[#173a67] shadow-inner">
-            <PhoneCall size={28} />
-          </div>
-          <h2 className="mb-2 text-3xl font-extrabold tracking-tight text-slate-900">
-            Verify to Send a Message
-          </h2>
-          <p className="mb-8 max-w-md text-sm text-slate-500 sm:text-base">
-            Enter your phone number to unlock the contact form.
-          </p>
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <h2 className="text-lg font-bold text-slate-900">Send Us a Message</h2>
+      <p className="mb-6 text-sm text-slate-500">
+        Fill in the details below and we&apos;ll get back to you shortly.
+      </p>
 
-          <form onSubmit={handleSendOtp} className="w-full text-left">
-            <div className="mb-4 flex h-16 items-center overflow-hidden rounded-[22px] border border-slate-200 bg-[#f6f8fc] p-1.5 shadow-inner transition focus-within:border-[#173a67] focus-within:ring-2 focus-within:ring-[#173a67]/10">
-              <div className="flex h-full items-center justify-center rounded-[18px] border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
-                IN +91 <span className="ml-1 text-[10px]">▼</span>
-              </div>
+      {step === 'phone' && (
+        <form onSubmit={handleSendOtp}>
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
+              <PhoneCall size={16} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-900">Enter your number</p>
+              <p className="text-xs text-slate-500">We&apos;ll send a verification code</p>
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="gate-phone" className="field-label">
+              Mobile Number
+            </label>
+            <div className="flex gap-2">
+              <span className="flex items-center rounded-md border border-slate-300 bg-slate-50 px-3 text-sm font-semibold text-slate-500">
+                +91
+              </span>
               <input
                 id="gate-phone"
                 type="tel"
@@ -91,41 +97,22 @@ export default function OtpGatedContactForm() {
                   setPhone(val);
                   if (phoneError) validatePhone(val);
                 }}
-                className="h-full flex-1 bg-transparent px-4 text-lg font-medium tracking-[0.02em] text-slate-800 outline-none placeholder:text-slate-400"
+                className="field-input flex-1"
                 autoFocus
               />
             </div>
-            {phoneError && <p className="mb-4 mt-1 text-xs text-red-600">{phoneError}</p>}
+            {phoneError && <p className="mt-1 text-xs text-red-600">{phoneError}</p>}
+          </div>
 
-            <div className="mb-6 flex items-start gap-3">
-              <input
-                type="checkbox"
-                id="terms"
-                required
-                className="mt-1 h-5 w-5 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
-              />
-              <label htmlFor="terms" className="text-xs leading-relaxed text-slate-500 sm:text-sm">
-                I agree to Thinkarz&apos;s{' '}
-                <Link href="/terms-and-conditions" className="font-semibold underline hover:text-slate-900">
-                  T&C
-                </Link>{' '}
-                and{' '}
-                <Link href="/privacy-policy" className="font-semibold underline hover:text-slate-900">
-                  Privacy Policy
-                </Link>
-                . This consent overrides any DNC/NDNC registrations.
-              </label>
-            </div>
+          <button type="submit" disabled={isLoading} className="btn btn-primary mt-4 w-full">
+            {isLoading ? 'Sending OTP...' : 'Send OTP'}
+          </button>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full rounded-[20px] bg-[#123b73] px-4 py-4 text-base font-semibold text-white shadow-[0_14px_32px_rgba(18,59,115,0.22)] transition-all hover:bg-[#0f315f] active:scale-[0.98]"
-            >
-              {isLoading ? 'Sending...' : 'Send OTP'}
-            </button>
-          </form>
-        </div>
+          <p className="mt-3 text-center text-[11px] text-slate-400">
+            <ShieldCheck size={12} className="mr-1 inline -translate-y-px" />
+            Your number is safe with us. No spam.
+          </p>
+        </form>
       )}
 
       {step === 'form' && (
@@ -136,17 +123,13 @@ export default function OtpGatedContactForm() {
           successMessage="Thanks for reaching out. Our team will get back to you shortly."
           className="space-y-4"
           validations={[
-            {
-              name: 'email',
-              pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
-              message: 'Enter a valid email address',
-            },
+            { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
           ]}
         >
           <input type="hidden" name="mobile" value={phone} />
           <input type="hidden" name="phone" value={phone} />
 
-          <div className="rounded-2xl border border-blue-100 bg-blue-50/60 px-4 py-3">
+          <div className="rounded-lg border border-blue-100 bg-blue-50/50 px-4 py-3">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-600">
               Verified Number
             </p>
@@ -154,30 +137,17 @@ export default function OtpGatedContactForm() {
           </div>
 
           <div>
-            <label htmlFor="name" className="field-label">
-              Full Name
-            </label>
+            <label htmlFor="name" className="field-label">Full Name</label>
             <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
             <FieldError name="name" />
           </div>
           <div>
-            <label htmlFor="email" className="field-label">
-              Email Address
-            </label>
-            <input
-              id="email"
-              name="email"
-              required
-              type="email"
-              className="field-input"
-              placeholder="Enter your email address"
-            />
+            <label htmlFor="email" className="field-label">Email Address</label>
+            <input id="email" name="email" required type="email" className="field-input" placeholder="Enter your email address" />
             <FieldError name="email" />
           </div>
           <div>
-            <label htmlFor="subject" className="field-label">
-              Subject
-            </label>
+            <label htmlFor="subject" className="field-label">Subject</label>
             <select id="subject" name="subject" required className="field-input" defaultValue="">
               <option value="" disabled>
                 Select a subject
@@ -190,26 +160,18 @@ export default function OtpGatedContactForm() {
             <FieldError name="subject" />
           </div>
           <div>
-            <label htmlFor="message" className="field-label">
-              Your Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              required
-              className="field-input"
-              rows={4}
-              placeholder="Type your message here..."
-            />
+            <label htmlFor="message" className="field-label">Your Message</label>
+            <textarea id="message" name="message" required className="field-input" rows={4} placeholder="Type your message here..." />
             <FieldError name="message" />
           </div>
         </SubmittableForm>
       )}
 
+      {/* OTP Popup */}
       {showOtpPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeOtpPopup} />
-          <div className="relative mx-4 w-full max-w-sm animate-fade-up rounded-2xl bg-white p-6 shadow-2xl sm:p-8">
+          <div className="relative mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-fade-up sm:p-8">
             <button
               onClick={closeOtpPopup}
               className="absolute right-4 top-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
@@ -246,7 +208,7 @@ export default function OtpGatedContactForm() {
                     setOtp(val);
                     if (otpError && val.length === 4) setOtpError('');
                   }}
-                  className="field-input rounded-2xl text-center text-lg font-bold tracking-[0.5em]"
+                  className="field-input text-center text-lg font-bold tracking-[0.5em]"
                   autoFocus
                 />
                 {otpError && <p className="mt-1 text-xs text-red-600">{otpError}</p>}
