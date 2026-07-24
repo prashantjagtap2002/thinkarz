@@ -74,12 +74,10 @@ export default function ContactUsPage() {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end">
-            <div className="w-full max-w-md">
-              <Suspense fallback={null}>
-                <OtpGatedContactForm />
-              </Suspense>
-            </div>
+          <div className="w-full h-full">
+            <Suspense fallback={null}>
+              <OtpGatedContactForm />
+            </Suspense>
           </div>
         </div>
       </section>
