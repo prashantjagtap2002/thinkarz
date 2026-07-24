@@ -89,14 +89,16 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-brand-navy">
-        {/* Gradient mesh background */}
+        {/* Background Image */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-navy via-brand-navyLight to-brand-navy" />
-          <div className="absolute -top-24 -right-24 h-[500px] w-[500px] rounded-full bg-brand-red/[0.07] blur-[120px]" />
-          <div className="absolute -bottom-32 -left-32 h-[400px] w-[400px] rounded-full bg-brand-blue/[0.08] blur-[100px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-white/[0.02] blur-[80px]" />
-          {/* Subtle grid pattern */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+          <Image
+            src="/images/cars/kia-seltos.jpg"
+            alt="Premium Pre-Owned Cars"
+            fill
+            priority
+            className="object-cover opacity-[0.25]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/95 to-brand-navy/40" />
         </div>
 
         <div className="container-page relative pb-10 pt-16 sm:pb-16 sm:pt-24">
