@@ -8,6 +8,7 @@ import {
   MoveRight,
   ChevronDown,
   CheckCircle2,
+  Sparkles,
 } from 'lucide-react';
 import OtpGatedTestDriveForm from '@/components/forms/OtpGatedTestDriveForm';
 import { cars } from '@/lib/cars';
