@@ -67,45 +67,39 @@ export default function OtpGatedContactForm() {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_16px_45px_-28px_rgba(15,27,46,0.35)]">
-
+    <div className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_4px_24px_-10px_rgba(0,0,0,0.05)] p-6 sm:p-12">
       {step === 'phone' && (
-        <form onSubmit={handleSendOtp} className="px-5 py-9 sm:px-10 sm:py-12">
-          <div className="mx-auto max-w-md text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-blueLight text-brand-blue shadow-sm ring-1 ring-brand-blue/10">
-              <PhoneCall size={29} strokeWidth={1.8} />
-            </div>
-            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900">Verify to Send a Message</h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-500">
-              Enter your mobile number to unlock the contact form.
-            </p>
+        <form onSubmit={handleSendOtp} className="w-full text-center">
+          <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
+            <PhoneCall size={26} strokeWidth={2} />
           </div>
+          <h2 className="mb-2 text-2xl font-bold text-slate-900">Verify to Send a Message</h2>
+          <p className="mb-8 text-[15px] text-slate-500">
+            Enter your phone number to unlock the contact form.
+          </p>
 
-          <div className="mx-auto mt-8 max-w-md">
-            <label htmlFor="gate-phone" className="sr-only">Mobile number</label>
-            <div className="flex overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-[0_0_0_4px_rgba(238,242,255,0.8)] transition-shadow focus-within:border-brand-blue/40 focus-within:shadow-[0_0_0_4px_rgba(41,82,204,0.12)]">
-              <span className="flex items-center gap-1 border-r border-slate-200 bg-slate-100/80 px-4 text-sm font-bold text-slate-700">
-                IN +91 <ChevronDown size={14} className="text-slate-400" />
-              </span>
-              <input
-                id="gate-phone"
-                type="tel"
-                maxLength={10}
-                placeholder="9876543210"
-                value={phone}
-                onChange={(e) => {
-                  const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                  setPhone(val);
-                  if (phoneError) validatePhone(val);
-                }}
-                className="min-w-0 flex-1 bg-transparent px-4 py-4 text-sm font-semibold text-slate-800 outline-none placeholder:font-normal placeholder:text-slate-400"
-                autoFocus
-              />
+          <div className="mx-auto mb-6 flex h-14 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/50 transition-colors focus-within:border-slate-300 focus-within:bg-white">
+            <div className="flex items-center justify-center border-r border-slate-200 bg-slate-100/50 px-4 text-[15px] font-semibold text-slate-700">
+              IN +91 <ChevronDown size={16} className="ml-1 text-slate-400" />
             </div>
-            {phoneError && <p className="mt-2 text-xs text-red-600">{phoneError}</p>}
+            <input
+              id="gate-phone"
+              type="tel"
+              maxLength={10}
+              placeholder="9876543210"
+              value={phone}
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                setPhone(val);
+                if (phoneError) validatePhone(val);
+              }}
+              className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:font-normal placeholder:text-slate-400"
+              autoFocus
+            />
           </div>
+          {phoneError && <p className="-mt-4 mb-4 text-left text-xs text-red-600">{phoneError}</p>}
 
-          <label className="mx-auto mt-6 flex max-w-md cursor-pointer items-start gap-3 text-left text-xs leading-relaxed text-slate-500">
+          <label className="mb-8 flex cursor-pointer items-start gap-3 text-left">
             <input
               type="checkbox"
               checked={hasConsent}
@@ -113,25 +107,21 @@ export default function OtpGatedContactForm() {
                 setHasConsent(e.target.checked);
                 if (e.target.checked) setConsentError('');
               }}
-              className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-red focus:ring-brand-red"
+              className="mt-[3px] h-[18px] w-[18px] shrink-0 rounded border-slate-300 text-[#001D3D] focus:ring-[#001D3D]"
             />
-            <span>
-              I agree to Thinkarz&apos;s{' '}
-              <Link href="/terms-and-conditions" className="font-semibold text-slate-700 underline underline-offset-2 hover:text-brand-red">Terms &amp; Conditions</Link>{' '}
+            <span className="text-[13px] leading-[1.6] text-slate-500">
+              I agree to Thinkarz's{' '}
+              <Link href="/terms-and-conditions" className="font-semibold text-slate-800 underline hover:text-[#001D3D]">T&amp;C</Link>{' '}
               and{' '}
-              <Link href="/privacy-policy" className="font-semibold text-slate-700 underline underline-offset-2 hover:text-brand-red">Privacy Policy</Link>.
+              <Link href="/privacy-policy" className="font-semibold text-slate-800 underline hover:text-[#001D3D]">Privacy Policy</Link>. 
+              This consent overrides any DNC/NDNC registrations.
             </span>
           </label>
-          {consentError && <p className="mx-auto mt-2 max-w-md text-xs text-red-600">{consentError}</p>}
+          {consentError && <p className="-mt-6 mb-4 text-left text-xs text-red-600">{consentError}</p>}
 
-          <button type="submit" disabled={isLoading} className="btn btn-primary mx-auto mt-6 flex w-full max-w-md !rounded-xl !bg-brand-navy !py-3.5 hover:!bg-brand-navyLight disabled:cursor-not-allowed disabled:opacity-60">
-            {isLoading ? 'Sending OTP...' : 'Send OTP'}
+          <button type="submit" disabled={isLoading} className="h-14 w-full rounded-xl bg-[#002f5d] text-[15px] font-semibold text-white shadow-md shadow-[#002f5d]/20 transition-all hover:bg-[#001d3d] active:scale-[0.99] disabled:opacity-70">
+            {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
-
-          <p className="mt-4 text-center text-[11px] text-slate-400">
-            <ShieldCheck size={12} className="mr-1 inline -translate-y-px text-brand-red" />
-            Your number is protected. No spam, ever.
-          </p>
         </form>
       )}
 
