@@ -114,55 +114,57 @@ export default function OtpGatedSellValuationForm() {
 
   return (
     <>
-      <div id="valuation-form" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <h2 className="text-[22px] font-bold text-slate-900">Request a Free Valuation</h2>
-        <p className="mb-6 text-[13px] text-slate-500 leading-relaxed mt-1">
-          Enter your car details and our team will get back to you with an expert valuation estimate.
-        </p>
+      <div id="valuation-form" className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 lg:p-12">
+        <div className="mx-auto w-full max-w-md">
+          <h2 className="text-[22px] font-bold text-slate-900">Request a Free Valuation</h2>
+          <p className="mb-8 text-[13px] text-slate-500 leading-relaxed mt-1">
+            Enter your car details and our team will get back to you with an expert valuation estimate.
+          </p>
 
-        <form onSubmit={handleSendOtp}>
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
-              <PhoneCall size={18} strokeWidth={2} />
-            </div>
-            <div>
-              <p className="text-[14px] font-bold text-slate-900 leading-tight">Enter your number</p>
-              <p className="text-[12px] text-slate-500 mt-0.5">We'll send a verification code</p>
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="sell-phone" className="mb-1.5 block text-[13px] font-semibold text-slate-700">Mobile Number</label>
-            <div className="flex h-[42px] overflow-hidden rounded-[6px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
-              <div className="flex items-center justify-center border-r border-[#cbd5e1] bg-white px-3.5 text-[14px] text-slate-600">
-                +91
+          <form onSubmit={handleSendOtp}>
+            <div className="mb-6 flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
+                <PhoneCall size={20} strokeWidth={2} />
               </div>
-              <input
-                id="sell-phone"
-                type="tel"
-                maxLength={10}
-                placeholder="9876543210"
-                value={phone}
-                onChange={(e) => {
-                  const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                  setPhone(val);
-                  if (phoneError) validatePhone(val);
-                }}
-                className="flex-1 bg-transparent px-3 text-[14px] text-slate-900 outline-none placeholder:text-[#94a3b8]"
-              />
+              <div>
+                <p className="text-[15px] font-bold text-slate-900 leading-tight">Enter your number</p>
+                <p className="text-[13px] text-slate-500 mt-0.5">We'll send a verification code</p>
+              </div>
             </div>
-            {phoneError && <p className="mt-1.5 text-[12px] text-red-600">{phoneError}</p>}
-          </div>
 
-          <button type="submit" disabled={isLoading} className="h-[42px] w-full rounded-[6px] bg-[#e31e24] text-[14px] font-semibold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70">
-            {isLoading ? 'Sending...' : 'Send OTP'}
-          </button>
+            <div className="mb-8">
+              <label htmlFor="sell-phone" className="mb-2 block text-[13px] font-semibold text-slate-700">Mobile Number</label>
+              <div className="flex h-[46px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
+                <div className="flex items-center justify-center border-r border-[#cbd5e1] bg-white px-4 text-[14px] font-medium text-slate-600">
+                  +91
+                </div>
+                <input
+                  id="sell-phone"
+                  type="tel"
+                  maxLength={10}
+                  placeholder="9876543210"
+                  value={phone}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    setPhone(val);
+                    if (phoneError) validatePhone(val);
+                  }}
+                  className="flex-1 bg-transparent px-4 text-[15px] text-slate-900 outline-none placeholder:text-[#94a3b8]"
+                />
+              </div>
+              {phoneError && <p className="mt-2 text-[12px] text-red-600">{phoneError}</p>}
+            </div>
 
-          <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
-            <ShieldCheck size={14} />
-            <p>Your number is safe with us. No spam.</p>
-          </div>
-        </form>
+            <button type="submit" disabled={isLoading} className="h-[46px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-semibold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70">
+              {isLoading ? 'Sending...' : 'Send OTP'}
+            </button>
+
+            <div className="mt-5 flex items-center justify-center gap-2 text-[12px] text-slate-400">
+              <ShieldCheck size={16} />
+              <p>Your number is safe with us. No spam.</p>
+            </div>
+          </form>
+        </div>
       </div>
 
       {isOpen && (

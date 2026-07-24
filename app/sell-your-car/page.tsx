@@ -70,7 +70,7 @@ export default function SellYourCarPage() {
   return (
     <>
       <section className="py-14 sm:py-20">
-        <div className="container-page grid grid-cols-1 items-start gap-10 lg:grid-cols-2">
+        <div className="container-page grid grid-cols-1 gap-10 lg:grid-cols-2">
           <div>
             <span className="section-eyebrow">Sell Your Car</span>
             <h1 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
