@@ -149,11 +149,11 @@ export default function OtpGatedSellValuationForm() {
                     setCountryCode(e.target.value);
                     if (phoneError) validatePhone(phone, e.target.value);
                   }}
-                  className="flex items-center justify-center border-r border-[#cbd5e1] bg-slate-50 px-4 text-[14px] font-medium text-slate-600 outline-none appearance-none cursor-pointer hover:bg-slate-100 transition-colors"
+                  className="w-[105px] shrink-0 border-r border-[#cbd5e1] bg-slate-50 pl-3 text-[14px] font-medium text-slate-600 outline-none appearance-none cursor-pointer hover:bg-slate-100 transition-colors"
                   style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2364748b\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 8px center', backgroundRepeat: 'no-repeat', paddingRight: '24px' }}
                 >
                   <option value="+91">IN (+91)</option>
-                  <option value="+1">US/CA (+1)</option>
+                  <option value="+1">US (+1)</option>
                   <option value="+44">UK (+44)</option>
                   <option value="+971">UAE (+971)</option>
                   <option value="+61">AU (+61)</option>
