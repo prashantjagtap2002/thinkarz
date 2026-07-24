@@ -1,7 +1,7 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export interface UtmParams {
   utm_source: string;
@@ -16,72 +16,58 @@ const STORAGE_KEY = 'thinkarz_utm_params';
 
 export function useUtmParams(): UtmParams {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [storedUtm, setStoredUtm] = useState<Partial<UtmParams>>({});
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    setMounted(true);
+    
+    const urlSource = searchParams.get('utm_source');
+    const urlMedium = searchParams.get('utm_medium');
+    const urlCampaign = searchParams.get('utm_campaign');
+    const urlTerm = searchParams.get('utm_term');
+    const urlContent = searchParams.get('utm_content');
 
+    const hasNewUrlUtms = Boolean(urlSource || urlMedium || urlCampaign || urlTerm || urlContent);
+
+    let existingUtm: Partial<UtmParams> = {};
     try {
-      const searchParams = new URLSearchParams(window.location.search);
-      const urlSource = searchParams.get('utm_source');
-      const urlMedium = searchParams.get('utm_medium');
-      const urlCampaign = searchParams.get('utm_campaign');
-      const urlTerm = searchParams.get('utm_term');
-      const urlContent = searchParams.get('utm_content');
-
-      const hasNewUrlUtms = Boolean(urlSource || urlMedium || urlCampaign || urlTerm || urlContent);
-
-      let existingUtm: Partial<UtmParams> = {};
       const stored = sessionStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        existingUtm = JSON.parse(stored);
-      }
+      if (stored) existingUtm = JSON.parse(stored);
+    } catch {}
 
-      if (hasNewUrlUtms) {
-        const newUtmObj: Partial<UtmParams> = {
-          utm_source: urlSource || existingUtm.utm_source || '',
-          utm_medium: urlMedium || existingUtm.utm_medium || '',
-          utm_campaign: urlCampaign || existingUtm.utm_campaign || '',
-          utm_term: urlTerm || existingUtm.utm_term || '',
-          utm_content: urlContent || existingUtm.utm_content || '',
-        };
-        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(newUtmObj));
-        setStoredUtm(newUtmObj);
-      } else {
-        setStoredUtm(existingUtm);
-      }
-    } catch {
-      // Ignore storage errors
-    }
-  }, [pathname]);
-
-  return useMemo(() => {
-    let urlSource = '';
-    let urlMedium = '';
-    let urlCampaign = '';
-    let urlTerm = '';
-    let urlContent = '';
-
-    if (typeof window !== 'undefined') {
+    if (hasNewUrlUtms) {
+      const newUtmObj: Partial<UtmParams> = {
+        utm_source: urlSource || existingUtm.utm_source || '',
+        utm_medium: urlMedium || existingUtm.utm_medium || '',
+        utm_campaign: urlCampaign || existingUtm.utm_campaign || '',
+        utm_term: urlTerm || existingUtm.utm_term || '',
+        utm_content: urlContent || existingUtm.utm_content || '',
+      };
       try {
-        const searchParams = new URLSearchParams(window.location.search);
-        urlSource = searchParams.get('utm_source') || '';
-        urlMedium = searchParams.get('utm_medium') || '';
-        urlCampaign = searchParams.get('utm_campaign') || '';
-        urlTerm = searchParams.get('utm_term') || '';
-        urlContent = searchParams.get('utm_content') || '';
-      } catch {
-        // Fallback
-      }
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(newUtmObj));
+      } catch {}
+      setStoredUtm(newUtmObj);
+    } else {
+      setStoredUtm(existingUtm);
     }
+  }, [pathname, searchParams]);
 
-    return {
-      utm_source: urlSource || storedUtm.utm_source || '',
-      utm_medium: urlMedium || storedUtm.utm_medium || '',
-      utm_campaign: urlCampaign || storedUtm.utm_campaign || '',
-      utm_term: urlTerm || storedUtm.utm_term || '',
-      utm_content: urlContent || storedUtm.utm_content || '',
-      page_url: pathname || '',
-    };
-  }, [pathname, storedUtm]);
+  // Use URL params directly if present, otherwise fall back to session storage
+  const currentUtmSource = searchParams.get('utm_source') || storedUtm.utm_source || '';
+  const currentUtmMedium = searchParams.get('utm_medium') || storedUtm.utm_medium || '';
+  const currentUtmCampaign = searchParams.get('utm_campaign') || storedUtm.utm_campaign || '';
+  const currentUtmTerm = searchParams.get('utm_term') || storedUtm.utm_term || '';
+  const currentUtmContent = searchParams.get('utm_content') || storedUtm.utm_content || '';
+
+  // Return empty strings during SSR to prevent hydration mismatch, rely on client-side values once mounted
+  return {
+    utm_source: mounted ? currentUtmSource : '',
+    utm_medium: mounted ? currentUtmMedium : '',
+    utm_campaign: mounted ? currentUtmCampaign : '',
+    utm_term: mounted ? currentUtmTerm : '',
+    utm_content: mounted ? currentUtmContent : '',
+    page_url: mounted ? pathname || '' : '',
+  };
 }
