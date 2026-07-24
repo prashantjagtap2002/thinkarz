@@ -82,27 +82,29 @@ export default function OtpGatedTestDriveForm() {
 
   return (
     <>
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <h2 className="text-lg font-bold text-slate-900">Book Your Test Drive</h2>
-        <p className="mb-6 text-sm text-slate-500">
-          Fill in your details and we&apos;ll get in touch to confirm.
+      <div className="rounded-xl bg-white p-6 sm:p-8">
+        <h2 className="text-[22px] font-bold text-slate-900">Book Your Test Drive</h2>
+        <p className="mb-6 text-[13px] text-slate-500 leading-relaxed mt-1">
+          Fill in your details and we'll get in touch to confirm.
         </p>
 
         <form onSubmit={handleSendOtp}>
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
-              <PhoneCall size={16} />
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
+              <PhoneCall size={18} strokeWidth={2} />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-900">Enter your number</p>
-              <p className="text-xs text-slate-500">We&apos;ll send a verification code</p>
+              <p className="text-[14px] font-bold text-slate-900 leading-tight">Enter your number</p>
+              <p className="text-[12px] text-slate-500 mt-0.5">We'll send a verification code</p>
             </div>
           </div>
 
-          <div>
-            <label htmlFor="td-phone" className="field-label">Mobile Number</label>
-            <div className="flex gap-2">
-              <span className="flex items-center rounded-md border border-slate-300 bg-slate-50 px-3 text-sm font-semibold text-slate-500">+91</span>
+          <div className="mb-6">
+            <label htmlFor="td-phone" className="mb-1.5 block text-[13px] font-semibold text-slate-700">Mobile Number</label>
+            <div className="flex h-[42px] overflow-hidden rounded-[6px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
+              <div className="flex items-center justify-center border-r border-[#cbd5e1] bg-white px-3.5 text-[14px] text-slate-600">
+                +91
+              </div>
               <input
                 id="td-phone"
                 type="tel"
@@ -114,20 +116,20 @@ export default function OtpGatedTestDriveForm() {
                   setPhone(val);
                   if (phoneError) validatePhone(val);
                 }}
-                className="field-input flex-1"
+                className="flex-1 bg-transparent px-3 text-[14px] text-slate-900 outline-none placeholder:text-[#94a3b8]"
               />
             </div>
-            {phoneError && <p className="mt-1 text-xs text-red-600">{phoneError}</p>}
+            {phoneError && <p className="mt-1.5 text-[12px] text-red-600">{phoneError}</p>}
           </div>
 
-          <button type="submit" disabled={isLoading} className="btn btn-primary mt-4 w-full">
-            {isLoading ? 'Sending OTP...' : 'Send OTP'}
+          <button type="submit" disabled={isLoading} className="h-[42px] w-full rounded-[6px] bg-[#e31e24] text-[14px] font-semibold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70">
+            {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
 
-          <p className="mt-3 text-center text-[11px] text-slate-400">
-            <ShieldCheck size={12} className="mr-1 inline -translate-y-px" />
-            Your number is safe with us. No spam.
-          </p>
+          <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+            <ShieldCheck size={14} />
+            <p>Your number is safe with us. No spam.</p>
+          </div>
         </form>
       </div>
 

@@ -74,17 +74,17 @@ export default function SellValuationForm() {
       }
     >
       <div>
-        <label htmlFor="regNumber" className="field-label">Registration Number</label>
-        <input id="regNumber" name="regNumber" required className="field-input" placeholder="e.g. MH01AB1234" />
+        <label htmlFor="regNumber" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Registration Number</label>
+        <input id="regNumber" name="regNumber" required className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]" placeholder="e.g. MH01AB1234" />
         <FieldError name="regNumber" />
       </div>
       <div>
-        <label htmlFor="carModel" className="field-label">Car Model</label>
+        <label htmlFor="carModel" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Car Model</label>
         <input
           id="carModel"
           name="carModel"
           required
-          className="field-input"
+          className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
           list="car-model-options"
           placeholder="Type or select your car model"
           value={model}
@@ -99,13 +99,14 @@ export default function SellValuationForm() {
         <FieldError name="carModel" />
       </div>
       <div>
-        <label htmlFor="year" className="field-label">Manufacturing Year</label>
+        <label htmlFor="year" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Manufacturing Year</label>
         <select
           id="year"
           name="year"
           required
-          className="field-input"
+          className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none"
           value={year}
+          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2394a3b8\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat' }}
           onChange={(e) => setYear(e.target.value)}
         >
           <option value="" disabled>
@@ -118,7 +119,7 @@ export default function SellValuationForm() {
         <FieldError name="year" />
       </div>
       <div>
-        <label htmlFor="kms" className="field-label">Kilometer Driven</label>
+        <label htmlFor="kms" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Kilometer Driven</label>
         <input
           id="kms"
           name="kms"
@@ -126,7 +127,7 @@ export default function SellValuationForm() {
           type="number"
           min={0}
           step={1}
-          className="field-input"
+          className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
           placeholder="e.g. 20,000 km"
           value={kms}
           onChange={(e) => setKms(e.target.value)}
@@ -134,25 +135,25 @@ export default function SellValuationForm() {
         <FieldError name="kms" />
       </div>
       <div>
-        <label htmlFor="phone" className="field-label">Phone Number</label>
+        <label htmlFor="phone" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Phone Number</label>
         <input
           id="phone"
           name="phone"
           required
           type="tel"
-          className="field-input"
+          className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
           placeholder="Enter your phone number"
         />
         <FieldError name="phone" />
       </div>
       <div>
-        <label htmlFor="email" className="field-label">Email ID</label>
+        <label htmlFor="email" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Email ID</label>
         <input
           id="email"
           name="email"
           required
           type="email"
-          className="field-input"
+          className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
           placeholder="Enter your email ID"
         />
         <FieldError name="email" />
