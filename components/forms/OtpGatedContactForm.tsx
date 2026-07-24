@@ -78,9 +78,9 @@ export default function OtpGatedContactForm() {
             Enter your phone number to unlock the contact form.
           </p>
 
-          <div className="mx-auto mb-6 flex h-14 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/50 transition-colors focus-within:border-slate-300 focus-within:bg-white">
-            <div className="flex items-center justify-center border-r border-slate-200 bg-slate-100/50 px-4 text-[15px] font-semibold text-slate-700">
-              IN +91 <ChevronDown size={16} className="ml-1 text-slate-400" />
+          <div className="mx-auto mb-6 flex h-[46px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white transition-colors focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
+            <div className="flex items-center justify-center border-r border-[#cbd5e1] bg-white px-4 text-[14px] font-medium text-slate-600">
+              +91
             </div>
             <input
               id="gate-phone"
@@ -119,7 +119,7 @@ export default function OtpGatedContactForm() {
           </label>
           {consentError && <p className="-mt-6 mb-4 text-left text-xs text-red-600">{consentError}</p>}
 
-          <button type="submit" disabled={isLoading} className="h-14 w-full rounded-xl bg-[#002f5d] text-[15px] font-semibold text-white shadow-md shadow-[#002f5d]/20 transition-all hover:bg-[#001d3d] active:scale-[0.99] disabled:opacity-70">
+          <button type="submit" disabled={isLoading} className="h-[46px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-semibold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70">
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
         </form>
