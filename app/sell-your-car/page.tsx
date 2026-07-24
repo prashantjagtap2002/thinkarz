@@ -15,7 +15,7 @@ import {
   MoveRight,
   ChevronDown,
 } from 'lucide-react';
-import SellValuationForm from '@/components/forms/SellValuationForm';
+import OtpGatedSellValuationForm from '@/components/forms/OtpGatedSellValuationForm';
 
 export const metadata = {
   title: 'Sell Your Car | Thinkarz',
@@ -92,13 +92,9 @@ export default function SellYourCarPage() {
             </div>
           </div>
 
-          <div id="valuation-form" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-lg font-bold text-slate-900">Request a Free Valuation</h2>
-            <p className="mb-6 text-sm text-slate-500">
-              Enter your car details and our team will get back to you with an expert valuation estimate.
-            </p>
+          <div className="w-full">
             <Suspense fallback={null}>
-              <SellValuationForm />
+              <OtpGatedSellValuationForm />
             </Suspense>
           </div>
         </div>
