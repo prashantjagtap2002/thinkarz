@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 export interface UtmParams {
@@ -16,71 +16,72 @@ const STORAGE_KEY = 'thinkarz_utm_params';
 
 export function useUtmParams(): UtmParams {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   const [storedUtm, setStoredUtm] = useState<Partial<UtmParams>>({});
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Check if new UTM params are present in the current URL
-    const urlSource = searchParams.get('utm_source');
-    const urlMedium = searchParams.get('utm_medium');
-    const urlCampaign = searchParams.get('utm_campaign');
-    const urlTerm = searchParams.get('utm_term');
-    const urlContent = searchParams.get('utm_content');
-
-    const hasNewUrlUtms = Boolean(urlSource || urlMedium || urlCampaign || urlTerm || urlContent);
-
-    // Retrieve existing stored UTM params if available
-    let existingUtm: Partial<UtmParams> = {};
     try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const urlSource = searchParams.get('utm_source');
+      const urlMedium = searchParams.get('utm_medium');
+      const urlCampaign = searchParams.get('utm_campaign');
+      const urlTerm = searchParams.get('utm_term');
+      const urlContent = searchParams.get('utm_content');
+
+      const hasNewUrlUtms = Boolean(urlSource || urlMedium || urlCampaign || urlTerm || urlContent);
+
+      let existingUtm: Partial<UtmParams> = {};
       const stored = sessionStorage.getItem(STORAGE_KEY);
       if (stored) {
         existingUtm = JSON.parse(stored);
       }
-    } catch {
-      // Ignore storage read errors
-    }
 
-    if (hasNewUrlUtms) {
-      // Overwrite/update storage if URL contains new UTM parameters
-      const newUtmObj: Partial<UtmParams> = {
-        utm_source: urlSource || existingUtm.utm_source || '',
-        utm_medium: urlMedium || existingUtm.utm_medium || '',
-        utm_campaign: urlCampaign || existingUtm.utm_campaign || '',
-        utm_term: urlTerm || existingUtm.utm_term || '',
-        utm_content: urlContent || existingUtm.utm_content || '',
-      };
-
-      try {
+      if (hasNewUrlUtms) {
+        const newUtmObj: Partial<UtmParams> = {
+          utm_source: urlSource || existingUtm.utm_source || '',
+          utm_medium: urlMedium || existingUtm.utm_medium || '',
+          utm_campaign: urlCampaign || existingUtm.utm_campaign || '',
+          utm_term: urlTerm || existingUtm.utm_term || '',
+          utm_content: urlContent || existingUtm.utm_content || '',
+        };
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(newUtmObj));
-      } catch {
-        // Ignore storage write errors
+        setStoredUtm(newUtmObj);
+      } else {
+        setStoredUtm(existingUtm);
       }
-
-      setStoredUtm(newUtmObj);
-    } else {
-      // Use existing stored UTM parameters
-      setStoredUtm(existingUtm);
+    } catch {
+      // Ignore storage errors
     }
-  }, [searchParams]);
+  }, [pathname]);
 
   return useMemo(() => {
-    // Current URL UTM params take immediate precedence, fallback to stored session UTMs
-    const source = searchParams.get('utm_source') || storedUtm.utm_source || '';
-    const medium = searchParams.get('utm_medium') || storedUtm.utm_medium || '';
-    const campaign = searchParams.get('utm_campaign') || storedUtm.utm_campaign || '';
-    const term = searchParams.get('utm_term') || storedUtm.utm_term || '';
-    const content = searchParams.get('utm_content') || storedUtm.utm_content || '';
+    let urlSource = '';
+    let urlMedium = '';
+    let urlCampaign = '';
+    let urlTerm = '';
+    let urlContent = '';
+
+    if (typeof window !== 'undefined') {
+      try {
+        const searchParams = new URLSearchParams(window.location.search);
+        urlSource = searchParams.get('utm_source') || '';
+        urlMedium = searchParams.get('utm_medium') || '';
+        urlCampaign = searchParams.get('utm_campaign') || '';
+        urlTerm = searchParams.get('utm_term') || '';
+        urlContent = searchParams.get('utm_content') || '';
+      } catch {
+        // Fallback
+      }
+    }
 
     return {
-      utm_source: source,
-      utm_medium: medium,
-      utm_campaign: campaign,
-      utm_term: term,
-      utm_content: content,
-      page_url: pathname,
+      utm_source: urlSource || storedUtm.utm_source || '',
+      utm_medium: urlMedium || storedUtm.utm_medium || '',
+      utm_campaign: urlCampaign || storedUtm.utm_campaign || '',
+      utm_term: urlTerm || storedUtm.utm_term || '',
+      utm_content: urlContent || storedUtm.utm_content || '',
+      page_url: pathname || '',
     };
-  }, [pathname, searchParams, storedUtm]);
+  }, [pathname, storedUtm]);
 }

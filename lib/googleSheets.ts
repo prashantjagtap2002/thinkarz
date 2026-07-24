@@ -5,7 +5,17 @@ export async function submitToGoogleSheets(payload: Record<string, any>): Promis
   try {
     console.log('Sending payload to Google Sheets:', payload);
 
-    await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+    const params = new URLSearchParams();
+    Object.keys(payload).forEach((key) => {
+      if (payload[key] !== undefined && payload[key] !== null) {
+        params.append(key, String(payload[key]));
+      }
+    });
+
+    // Append parameters to query string AND send in body for maximum compatibility with Google Apps Script redirect behavior
+    const urlWithParams = `${GOOGLE_SHEETS_WEB_APP_URL}?${params.toString()}`;
+
+    await fetch(urlWithParams, {
       method: 'POST',
       mode: 'no-cors',
       keepalive: true,
