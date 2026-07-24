@@ -221,56 +221,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Shop by body type & budget */}
-      <section className="py-16 sm:py-20">
-        <div className="container-page grid grid-cols-1 gap-12 lg:grid-cols-2">
-          <div>
-            <h2 className="mb-6 text-xl font-extrabold text-slate-900 sm:text-2xl">
-              Shop by Body Type
-            </h2>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {bodyTypes.map((type, i) => {
-                return (
-                  <Reveal key={type} delay={i * 70}>
-                    <Link
-                      href={`/pre-owned-cars?bodyType=${encodeURIComponent(type)}`}
-                      className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
-                    >
-                      <BodyTypeIcon bodyType={type} size={48} className="text-brand-blue" />
-                      <span className="text-xs font-semibold text-slate-700">{type}</span>
-                      <span className="text-[11px] text-slate-400">{countByBodyType(type)} Cars</span>
-                    </Link>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </div>
 
-          <div>
-            <h2 className="mb-6 text-xl font-extrabold text-slate-900 sm:text-2xl">
-              Shop by Budget
-            </h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {budgetOptions.map((option, i) => (
-                <Reveal key={option.label} delay={i * 70}>
-                  <Link
-                    href={`/pre-owned-cars?budget=${encodeURIComponent(option.label)}`}
-                    className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
-                  >
-                    <div>
-                      <p className="text-sm font-bold text-slate-900">{option.label}</p>
-                      <p className="mt-0.5 text-[11px] text-slate-400">
-                        {countByBudget(option.label)} Cars
-                      </p>
-                    </div>
-                    <ArrowRight size={16} className="text-brand-red" />
-                  </Link>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Featured cars */}
       <section className="bg-slate-50 py-16 sm:py-20">
