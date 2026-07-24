@@ -8,7 +8,7 @@ import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm'
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 
 export default function OtpGatedContactForm() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(true);
   const [step, setStep] = useState<'phone' | 'form'>('phone');
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [phone, setPhone] = useState('');
@@ -84,6 +84,7 @@ export default function OtpGatedContactForm() {
       if (res.success) {
         setShowOtpPopup(false);
         setStep('form');
+        setIsFormOpen(true);
       } else {
         setOtpError(res.error || 'Invalid OTP');
       }
@@ -100,38 +101,8 @@ export default function OtpGatedContactForm() {
     setOtpError('');
   }
 
-  function closePopup() {
-    setIsOpen(false);
-  }
-
   return (
-    <>
-      <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_4px_24px_-10px_rgba(0,0,0,0.05)] p-6 text-center sm:p-12">
-        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
-          <Mail size={32} />
-        </div>
-        <h2 className="mb-3 text-2xl font-bold text-slate-900">Send us a Message</h2>
-        <p className="mb-8 text-[15px] text-slate-500 max-w-sm">
-          Have a specific question or want to reach out to our support team? Drop us a message and we'll get back to you shortly.
-        </p>
-        <button onClick={() => setIsOpen(true)} className="btn btn-primary w-full max-w-[280px]">
-          Get Started
-        </button>
-      </div>
-
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closePopup} />
-          
-          <div className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto rounded-2xl bg-white shadow-2xl animate-fade-up">
-            <button
-              onClick={closePopup}
-              className="absolute right-4 top-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 z-20"
-            >
-              <X size={18} />
-            </button>
-
-            <div className="p-6 sm:p-10">
+    <div className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_4px_24px_-10px_rgba(0,0,0,0.05)] p-6 sm:p-12">
       {step === 'phone' && (
         <form onSubmit={handleSendOtp} className="w-full text-center">
           <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
@@ -203,55 +174,84 @@ export default function OtpGatedContactForm() {
       )}
 
       {step === 'form' && (
-        <SubmittableForm
-          formType="Contact Us Form"
-          submitLabel="Send Message"
-          successTitle="Message Sent!"
-          successMessage="Thanks for reaching out. Our team will get back to you shortly."
-          className="space-y-4 p-6 sm:p-8"
-          validations={[
-            { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
-          ]}
-        >
-          <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
-          <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
+        <div className="text-center animate-fade-in">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+            <ShieldCheck size={32} />
+          </div>
+          <h2 className="mb-3 text-2xl font-bold text-slate-900">Number Verified</h2>
+          <p className="mb-8 text-[15px] text-slate-500 max-w-sm mx-auto">
+            Your phone number {countryCode} {phone} has been verified successfully.
+          </p>
+          <button onClick={() => setIsFormOpen(true)} className="btn btn-primary w-full max-w-[280px]">
+            Open Contact Form
+          </button>
+        </div>
+      )}
 
-          <div className="rounded-xl border border-brand-blue/10 bg-brand-blueLight/60 px-4 py-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-blue">
-              Verified Number
-            </p>
-            <p className="text-sm font-bold text-slate-900">{countryCode} {phone}</p>
-          </div>
+      {/* Main Form Popup */}
+      {step === 'form' && isFormOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsFormOpen(false)} />
+          <div className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto rounded-2xl bg-white shadow-2xl animate-fade-up">
+            <button
+              onClick={() => setIsFormOpen(false)}
+              className="absolute right-4 top-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 z-20"
+            >
+              <X size={18} />
+            </button>
+            <div className="p-6 sm:p-10">
+              <SubmittableForm
+                formType="Contact Us Form"
+                submitLabel="Send Message"
+                successTitle="Message Sent!"
+                successMessage="Thanks for reaching out. Our team will get back to you shortly."
+                className="space-y-4"
+                validations={[
+                  { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
+                ]}
+              >
+                <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
+                <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
-          <div>
-            <label htmlFor="name" className="field-label">Full Name</label>
-            <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
-            <FieldError name="name" />
+                <div className="rounded-xl border border-brand-blue/10 bg-brand-blueLight/60 px-4 py-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-blue">
+                    Verified Number
+                  </p>
+                  <p className="text-sm font-bold text-slate-900">{countryCode} {phone}</p>
+                </div>
+
+                <div>
+                  <label htmlFor="name" className="field-label">Full Name</label>
+                  <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
+                  <FieldError name="name" />
+                </div>
+                <div>
+                  <label htmlFor="email" className="field-label">Email Address</label>
+                  <input id="email" name="email" required type="email" className="field-input" placeholder="Enter your email address" />
+                  <FieldError name="email" />
+                </div>
+                <div>
+                  <label htmlFor="subject" className="field-label">Subject</label>
+                  <select id="subject" name="subject" required className="field-input" defaultValue="">
+                    <option value="" disabled>
+                      Select a subject
+                    </option>
+                    <option>Buying a Car</option>
+                    <option>Selling a Car</option>
+                    <option>Service Appointment</option>
+                    <option>General Enquiry</option>
+                  </select>
+                  <FieldError name="subject" />
+                </div>
+                <div>
+                  <label htmlFor="message" className="field-label">Your Message</label>
+                  <textarea id="message" name="message" required className="field-input" rows={4} placeholder="Type your message here..." />
+                  <FieldError name="message" />
+                </div>
+              </SubmittableForm>
+            </div>
           </div>
-          <div>
-            <label htmlFor="email" className="field-label">Email Address</label>
-            <input id="email" name="email" required type="email" className="field-input" placeholder="Enter your email address" />
-            <FieldError name="email" />
-          </div>
-          <div>
-            <label htmlFor="subject" className="field-label">Subject</label>
-            <select id="subject" name="subject" required className="field-input" defaultValue="">
-              <option value="" disabled>
-                Select a subject
-              </option>
-              <option>Buying a Car</option>
-              <option>Selling a Car</option>
-              <option>Service Appointment</option>
-              <option>General Enquiry</option>
-            </select>
-            <FieldError name="subject" />
-          </div>
-          <div>
-            <label htmlFor="message" className="field-label">Your Message</label>
-            <textarea id="message" name="message" required className="field-input" rows={4} placeholder="Type your message here..." />
-            <FieldError name="message" />
-          </div>
-        </SubmittableForm>
+        </div>
       )}
 
       {/* OTP Popup */}
@@ -316,10 +316,6 @@ export default function OtpGatedContactForm() {
           </div>
         </div>
       )}
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    </div>
   );
 }
