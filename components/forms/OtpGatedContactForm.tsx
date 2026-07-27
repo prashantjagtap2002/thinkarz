@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, PhoneCall, ShieldCheck, X, Mail } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
-
+import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 import { countryCodes } from '@/lib/countryCodes';
 
@@ -114,22 +114,14 @@ export default function OtpGatedContactForm() {
             Enter your phone number to unlock the contact form.
           </p>
 
-          <div className="mx-auto mb-6 flex h-[46px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white transition-colors focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
-            <select
+          <div className="mx-auto mb-6 flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white transition-colors focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
+            <CountryCodeSelect
               value={countryCode}
-              onChange={(e) => {
-                setCountryCode(e.target.value);
-                if (phoneError) validatePhone(phone, e.target.value);
+              onChange={(val) => {
+                setCountryCode(val);
+                if (phoneError) validatePhone(phone, val);
               }}
-              className="w-[105px] shrink-0 border-r border-[#cbd5e1] bg-slate-50 pl-3 text-[14px] font-medium text-slate-600 outline-none appearance-none cursor-pointer hover:bg-slate-100 transition-colors"
-              style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2364748b\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 8px center', backgroundRepeat: 'no-repeat', paddingRight: '24px' }}
-            >
-                {countryCodes.sort((a, b) => a.code.localeCompare(b.code)).map((c) => (
-                  <option key={`${c.code}-${c.dial}`} value={c.dial}>
-                    {c.flag} {c.code} ({c.dial})
-                  </option>
-                ))}
-            </select>
+            />
             <input
               id="gate-phone"
               type="tel"
@@ -168,7 +160,7 @@ export default function OtpGatedContactForm() {
           </label>
           {consentError && <p className="-mt-6 mb-4 text-left text-xs text-red-600">{consentError}</p>}
 
-          <button type="submit" disabled={isLoading} className="h-[46px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-semibold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70">
+          <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
         </form>

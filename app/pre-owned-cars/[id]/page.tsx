@@ -25,7 +25,6 @@ import CarComparison from '@/components/car-detail/CarComparison';
 import EmiCalculator from '@/components/car-detail/EmiCalculator';
 import InspectionReport from '@/components/car-detail/InspectionReport';
 import FaqAccordion from '@/components/FaqAccordion';
-import MakeOfferButton from '@/components/MakeOfferButton';
 
 const trustBadges = [
   { icon: ShieldCheck, label: '140-Point Inspection' },
@@ -133,6 +132,31 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
               </div>
             ))}
           </div>
+
+          {/* Vehicle Description */}
+          {car.description && (
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50/60 p-6 sm:p-8">
+              <div className="mb-3 flex items-center gap-2">
+                <Sparkles className="text-brand-red" size={20} />
+                <h2 className="text-lg font-bold text-slate-900">Vehicle Overview & Condition</h2>
+              </div>
+              <p className="text-sm leading-relaxed text-slate-600">{car.description}</p>
+              <div className="mt-6 flex flex-wrap gap-3 border-t border-slate-200 pt-4 text-xs font-semibold text-slate-700">
+                <span className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-sm border border-slate-200">
+                  <CheckCircle2 size={15} className="text-green-600" />
+                  100% Non-Accidental Guaranteed
+                </span>
+                <span className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-sm border border-slate-200">
+                  <CheckCircle2 size={15} className="text-green-600" />
+                  Genuine Odometer Reading
+                </span>
+                <span className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-sm border border-slate-200">
+                  <CheckCircle2 size={15} className="text-green-600" />
+                  All Documents Verified
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -146,9 +170,8 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
               <Link href="/book-a-test-drive" className="btn btn-primary w-full">
                 Book Test Drive
               </Link>
-              <MakeOfferButton car={car} />
               <a
-                  href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent(
+                href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent(
                   `Hi, I'm interested in the ${car.year} ${car.make} ${car.model} (${car.variant}) listed at ${formatPrice(car.price)} on Thinkarz.`
                 )}`}
                 target="_blank"
@@ -253,6 +276,56 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
       {/* Inspection report */}
       <div className="mt-10">
         <InspectionReport certified={car.certified} />
+      </div>
+
+      {/* Buyer Assurance Section */}
+      <div className="mt-10">
+        <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white shadow-lg sm:p-8">
+          <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <span className="inline-block rounded-full bg-brand-red/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-red">
+                Peace of Mind Guaranteed
+              </span>
+              <h2 className="mt-2 text-xl font-extrabold text-white sm:text-2xl">
+                The Thinkarz Buyer Assurance
+              </h2>
+            </div>
+            <p className="text-xs text-slate-300 max-w-xs">
+              Every certified vehicle comes bundled with industry-leading buyer protection benefits.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-xl bg-white/5 border border-white/10 p-4 backdrop-blur-sm">
+              <ShieldCheck className="mb-3 text-brand-red" size={24} />
+              <h3 className="text-sm font-bold text-white">6-Month Warranty</h3>
+              <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                Comprehensive coverage on engine, gearbox, and primary electrical components.
+              </p>
+            </div>
+            <div className="rounded-xl bg-white/5 border border-white/10 p-4 backdrop-blur-sm">
+              <RotateCcw className="mb-3 text-brand-red" size={24} />
+              <h3 className="text-sm font-bold text-white">7-Day Money Back</h3>
+              <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                Test drive it in your everyday life. If you aren&apos;t 100% in love, return it for a full refund.
+              </p>
+            </div>
+            <div className="rounded-xl bg-white/5 border border-white/10 p-4 backdrop-blur-sm">
+              <FileCheck2 className="mb-3 text-brand-red" size={24} />
+              <h3 className="text-sm font-bold text-white">Free RC Transfer</h3>
+              <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                We handle 100% of the RTO paperwork and registration transfer at zero extra charge.
+              </p>
+            </div>
+            <div className="rounded-xl bg-white/5 border border-white/10 p-4 backdrop-blur-sm">
+              <CheckCircle2 className="mb-3 text-green-400" size={24} />
+              <h3 className="text-sm font-bold text-white">Fixed & Transparent</h3>
+              <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                No hidden handling fees, no surprise refurbishment charges. What you see is what you pay.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* EMI calculator */}

@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { PhoneCall, ShieldCheck, X, CheckCircle2 } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
+import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { cars } from '@/lib/cars';
 import { countryCodes } from '@/lib/countryCodes';
 
@@ -135,23 +136,15 @@ export default function OtpGatedTestDriveForm() {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="td-phone" className="mb-1.5 block text-[13px] font-semibold text-slate-700">Mobile Number</label>
-            <div className="flex h-[42px] overflow-hidden rounded-[6px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
-              <select
+            <label htmlFor="td-phone" className="mb-2 block text-[14px] font-bold text-slate-700">Mobile Number</label>
+            <div className="flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
+              <CountryCodeSelect
                 value={countryCode}
-                onChange={(e) => {
-                  setCountryCode(e.target.value);
-                  if (phoneError) validatePhone(phone, e.target.value);
+                onChange={(val) => {
+                  setCountryCode(val);
+                  if (phoneError) validatePhone(phone, val);
                 }}
-                className="w-[105px] shrink-0 border-r border-[#cbd5e1] bg-slate-50 pl-3 text-[14px] text-slate-600 outline-none appearance-none cursor-pointer hover:bg-slate-100 transition-colors"
-                style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23475569\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 8px center', backgroundRepeat: 'no-repeat', paddingRight: '24px' }}
-              >
-                {countryCodes.sort((a, b) => a.code.localeCompare(b.code)).map((c) => (
-                  <option key={`${c.code}-${c.dial}`} value={c.dial}>
-                    {c.flag} {c.code} ({c.dial})
-                  </option>
-                ))}
-              </select>
+              />
               <input
                 id="td-phone"
                 type="tel"
@@ -164,13 +157,13 @@ export default function OtpGatedTestDriveForm() {
                   setPhone(val);
                   if (phoneError) validatePhone(val);
                 }}
-                className="flex-1 bg-transparent px-3 text-[14px] text-slate-900 outline-none placeholder:text-[#94a3b8]"
+                className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8]"
               />
             </div>
-            {phoneError && <p className="mt-1.5 text-[12px] text-red-600">{phoneError}</p>}
+            {phoneError && <p className="mt-1.5 text-[13px] text-red-600">{phoneError}</p>}
           </div>
 
-          <button type="submit" disabled={isLoading} className="h-[42px] w-full rounded-[6px] bg-[#e31e24] text-[14px] font-semibold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70">
+          <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
 
@@ -185,19 +178,19 @@ export default function OtpGatedTestDriveForm() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closePopup} />
 
-          <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl animate-fade-up">
+          <div className="relative w-full max-w-[620px] rounded-3xl bg-white shadow-2xl animate-fade-up">
             <button
               onClick={closePopup}
-              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700"
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700"
               aria-label="Close"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
 
             {step !== 'success' && (
-              <div className="p-6 sm:p-8">
-                <h2 className="text-lg font-bold text-slate-900">Book Your Test Drive</h2>
-                <p className="mb-6 text-sm text-slate-500">
+              <div className="p-8 sm:p-12">
+                <h2 className="text-[24px] font-extrabold text-slate-900">Book Your Test Drive</h2>
+                <p className="mb-8 text-[15px] text-slate-500 leading-relaxed">
                   Fill in your details and we&apos;ll get in touch to confirm.
                 </p>
 

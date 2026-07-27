@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, PhoneCall } from 'lucide-react';
 import OtpGatedContactForm from '@/components/forms/OtpGatedContactForm';
+import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
 
 export const metadata = {
@@ -123,6 +124,33 @@ export default function ContactUsPage() {
         </div>
       </section>
 
+      {/* FAQ Section — same design as car detail page */}
+      <section className="container-page pb-16 sm:pb-24">
+        <div className="mt-4 grid grid-cols-1 gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
+          {/* Left — sticky heading */}
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <p className="mb-3 text-xs font-bold uppercase tracking-widest text-brand-red">Quick Answers</p>
+            <h2 className="text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl">
+              About Thinkarz:
+              <br />
+              <span className="relative inline-block">
+                Frequently Asked
+                <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-brand-red" />
+              </span>
+              <br />
+              Questions
+            </h2>
+            <p className="mt-5 text-sm leading-relaxed text-slate-500">
+              Quick answers about our company, inspection process, and what we offer.
+            </p>
+          </div>
+
+          {/* Right — accordion */}
+          <div className="border-t border-slate-200">
+            <FaqAccordion />
+          </div>
+        </div>
+      </section>
 
     </>
   );

@@ -72,6 +72,21 @@ const aboutFaqs = [
     answer:
       'Absolutely. You can sell your car to Thinkarz through our Sell Your Car programme. We offer instant valuation, free inspection at your doorstep or at our showroom, and guaranteed payment within 24 hours. Visit our Sell Your Car page to get started.',
   },
+  {
+    question: 'What makes Thinkarz different from traditional used car dealers?',
+    answer:
+      'Unlike unorganized used car dealers, Thinkarz is backed by the 35+ year legacy of the Gautam Modi Group. Every car undergoes a 140-point inspection, comes with verified RC and service history, 7-day return policy, transparent fixed pricing, and full post-purchase support.',
+  },
+  {
+    question: 'How long does the car valuation and selling process take?',
+    answer:
+      'Our car valuation takes just 30 minutes! Once you accept our offer, we initiate instant payment into your bank account within 24 hours and handle all RTO transfer paperwork.',
+  },
+  {
+    question: 'Do you offer car loan assistance for pre-owned cars?',
+    answer:
+      'Yes, we have partnerships with top banks and NBFCs (HDFC, ICICI, Axis, IDFC, etc.) offering competitive interest rates, up to 90% funding, and fast approvals within 24–48 hours.',
+  },
 ];
 
 export default function AboutPage() {
@@ -247,22 +262,29 @@ export default function AboutPage() {
       {/* FAQ */}
       <section className="py-14 sm:py-20">
         <div className="container-page">
-          <Reveal>
-            <div className="mx-auto max-w-xl text-center">
-              <span className="section-eyebrow">Quick Answers</span>
-              <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
-                About Thinkarz: Frequently Asked Questions
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
+            {/* Left — sticky heading */}
+            <div className="lg:sticky lg:top-28 lg:self-start">
+              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-brand-red">Quick Answers</p>
+              <h2 className="text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl">
+                About Thinkarz:
+                <br />
+                <span className="relative inline-block">
+                  Frequently Asked
+                  <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-brand-red" />
+                </span>
+                <br />
+                Questions
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">
+              <p className="mt-5 text-sm leading-relaxed text-slate-500">
                 Quick answers about our company, inspection process, and what we offer.
               </p>
             </div>
-          </Reveal>
 
-          <div className="mx-auto mt-10 max-w-2xl">
-            <Reveal>
+            {/* Right — accordion */}
+            <div className="border-t border-slate-200">
               <FaqAccordion faqs={aboutFaqs} />
-            </Reveal>
+            </div>
           </div>
         </div>
       </section>
