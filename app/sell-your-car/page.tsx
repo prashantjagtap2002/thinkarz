@@ -85,6 +85,7 @@ export default function SellYourCarPage() {
               <Image
                 src="/images/cars/mg-zs-ev.jpg"
                 alt="Sell your car with THINKARZ"
+                title="Sell Your Car with THINKARZ"
                 fill
                 priority
                 className="object-cover"
@@ -165,7 +166,8 @@ export default function SellYourCarPage() {
           <div className="absolute inset-0">
             <Image
               src="/images/cars/tata-nexon-ev.jpg"
-              alt=""
+              alt="Sell Your Car with THINKARZ"
+              title="Sell Your Car with THINKARZ"
               fill
               className="object-cover opacity-20"
             />

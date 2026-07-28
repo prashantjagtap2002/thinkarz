@@ -13,6 +13,7 @@ export default function CarCard({ car }: { car: Car }) {
         <Image
           src={car.image}
           alt={`${car.make} ${car.model} ${car.variant}`}
+          title={`${car.year} ${car.make} ${car.model} ${car.variant}`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"

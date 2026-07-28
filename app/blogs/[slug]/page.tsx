@@ -63,7 +63,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       </div>
 
       <div className="relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-2xl">
-        <Image src={post.image} alt={post.title} fill priority className="object-cover" />
+        <Image src={post.image} alt={post.title} title={post.title} fill priority className="object-cover" />
       </div>
 
       <div className="max-w-3xl space-y-4 text-sm leading-relaxed text-slate-700">
@@ -93,7 +93,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 className="overflow-hidden rounded-xl border border-slate-200"
               >
                 <div className="relative aspect-[16/10] w-full">
-                  <Image src={r.image} alt={r.title} fill className="object-cover" />
+                  <Image src={r.image} alt={r.title} title={r.title} fill className="object-cover" />
                 </div>
                 <div className="p-4">
                   <h3 className="text-sm font-bold leading-snug text-slate-900">{r.title}</h3>

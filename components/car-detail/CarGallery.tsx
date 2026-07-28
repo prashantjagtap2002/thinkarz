@@ -18,7 +18,7 @@ export default function CarGallery({
   return (
     <div>
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100">
-        <Image src={images[active]} alt={alt} fill priority className="object-cover" />
+        <Image src={images[active]} alt={alt} title={alt} fill priority className="object-cover" />
         {certified && (
           <span className="absolute left-4 top-4 flex items-center gap-1 rounded-full bg-brand-red px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white">
             <ShieldCheck size={14} /> Certified
@@ -36,7 +36,7 @@ export default function CarGallery({
                 active === i ? 'border-brand-red' : 'border-transparent'
               }`}
             >
-              <Image src={img} alt={`${alt} thumbnail ${i + 1}`} fill className="object-cover" />
+              <Image src={img} alt={`${alt} thumbnail ${i + 1}`} title={`${alt} thumbnail ${i + 1}`} fill className="object-cover" />
             </button>
           ))}
         </div>

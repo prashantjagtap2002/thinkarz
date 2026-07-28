@@ -61,7 +61,8 @@ export default function BlogsPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/hero-banner.jpg"
-            alt=""
+            alt="Blogs"
+            title="THINKARZ Blogs - Car Insights & Expert Advice"
             fill
             priority
             className="object-cover opacity-30"
@@ -94,7 +95,7 @@ export default function BlogsPage() {
                   className="mb-12 grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-slate-200 sm:grid-cols-2"
                 >
                   <div className="relative aspect-[4/3] w-full">
-                    <Image src={featured.image} alt={featured.title} fill className="object-cover" />
+                    <Image src={featured.image} alt={featured.title} title={featured.title} fill className="object-cover" />
                   </div>
                   <div className="flex flex-col justify-center p-6">
                     <span className="mb-3 w-fit rounded-full bg-brand-blueLight px-3 py-1 text-xs font-semibold text-brand-blue">
@@ -158,6 +159,7 @@ export default function BlogsPage() {
                         <Image
                           src={post.image}
                           alt={post.title}
+                          title={post.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
@@ -259,7 +261,8 @@ export default function BlogsPage() {
                       <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-slate-100 shadow-sm">
                         <Image 
                           src={p.image} 
-                          alt={p.title} 
+                          alt={p.title}
+                          title={p.title}
                           fill 
                           className="object-cover transition-transform duration-300 group-hover:scale-105" 
                         />

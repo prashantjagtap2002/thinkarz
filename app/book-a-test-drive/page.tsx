@@ -69,7 +69,8 @@ export default function BookTestDrivePage() {
         <div className="absolute inset-0">
           <Image
             src="/images/hero-banner.jpg"
-            alt=""
+            alt="Book a Test Drive"
+            title="Book a Test Drive at THINKARZ"
             fill
             priority
             className="object-cover opacity-40"
@@ -203,6 +204,7 @@ export default function BookTestDrivePage() {
                   <Image
                     src={car.image}
                     alt={`${car.make} ${car.model}`}
+                    title={`${car.make} ${car.model}`}
                     fill
                     className="object-cover"
                   />

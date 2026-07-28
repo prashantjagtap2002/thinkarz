@@ -25,6 +25,7 @@ export default function ContactUsPage() {
           <Image
             src="/images/cars/mg-zs-ev.jpg"
             alt="MG ZS EV - THINKARZ showroom"
+            title="THINKARZ Pre-Owned Car Showroom"
             fill
             priority
             className="object-cover opacity-30"
@@ -100,6 +101,7 @@ export default function ContactUsPage() {
               <Image
                 src="/showroom.jpeg"
                 alt="THINKARZ showroom"
+                title="THINKARZ Showroom - Malad West, Mumbai"
                 fill
                 className="object-cover"
               />

@@ -105,7 +105,7 @@ export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
             {/* Header */}
             <div className="flex gap-4 items-center">
               <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-100">
-                <Image src={car.image} alt={`${car.make} ${car.model}`} fill className="object-cover" />
+                <Image src={car.image} alt={`${car.make} ${car.model}`} title={`${car.make} ${car.model} ${car.variant}`} fill className="object-cover" />
               </div>
               <div className="text-left">
                 <h3 className="text-lg font-bold text-slate-900">Make Offer</h3>

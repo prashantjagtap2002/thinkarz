@@ -70,6 +70,7 @@ export default function BrandLogo({ brand, size = 48 }: { brand: string; size?: 
       <img
         src={asset.src}
         alt={asset.alt}
+        title={`${brand} logo`}
         className="h-full w-full object-contain"
         loading="lazy"
         decoding="async"

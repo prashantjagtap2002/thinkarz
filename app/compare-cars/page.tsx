@@ -120,7 +120,8 @@ export default function CompareCarsPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/hero-banner.jpg"
-            alt=""
+            alt="Compare Cars"
+            title="Compare Pre-Owned Cars"
             fill
             priority
             className="object-cover opacity-30"
@@ -348,13 +349,13 @@ export default function CompareCarsPage() {
                 >
                   <div className="mb-4 flex items-center gap-2">
                     <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg bg-slate-100">
-                      <Image src={a.image} alt={a.make} fill className="object-cover" />
-                    </div>
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-brand-red text-[11px] font-bold text-brand-red">
-                      VS
-                    </span>
-                    <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg bg-slate-100">
-                      <Image src={b.image} alt={b.make} fill className="object-cover" />
+                          <Image src={a.image} alt={`${a.make} ${a.model}`} title={`${a.make} ${a.model}`} fill className="object-cover" />
+                        </div>
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-brand-red text-[11px] font-bold text-brand-red">
+                          VS
+                        </span>
+                        <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg bg-slate-100">
+                          <Image src={b.image} alt={`${b.make} ${b.model}`} title={`${b.make} ${b.model}`} fill className="object-cover" />
                     </div>
                   </div>
                   <div className="mb-4 flex items-center justify-between text-xs">

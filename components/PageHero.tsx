@@ -17,7 +17,14 @@ export default function PageHero({
   return (
     <section className="relative overflow-hidden bg-brand-navy">
       <div className="absolute inset-0">
-        <Image src={image} alt="" fill priority className="hero-image-drift object-cover opacity-40" />
+        <Image
+          src={image}
+          alt={typeof title === 'string' ? title : eyebrow}
+          title={typeof title === 'string' ? title : eyebrow}
+          fill
+          priority
+          className="hero-image-drift object-cover opacity-40"
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/80 to-transparent" />
       </div>
       <div className="container-page relative py-20 sm:py-28">

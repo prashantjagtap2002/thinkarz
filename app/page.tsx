@@ -94,6 +94,7 @@ export default function HomePage() {
           <Image
             src="/images/cars/kia-seltos.jpg"
             alt="Premium Pre-Owned Cars"
+            title="Premium Pre-Owned Cars at THINKARZ"
             fill
             priority
             className="object-cover opacity-60"
@@ -373,7 +374,7 @@ export default function HomePage() {
               >
                 <Link href={`/blogs/${post.slug}`}>
                   <div className="relative aspect-[16/10] w-full">
-                    <Image src={post.image} alt={post.title} fill className="object-cover" />
+                    <Image src={post.image} alt={post.title} title={post.title} fill className="object-cover" />
                   </div>
                   <div className="p-5">
                     <span className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-500">

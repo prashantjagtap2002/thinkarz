@@ -98,6 +98,7 @@ export default function AboutPage() {
           <Image
             src="/showroom_image/about-hero.png"
             alt="THINKARZ showroom in Malad West, Mumbai"
+            title="THINKARZ Showroom - Malad West, Mumbai"
             fill
             priority
             className="object-cover"
@@ -150,6 +151,7 @@ export default function AboutPage() {
                 <Image
                   src="/images/our-story.png"
                   alt="THINKARZ team and showroom"
+                  title="THINKARZ Team & Showroom"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 540px"
