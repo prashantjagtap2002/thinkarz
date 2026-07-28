@@ -299,23 +299,22 @@ export default function OtpGatedSellValuationForm() {
                 <FieldError name="regNumber" />
               </div>
               <div>
-                <label htmlFor="carModel" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Car Model</label>
-                <input
+                <label htmlFor="carModel" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Car Model / Body Type</label>
+                <select
                   id="carModel"
                   name="carModel"
                   required
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
-                  list="car-model-options"
-                  placeholder="Type or select your car model"
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none"
+                  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2394a3b8\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat' }}
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
-                />
-                <datalist id="car-model-options">
-                  <option value="Hatchback" />
-                  <option value="Sedan" />
-                  <option value="SUV" />
-                  <option value="Electric" />
-                </datalist>
+                >
+                  <option value="" disabled>Select Car Model / Body Type</option>
+                  <option value="Hatchback">Hatchback (Swift, Baleno, i20, etc.)</option>
+                  <option value="Sedan">Sedan (City, Verna, Dzire, etc.)</option>
+                  <option value="SUV">SUV / MUV (Creta, Brezza, Thar, Fortuner, etc.)</option>
+                  <option value="Electric">Electric (Nexon EV, Comet EV, ZS EV, etc.)</option>
+                </select>
                 <FieldError name="carModel" />
               </div>
               <div>
