@@ -7,6 +7,7 @@ import { X, CheckCircle2 } from 'lucide-react';
 import { Car, formatPrice } from '@/lib/cars';
 import { useUtmParams } from '@/hooks/useUtmParams';
 import { submitToGoogleSheets } from '@/lib/googleSheets';
+import { submitToSupabase } from '@/lib/supabaseSubmit';
 
 interface MakeOfferModalProps {
   car: Car;
@@ -55,7 +56,7 @@ export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
     e.preventDefault();
     if (!offerValue.trim()) return;
 
-    submitToGoogleSheets({
+    const payload = {
       form_type: 'Make an Offer / Buy Enquiry Modal',
       name,
       phone,
@@ -63,7 +64,10 @@ export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
       car_model: `${car.make} ${car.model} ${car.variant}`,
       car_id: car.id,
       ...utm,
-    });
+    };
+
+    submitToGoogleSheets(payload);
+    submitToSupabase(payload);
 
     setSubmitted(true);
   };
