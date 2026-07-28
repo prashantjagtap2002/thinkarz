@@ -12,7 +12,14 @@ import { useVerifiedPhone } from '@/lib/verifiedPhone';
 export default function OtpGatedContactForm() {
   const { verifiedData, isVerified, saveVerification, resetVerification } = useVerifiedPhone();
   const [isFormOpen, setIsFormOpen] = useState(true);
-  const [step, setStep] = useState<'phone' | 'form'>('phone');
+  const [step, setStep] = useState<'phone' | 'form' | 'success'>('phone');
+
+  function handleCloseModal() {
+    setIsFormOpen(false);
+    if (step === 'success') {
+      setStep(isVerified ? 'form' : 'phone');
+    }
+  }
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [phone, setPhone] = useState('');
   const [countryCode, setCountryCode] = useState('+91');
@@ -214,78 +221,101 @@ export default function OtpGatedContactForm() {
       )}
 
       {/* Main Form Popup */}
-      {step === 'form' && isFormOpen && (
+      {(step === 'form' || step === 'success') && isFormOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm p-4 sm:p-6 flex min-h-full items-center justify-center">
-          <div className="absolute inset-0" onClick={() => setIsFormOpen(false)} />
+          <div className="absolute inset-0" onClick={handleCloseModal} />
           <div className="relative my-auto w-full max-w-[620px] max-h-[calc(100vh-3rem)] overflow-y-auto rounded-3xl bg-white shadow-2xl animate-fade-up">
             <button
-              onClick={() => setIsFormOpen(false)}
+              onClick={handleCloseModal}
               className="sticky right-4 top-4 z-30 float-right -mb-10 mr-4 mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 shadow-sm"
               aria-label="Close"
             >
               <X size={18} />
             </button>
-            <div className="p-6 sm:p-10">
-              <SubmittableForm
-                formType="Contact Us Form"
-                submitLabel="Send Message"
-                successTitle="Message Sent!"
-                successMessage="Thanks for reaching out. Our team will get back to you shortly."
-                className="space-y-4"
-                validations={[
-                  { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
-                ]}
-              >
-                <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
-                <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
-                <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3">
-                  <div>
-                    <div className="flex items-center gap-1.5 text-emerald-700">
-                      <CheckCircle2 size={14} />
-                      <p className="text-[11px] font-bold uppercase tracking-wider">Verified Number (Locked)</p>
+            {step === 'form' && (
+              <div className="p-6 sm:p-10">
+                <SubmittableForm
+                  formType="Contact Us Form"
+                  submitLabel="Send Message"
+                  successTitle="Message Sent!"
+                  successMessage="Thanks for reaching out. Our team will get back to you shortly."
+                  className="space-y-4"
+                  onSubmit={() => setStep('success')}
+                  validations={[
+                    { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
+                  ]}
+                >
+                  <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
+                  <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
+
+                  <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-emerald-700">
+                        <CheckCircle2 size={14} />
+                        <p className="text-[11px] font-bold uppercase tracking-wider">Verified Number (Locked)</p>
+                      </div>
+                      <p className="text-sm font-bold text-slate-900 mt-0.5">{countryCode} {phone}</p>
                     </div>
-                    <p className="text-sm font-bold text-slate-900 mt-0.5">{countryCode} {phone}</p>
+                    <button
+                      type="button"
+                      onClick={handleReverify}
+                      className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
+                    >
+                      Change Number
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleReverify}
-                    className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
-                  >
-                    Change Number
-                  </button>
-                </div>
 
-                <div>
-                  <label htmlFor="name" className="field-label">Full Name</label>
-                  <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
-                  <FieldError name="name" />
+                  <div>
+                    <label htmlFor="name" className="field-label">Full Name</label>
+                    <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
+                    <FieldError name="name" />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="field-label">Email Address</label>
+                    <input id="email" name="email" required type="email" className="field-input" placeholder="Enter your email address" />
+                    <FieldError name="email" />
+                  </div>
+                  <div>
+                    <label htmlFor="subject" className="field-label">Subject</label>
+                    <select id="subject" name="subject" required className="field-input" defaultValue="">
+                      <option value="" disabled>
+                        Select a subject
+                      </option>
+                      <option>Buying a Car</option>
+                      <option>Selling a Car</option>
+                      <option>Service Appointment</option>
+                      <option>General Enquiry</option>
+                    </select>
+                    <FieldError name="subject" />
+                  </div>
+                  <div>
+                    <label htmlFor="message" className="field-label">Your Message</label>
+                    <textarea id="message" name="message" required className="field-input" rows={4} placeholder="Type your message here..." />
+                    <FieldError name="message" />
+                  </div>
+                </SubmittableForm>
+              </div>
+            )}
+
+            {step === 'success' && (
+              <div className="flex flex-col items-center justify-center px-6 py-12 text-center sm:px-8 animate-fade-in">
+                <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-500/10 shadow-sm">
+                  <CheckCircle2 size={44} className="stroke-[2.2]" />
                 </div>
-                <div>
-                  <label htmlFor="email" className="field-label">Email Address</label>
-                  <input id="email" name="email" required type="email" className="field-input" placeholder="Enter your email address" />
-                  <FieldError name="email" />
-                </div>
-                <div>
-                  <label htmlFor="subject" className="field-label">Subject</label>
-                  <select id="subject" name="subject" required className="field-input" defaultValue="">
-                    <option value="" disabled>
-                      Select a subject
-                    </option>
-                    <option>Buying a Car</option>
-                    <option>Selling a Car</option>
-                    <option>Service Appointment</option>
-                    <option>General Enquiry</option>
-                  </select>
-                  <FieldError name="subject" />
-                </div>
-                <div>
-                  <label htmlFor="message" className="field-label">Your Message</label>
-                  <textarea id="message" name="message" required className="field-input" rows={4} placeholder="Type your message here..." />
-                  <FieldError name="message" />
-                </div>
-              </SubmittableForm>
-            </div>
+                <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-3xl">Message Sent!</h3>
+                <p className="mt-3 max-w-md text-sm sm:text-base leading-relaxed text-slate-600 font-medium">
+                  Thanks for reaching out. Our team will get back to you shortly.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="btn btn-primary mt-8 w-full max-w-xs py-3 text-sm font-bold shadow-lg shadow-brand-red/20 transition-all hover:shadow-xl"
+                >
+                  Done
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

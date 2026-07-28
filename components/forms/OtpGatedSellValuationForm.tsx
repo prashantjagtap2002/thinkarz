@@ -471,13 +471,15 @@ export default function OtpGatedSellValuationForm() {
             )}
 
             {step === 'success' && (
-              <div className="flex flex-col items-center justify-center px-6 py-16 text-center sm:px-8">
-                <CheckCircle2 className="mb-4 text-green-600" size={48} />
-                <h3 className="text-xl font-extrabold text-slate-900">Valuation Request Received!</h3>
-                <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-600">
-                  Our team will get back to you shortly to confirm your car's final value.
+              <div className="flex flex-col items-center justify-center px-6 py-12 text-center sm:px-8 animate-fade-in">
+                <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-500/10 shadow-sm">
+                  <CheckCircle2 size={44} className="stroke-[2.2]" />
+                </div>
+                <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-3xl">Valuation Request Received!</h3>
+                <p className="mt-3 max-w-md text-sm sm:text-base leading-relaxed text-slate-600 font-medium">
+                  Our team will get back to you shortly to confirm your car&apos;s final value.
                 </p>
-                <button onClick={closePopup} className="btn btn-primary mt-8">
+                <button onClick={closePopup} className="btn btn-primary mt-8 w-full max-w-xs py-3 text-sm font-bold shadow-lg shadow-brand-red/20 transition-all hover:shadow-xl">
                   Done
                 </button>
               </div>

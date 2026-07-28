@@ -116,17 +116,22 @@ export default function SubmittableForm({
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-green-200 bg-green-50 px-6 py-16 text-center">
-        <CheckCircle2 className="mb-4 text-green-600" size={40} />
-        <h3 className="text-lg font-bold text-slate-900">{successTitle}</h3>
-        <p className="mt-2 max-w-sm text-sm text-slate-600">{successMessage}</p>
+      <div className="flex flex-col items-center justify-center py-10 px-4 text-center animate-fade-in">
+        <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-500/10 shadow-sm">
+          <CheckCircle2 size={44} className="stroke-[2.2]" />
+        </div>
+        <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-3xl">{successTitle}</h3>
+        <p className="mt-3 max-w-md text-sm sm:text-base leading-relaxed text-slate-600 font-medium">{successMessage}</p>
         {successExtra}
-        <button
-          onClick={() => setSubmitted(false)}
-          className="mt-6 text-sm font-semibold text-brand-red hover:underline"
-        >
-          Submit another response
-        </button>
+        <div className="mt-8 flex w-full max-w-xs flex-col items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setSubmitted(false)}
+            className="btn btn-primary w-full py-3 text-sm font-bold shadow-lg shadow-brand-red/20 transition-all hover:shadow-xl"
+          >
+            Done
+          </button>
+        </div>
       </div>
     );
   }
