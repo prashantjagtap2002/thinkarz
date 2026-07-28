@@ -9,48 +9,55 @@ import { countryCodes } from '@/lib/countryCodes';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 import { useVerifiedPhone } from '@/lib/verifiedPhone';
 
-const BRAND_MODELS: Record<string, string[]> = {
-  'Maruti Suzuki': ['Swift', 'Baleno', 'Brezza', 'Dzire', 'Ertiga', 'Ignis', 'Wagon R', 'Alto', 'Grand Vitara', 'Ciaz', 'Fronx'],
-  'Hyundai': ['Creta', 'Venue', 'Verna', 'i20', 'Grand i10 Nios', 'Alcazar', 'Tucson', 'Aura', 'Exter'],
-  'Tata': ['Nexon', 'Punch', 'Harrier', 'Safari', 'Altroz', 'Tiago', 'Tigor', 'Nexon EV', 'Curvv'],
-  'Mahindra': ['Thar', 'XUV700', 'Scorpio-N', 'Scorpio Classic', 'XUV300 / XUV3XO', 'Bolero', 'XUV400 EV'],
-  'Toyota': ['Fortuner', 'Innova Crysta', 'Innova Hycross', 'Urban Cruiser Hyryder', 'Glanza', 'Camry'],
-  'Kia': ['Seltos', 'Sonet', 'Carens', 'EV6'],
-  'Honda': ['City', 'Amaze', 'Elevate', 'WR-V', 'Civic'],
-  'MG': ['Comet EV', 'ZS EV', 'Astor', 'Hector', 'Gloster'],
-  'BMW': ['3 Series', '5 Series', 'X1', 'X3', 'X5', 'i4'],
-  'Mercedes-Benz': ['C-Class', 'E-Class', 'GLA', 'GLC', 'GLE'],
-  'Audi': ['A4', 'A6', 'Q3', 'Q5'],
-  'Volkswagen': ['Virtus', 'Taigun', 'Polo', 'Vento'],
-  'Skoda': ['Slavia', 'Kushaq', 'Octavia', 'Superb'],
-  'Other Brand': ['Other Model'],
-};
-
-const BRAND_BASE_VALUES: Record<string, number> = {
-  'Maruti Suzuki': 700000,
-  'Hyundai': 950000,
-  'Tata': 900000,
-  'Mahindra': 1400000,
-  'Toyota': 1800000,
-  'Kia': 1100000,
-  'Honda': 900000,
-  'MG': 1200000,
-  'BMW': 4000000,
-  'Mercedes-Benz': 4500000,
-  'Audi': 4000000,
-  'Volkswagen': 1000000,
-  'Skoda': 1100000,
-  'Other Brand': 800000,
-};
-
-const brandList = Object.keys(BRAND_MODELS);
 const currentYear = new Date().getFullYear();
 
-function estimatePrice(brand: string, year: string, kms: string) {
-  const base = BRAND_BASE_VALUES[brand] || 800000;
+function estimatePrice(brand: string, model: string, year: string, kms: string) {
   const yearNum = Number(year);
   const kmsNum = Number(kms);
   if (!yearNum || !kmsNum) return null;
+
+  let base = 800000;
+  const combined = `${brand} ${model}`.toLowerCase();
+
+  if (combined.includes('ev') || combined.includes('electric')) {
+    base = 1200000;
+  } else if (
+    combined.includes('bmw') ||
+    combined.includes('mercedes') ||
+    combined.includes('audi') ||
+    combined.includes('jaguar') ||
+    combined.includes('porsche')
+  ) {
+    base = 3500000;
+  } else if (
+    combined.includes('fortuner') ||
+    combined.includes('endeavour') ||
+    combined.includes('thar') ||
+    combined.includes('xuv700') ||
+    combined.includes('harrier') ||
+    combined.includes('safari') ||
+    combined.includes('suv')
+  ) {
+    base = 1500000;
+  } else if (
+    combined.includes('city') ||
+    combined.includes('verna') ||
+    combined.includes('ciaz') ||
+    combined.includes('slavia') ||
+    combined.includes('virtus') ||
+    combined.includes('sedan')
+  ) {
+    base = 900000;
+  } else if (
+    combined.includes('swift') ||
+    combined.includes('baleno') ||
+    combined.includes('i20') ||
+    combined.includes('altroz') ||
+    combined.includes('wagon') ||
+    combined.includes('hatchback')
+  ) {
+    base = 600000;
+  }
 
   const age = Math.max(0, currentYear - yearNum);
   const ageDepreciation = 1 - Math.min(age * 0.06, 0.6);
@@ -83,8 +90,7 @@ export default function OtpGatedSellValuationForm() {
   const [year, setYear] = useState('');
   const [kms, setKms] = useState('');
 
-  const estimate = estimatePrice(brand, year, kms);
-  const availableModels = brand ? BRAND_MODELS[brand] || [] : [];
+  const estimate = estimatePrice(brand, model, year, kms);
 
   // Sync state with verified phone data if available
   useEffect(() => {
@@ -332,53 +338,43 @@ export default function OtpGatedSellValuationForm() {
               {/* 1. Registration Number */}
               <div>
                 <label htmlFor="regNumber" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Registration Number</label>
-                <input id="regNumber" name="regNumber" required className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]" placeholder="e.g. MH01AB1234" />
+                <input
+                  id="regNumber"
+                  name="regNumber"
+                  required
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  placeholder="e.g. MH01AB1234"
+                />
                 <FieldError name="regNumber" />
               </div>
 
               {/* 2. Brand */}
               <div>
                 <label htmlFor="brand" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Brand</label>
-                <select
+                <input
                   id="brand"
                   name="brand"
                   required
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none"
-                  style={selectStyle}
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  placeholder="e.g. Maruti Suzuki, Hyundai, Tata"
                   value={brand}
-                  onChange={(e) => {
-                    setBrand(e.target.value);
-                    setModel('');
-                  }}
-                >
-                  <option value="" disabled>Select Car Brand</option>
-                  {brandList.map((b) => (
-                    <option key={b} value={b}>{b}</option>
-                  ))}
-                </select>
+                  onChange={(e) => setBrand(e.target.value)}
+                />
                 <FieldError name="brand" />
               </div>
 
               {/* 3. Model */}
               <div>
                 <label htmlFor="carModel" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Model</label>
-                <select
+                <input
                   id="carModel"
                   name="carModel"
                   required
-                  disabled={!brand}
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none disabled:bg-slate-100 disabled:text-slate-400 cursor-pointer disabled:cursor-not-allowed"
-                  style={selectStyle}
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  placeholder="e.g. Swift, Creta, Nexon, City"
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
-                >
-                  <option value="" disabled>
-                    {brand ? 'Select Car Model' : 'Select Brand First'}
-                  </option>
-                  {availableModels.map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
+                />
                 <FieldError name="carModel" />
               </div>
 
