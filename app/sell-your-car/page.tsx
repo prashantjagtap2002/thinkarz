@@ -70,8 +70,8 @@ export default function SellYourCarPage() {
   return (
     <>
       <section className="py-14 sm:py-20">
-        <div className="container-page grid grid-cols-1 gap-10 lg:grid-cols-2">
-          <div>
+        <div className="container-page grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-5">
             <span className="section-eyebrow">Sell Your Car</span>
             <h1 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
               Sell Your Car.
@@ -93,7 +93,7 @@ export default function SellYourCarPage() {
             </div>
           </div>
 
-          <div className="w-full">
+          <div className="w-full lg:col-span-7">
             <Suspense fallback={null}>
               <OtpGatedSellValuationForm />
             </Suspense>

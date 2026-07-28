@@ -122,7 +122,7 @@ export default function BookTestDrivePage() {
           </div>
 
           <div className="flex items-start justify-center lg:justify-end">
-            <div className="w-full max-w-sm">
+            <div className="w-full max-w-xl lg:max-w-2xl">
               <Suspense fallback={null}>
                 <OtpGatedTestDriveForm />
               </Suspense>

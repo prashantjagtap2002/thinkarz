@@ -47,8 +47,8 @@ export default function ContactUsPage() {
       </section>
 
       <section className="container-page py-14 sm:py-20">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-10 lg:p-12">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-10 lg:p-12 lg:col-span-5">
             <h2 className="mb-4 text-[22px] font-bold text-[#1e293b]">
               Contact Information
             </h2>
@@ -75,7 +75,7 @@ export default function ContactUsPage() {
             </div>
           </div>
 
-          <div className="w-full h-full">
+          <div className="w-full h-full lg:col-span-7">
             <Suspense fallback={null}>
               <OtpGatedContactForm />
             </Suspense>
