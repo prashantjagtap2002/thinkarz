@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import PreOwnedCarsBrowser from '@/components/PreOwnedCarsBrowser';
 
 export const metadata = {
-  title: 'Pre Owned Cars | Thinkarz',
+  title: 'Pre Owned Cars',
   description: 'Browse quality certified pre-owned cars in Mumbai. Filter by budget, body type, age and more to find your perfect car.',
 };
 

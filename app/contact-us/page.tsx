@@ -6,8 +6,8 @@ import FaqAccordion from '@/components/FaqAccordion';
 import { contactInfo } from '@/lib/content';
 
 export const metadata = {
-  title: 'Contact Us | Thinkarz',
-  description: 'Get in touch with Thinkarz for pre-owned car inquiries, test drives, and expert guidance. Visit our Malad West showroom or call us today.',
+  title: 'Contact Us',
+  description: 'Get in touch with THINKARZ for pre-owned car inquiries, test drives, and expert guidance. Visit our Malad West showroom or call us today.',
 };
 
 const touchPoints = [
@@ -24,7 +24,7 @@ export default function ContactUsPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/cars/mg-zs-ev.jpg"
-            alt="MG ZS EV - Thinkarz showroom"
+            alt="MG ZS EV - THINKARZ showroom"
             fill
             priority
             className="object-cover opacity-30"
@@ -87,7 +87,7 @@ export default function ContactUsPage() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200">
             <iframe
-              title="Thinkarz showroom location"
+              title="THINKARZ showroom location"
               src="https://maps.google.com/maps?q=19.182148,72.836216&z=15&output=embed"
               className="h-full w-full"
               loading="lazy"
@@ -99,7 +99,7 @@ export default function ContactUsPage() {
             <div className="relative aspect-[16/10] w-full">
               <Image
                 src="/showroom.jpeg"
-                alt="Thinkarz showroom"
+                alt="THINKARZ showroom"
                 fill
                 className="object-cover"
               />
@@ -131,7 +131,7 @@ export default function ContactUsPage() {
           <div className="lg:sticky lg:top-28 lg:self-start">
             <p className="mb-3 text-xs font-bold uppercase tracking-widest text-brand-red">Quick Answers</p>
             <h2 className="text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl">
-              About Thinkarz:
+              About THINKARZ:
               <br />
               <span className="relative inline-block">
                 Frequently Asked

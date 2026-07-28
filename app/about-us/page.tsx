@@ -11,9 +11,9 @@ import Reveal from '@/components/Reveal';
 import FaqAccordion from '@/components/FaqAccordion';
 
 export const metadata = {
-  title: 'About Us | Thinkarz',
+  title: 'About Us',
   description:
-    'Thinkarz is the pre-owned car venture of Gautam Modi Group. 35+ years of trust, 50,000+ cars sold, 140-point inspection. Learn about our story, values, and commitment.',
+    'THINKARZ is the pre-owned car venture of Gautam Modi Group. 35+ years of trust, 50,000+ cars sold, 140-point inspection. Learn about our story, values, and commitment.',
 };
 
 const stats = [
@@ -48,14 +48,14 @@ const values = [
 
 const aboutFaqs = [
   {
-    question: 'What is Thinkarz?',
+    question: 'What is THINKARZ?',
     answer:
-      'Thinkarz is the pre-owned car venture of the Gautam Modi Group, one of India\'s most trusted automotive business groups. We specialise in buying and selling quality-checked pre-owned cars with complete transparency, 140-point inspection, warranty, and easy finance options.',
+      'THINKARZ is the pre-owned car venture of the Gautam Modi Group, one of India\'s most trusted automotive business groups. We specialise in buying and selling quality-checked pre-owned cars with complete transparency, 140-point inspection, warranty, and easy finance options.',
   },
   {
-    question: 'Is Thinkarz part of the Gautam Modi Group?',
+    question: 'Is THINKARZ part of the Gautam Modi Group?',
     answer:
-      'Yes. Thinkarz is owned and operated by the Gautam Modi Group, an automotive business group that also represents Hyundai, Audi, Mahindra, Kia and MG across India. The group has grown from a 100-member team to a 3,500+ strong organisation over three decades.',
+      'Yes. THINKARZ is owned and operated by the Gautam Modi Group, an automotive business group that also represents Hyundai, Audi, Mahindra, Kia and MG across India. The group has grown from a 100-member team to a 3,500+ strong organisation over three decades.',
   },
   {
     question: 'What is the 140-point inspection?',
@@ -65,17 +65,17 @@ const aboutFaqs = [
   {
     question: 'Do you offer warranty on pre-owned cars?',
     answer:
-      'Yes. All Thinkarz-certified cars come with a comprehensive warranty package. Our team will walk you through the exact warranty terms, coverage period, and what is included at the time of purchase, so you have complete peace of mind.',
+      'Yes. All THINKARZ-certified cars come with a comprehensive warranty package. Our team will walk you through the exact warranty terms, coverage period, and what is included at the time of purchase, so you have complete peace of mind.',
   },
   {
-    question: 'Can I sell my car to Thinkarz?',
+    question: 'Can I sell my car to THINKARZ?',
     answer:
-      'Absolutely. You can sell your car to Thinkarz through our Sell Your Car programme. We offer instant valuation, free inspection at your doorstep or at our showroom, and guaranteed payment within 24 hours. Visit our Sell Your Car page to get started.',
+      'Absolutely. You can sell your car to THINKARZ through our Sell Your Car programme. We offer instant valuation, free inspection at your doorstep or at our showroom, and guaranteed payment within 24 hours. Visit our Sell Your Car page to get started.',
   },
   {
-    question: 'What makes Thinkarz different from traditional used car dealers?',
+    question: 'What makes THINKARZ different from traditional used car dealers?',
     answer:
-      'Unlike unorganized used car dealers, Thinkarz is backed by the 35+ year legacy of the Gautam Modi Group. Every car undergoes a 140-point inspection, comes with verified RC and service history, 7-day return policy, transparent fixed pricing, and full post-purchase support.',
+      'Unlike unorganized used car dealers, THINKARZ is backed by the 35+ year legacy of the Gautam Modi Group. Every car undergoes a 140-point inspection, comes with verified RC and service history, 7-day return policy, transparent fixed pricing, and full post-purchase support.',
   },
   {
     question: 'How long does the car valuation and selling process take?',
@@ -96,8 +96,8 @@ export default function AboutPage() {
       <section className="relative min-h-[380px] overflow-hidden bg-brand-navy sm:min-h-[440px]">
         <div className="absolute inset-0">
           <Image
-            src="/showroom_image/thinkarz-malad-west-mumbai-second-hand-car-dealers-tinbrdbc9n.webp"
-            alt="Thinkarz showroom in Malad West, Mumbai"
+            src="/showroom_image/about-hero.png"
+            alt="THINKARZ showroom in Malad West, Mumbai"
             fill
             priority
             className="object-cover"
@@ -111,7 +111,7 @@ export default function AboutPage() {
               Who We Are
             </span>
             <h1 className="mt-1 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-              About Thinkarz
+              About THINKARZ
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
               India&apos;s trusted pre-owned car destination from the Gautam Modi Group, built
@@ -131,7 +131,7 @@ export default function AboutPage() {
                 Part of the Gautam Modi Group
               </h2>
               <p className="mt-5 text-sm leading-relaxed text-slate-600 sm:text-base">
-                Thinkarz is the pre-owned car venture of the Gautam Modi Group, one of
+                THINKARZ is the pre-owned car venture of the Gautam Modi Group, one of
                 India&apos;s most respected automotive business groups. With 35+ years in the
                 industry, we have sold over 50,000 cars and built a reputation for trust,
                 transparency, and quality.
@@ -148,8 +148,8 @@ export default function AboutPage() {
             <Reveal delay={150}>
               <div className="relative min-h-[260px] overflow-hidden rounded-lg">
                 <Image
-                  src="/images/team-culture.jpg"
-                  alt="Our team"
+                  src="/images/our-story.png"
+                  alt="THINKARZ team and showroom"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 540px"
@@ -267,7 +267,7 @@ export default function AboutPage() {
             <div className="lg:sticky lg:top-28 lg:self-start">
               <p className="mb-3 text-xs font-bold uppercase tracking-widest text-brand-red">Quick Answers</p>
               <h2 className="text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl">
-                About Thinkarz:
+                About THINKARZ:
                 <br />
                 <span className="relative inline-block">
                   Frequently Asked

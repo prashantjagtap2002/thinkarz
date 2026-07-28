@@ -18,8 +18,8 @@ import {
 import OtpGatedSellValuationForm from '@/components/forms/OtpGatedSellValuationForm';
 
 export const metadata = {
-  title: 'Sell Your Car | Thinkarz',
-  description: 'Get the best value for your car with Thinkarz. Free inspection, instant valuation, and hassle-free paperwork.',
+  title: 'Sell Your Car',
+  description: 'Get the best value for your car with THINKARZ. Free inspection, instant valuation, and hassle-free paperwork.',
 };
 
 const steps = [
@@ -84,7 +84,7 @@ export default function SellYourCarPage() {
             <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
                 src="/images/cars/mg-zs-ev.jpg"
-                alt="Sell your car with Thinkarz"
+                alt="Sell your car with THINKARZ"
                 fill
                 priority
                 className="object-cover"
@@ -138,7 +138,7 @@ export default function SellYourCarPage() {
       <section className="bg-brand-navy py-16 sm:py-20">
         <div className="container-page">
           <h2 className="mb-2 text-center text-2xl font-extrabold text-white sm:text-3xl">
-            Why Sell Your Car to Thinkarz?
+            Why Sell Your Car to THINKARZ?
           </h2>
           <span className="mx-auto mb-12 block h-1 w-12 bg-brand-red" />
 
@@ -174,7 +174,7 @@ export default function SellYourCarPage() {
             <div>
               <h3 className="text-xl font-bold text-white sm:text-2xl">Ready to sell your car?</h3>
               <p className="mt-2 max-w-md text-sm text-slate-300">
-                Get the best value for your car with Thinkarz. It&apos;s quick, easy and
+                Get the best value for your car with THINKARZ. It&apos;s quick, easy and
                 hassle-free.
               </p>
             </div>

@@ -1,18 +1,18 @@
 export const testimonials = [
   {
-    name: 'Happy Customer',
+    name: 'Rahul Sharma',
     quote:
-      'Amazing experience! The team at Thinkarz helped me find the perfect car. Transparent process and no hidden charges.',
+      'Amazing experience! The team at THINKARZ helped me find the perfect car. Transparent process and no hidden charges.',
     rating: 5,
   },
   {
-    name: 'Happy Customer',
+    name: 'Priya Patel',
     quote:
-      'I sold my car through Thinkarz and got a great price. The inspection and payment process was quick and smooth.',
+      'I sold my car through THINKARZ and got a great price. The inspection and payment process was quick and smooth.',
     rating: 5,
   },
   {
-    name: 'Happy Customer',
+    name: 'Vikram Desai',
     quote:
       'Wide range of quality cars and excellent customer service. Highly recommended for buying pre-owned cars.',
     rating: 5,
@@ -46,32 +46,32 @@ export const contactInfo = {
 
 export const faqs = [
   {
-    question: 'Who owns Thinkarz?',
+    question: 'Who owns THINKARZ?',
     answer:
-      'Thinkarz is the pre-owned car venture of the Gautam Modi Group, a trusted automotive group with over 35 years of industry excellence.',
+      'THINKARZ is the pre-owned car venture of the Gautam Modi Group, a trusted automotive group with over 35 years of industry excellence.',
   },
   {
-    question: 'Is Thinkarz an authorised dealership?',
+    question: 'Is THINKARZ an authorised dealership?',
     answer:
       'While we operate independently to offer you a diverse multi-brand selection, our parent group represents Hyundai, Audi, Mahindra, Kia, and MG. Every vehicle undergoes a 140-point inspection to ensure authorized-level quality.',
   },
   {
-    question: 'What can I do at Thinkarz?',
+    question: 'What can I do at THINKARZ?',
     answer:
       'You can buy certified premium pre-owned cars, sell your current vehicle for an instant valuation, exchange your car, and arrange flexible bank financing options all under one roof.',
   },
   {
-    question: 'Which areas does Thinkarz serve?',
+    question: 'Which areas does THINKARZ serve?',
     answer:
       'Our flagship showroom is located in Malad West, Mumbai, and we proudly serve customers across the Mumbai Metropolitan Region (MMR), Thane, Navi Mumbai, and surrounding areas.',
   },
   {
-    question: 'When did Thinkarz enter the Indian market?',
+    question: 'When did THINKARZ enter the Indian market?',
     answer:
-      'Thinkarz was established to organize the pre-owned car market, bringing transparency, trust, 140-point inspections, and a premium dealership experience to Indian car buyers.',
+      'THINKARZ was established to organize the pre-owned car market, bringing transparency, trust, 140-point inspections, and a premium dealership experience to Indian car buyers.',
   },
   {
-    question: 'How does the car buying process work at Thinkarz?',
+    question: 'How does the car buying process work at THINKARZ?',
     answer:
       'Our process is simple and transparent: 1. Browse our certified inventory online or visit our Malad West showroom. 2. Book a free test drive. 3. Choose your preferred financing or payment option. 4. Complete quick paperwork and drive home your car.',
   },
@@ -86,14 +86,14 @@ export const faqs = [
       'We accept all major payment modes including Net Banking (NEFT/RTGS), Credit/Debit cards, UPI, Cheques, and direct bank loan disbursements.',
   },
   {
-    question: 'Are prices negotiable at Thinkarz?',
+    question: 'Are prices negotiable at THINKARZ?',
     answer:
       'We follow a fixed and transparent pricing model based on real-time market data and comprehensive car condition reports, ensuring you get the fairest price upfront without stressful haggling.',
   },
   {
     question: 'What warranty and return guarantee do you offer?',
     answer:
-      'All Thinkarz Certified vehicles come with a comprehensive warranty package covering core engine, transmission, and electrical components, alongside a 7-day money-back return guarantee.',
+      'All THINKARZ Certified vehicles come with a comprehensive warranty package covering core engine, transmission, and electrical components, alongside a 7-day money-back return guarantee.',
   },
 ];
 
@@ -101,7 +101,7 @@ export const carFaqs = [
   {
     question: "Is this car's ownership and accident history verified?",
     answer:
-      "Yes. Every Thinkarz car goes through a documentation check covering RC, ownership transfer history, and accident/insurance claim records before it's listed.",
+      "Yes. Every THINKARZ car goes through a documentation check covering RC, ownership transfer history, and accident/insurance claim records before it's listed.",
   },
   {
     question: 'What does the 140-point inspection cover?',
@@ -124,7 +124,7 @@ export const carFaqs = [
       'Yes, you can book a free test drive at our Malad (West) showroom at a time that works for you, with no obligation to buy.',
   },
   {
-    question: "What is Thinkarz's return policy?",
+    question: "What is THINKARZ's return policy?",
     answer:
       "If you're not fully satisfied, certified cars come with a 7-day easy return window from the date of delivery, subject to standard terms.",
   },

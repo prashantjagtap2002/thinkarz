@@ -88,7 +88,7 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-brand-navy">
+      <section className="relative flex min-h-[calc(100dvh-80px)] flex-col justify-center overflow-hidden bg-brand-navy">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -96,14 +96,14 @@ export default function HomePage() {
             alt="Premium Pre-Owned Cars"
             fill
             priority
-            className="object-cover opacity-[0.25]"
+            className="object-cover opacity-60"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/95 to-brand-navy/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/90 via-brand-navy/70 to-brand-navy/25" />
         </div>
 
-        <div className="container-page relative pb-10 pt-16 sm:pb-16 sm:pt-24">
+        <div className="container-page relative flex flex-1 flex-col justify-between py-8 sm:py-12 lg:py-14">
           {/* Two-column layout */}
-          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="my-auto grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
             {/* Left column — Copy */}
             <div className="animate-fade-up">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm">
@@ -251,12 +251,12 @@ export default function HomePage() {
       <section className="py-16 sm:py-20">
         <div className="container-page grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,320px)_1fr]">
           <div>
-            <span className="section-eyebrow">Why Thinkarz</span>
+            <span className="section-eyebrow">Why THINKARZ</span>
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
-              Why Choose Thinkarz?
+              Why Choose THINKARZ?
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-slate-600">
-              At Thinkarz, we are committed to delivering a seamless car buying experience with
+              At THINKARZ, we are committed to delivering a seamless car buying experience with
               trust, transparency and complete peace of mind.
             </p>
           </div>

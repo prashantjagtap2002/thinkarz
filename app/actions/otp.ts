@@ -25,7 +25,7 @@ export async function sendWhatsAppOtp(countryCode: string, phone: string) {
 
     // Call the WhatsApp API
     const response = await fetch(
-      'https://messaginghub.solutions/relaybridge/api/v1/meta/67f4b113f59e04c3b1511c53/messages',
+      'https://messaginghub.solutions/relaybridge/api/v1/meta/67ff5b35f59e04c3b1513294/messages',
       {
         method: 'POST',
         headers: {
@@ -65,7 +65,7 @@ export async function sendWhatsAppOtp(countryCode: string, phone: string) {
               },
             ],
           },
-          biz_opaque_callback_data: 'ThinkarzOTP',
+          biz_opaque_callback_data: 'THINKARZOTP',
         }),
       }
     );

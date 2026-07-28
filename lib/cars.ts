@@ -453,7 +453,7 @@ export function getHighlights(car: Car): string[] {
 
   if (car.owners === 1) highlights.push('Single owner vehicle with complete service history');
   if (car.kms < 20000) highlights.push(`Low odometer reading of just ${formatKms(car.kms)}`);
-  if (car.certified) highlights.push("Passed Thinkarz's 140-point quality inspection");
+  if (car.certified) highlights.push("Passed THINKARZ's 140-point quality inspection");
   if (car.transmission === 'Automatic')
     highlights.push('Comfortable automatic transmission, ideal for city driving');
   if (car.fuel === 'EV')

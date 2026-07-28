@@ -1,14 +1,16 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, PhoneCall, ShieldCheck, X, Mail } from 'lucide-react';
+import { ChevronDown, PhoneCall, ShieldCheck, X, Mail, CheckCircle2 } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 import { countryCodes } from '@/lib/countryCodes';
+import { useVerifiedPhone } from '@/lib/verifiedPhone';
 
 export default function OtpGatedContactForm() {
+  const { verifiedData, isVerified, saveVerification, resetVerification } = useVerifiedPhone();
   const [isFormOpen, setIsFormOpen] = useState(true);
   const [step, setStep] = useState<'phone' | 'form'>('phone');
   const [showOtpPopup, setShowOtpPopup] = useState(false);
@@ -21,6 +23,23 @@ export default function OtpGatedContactForm() {
   const [consentError, setConsentError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [serverHash, setServerHash] = useState('');
+
+  // Sync state with verified phone data if available
+  useEffect(() => {
+    if (verifiedData) {
+      setPhone(verifiedData.phone);
+      setCountryCode(verifiedData.countryCode);
+      setStep('form');
+    }
+  }, [verifiedData]);
+
+  function handleReverify() {
+    resetVerification();
+    setPhone('');
+    setOtp('');
+    setStep('phone');
+    setIsFormOpen(false);
+  }
 
   function validatePhone(value: string, code = countryCode) {
     if (!value.trim()) {
@@ -83,6 +102,7 @@ export default function OtpGatedContactForm() {
       setIsLoading(false);
 
       if (res.success) {
+        saveVerification(phone, countryCode);
         setShowOtpPopup(false);
         setStep('form');
         setIsFormOpen(true);
@@ -140,7 +160,7 @@ export default function OtpGatedContactForm() {
           </div>
           {phoneError && <p className="-mt-4 mb-4 text-left text-xs text-red-600">{phoneError}</p>}
 
-          <label className="mb-8 flex cursor-pointer items-start gap-3 text-left">
+          <label className="mb-6 flex cursor-pointer items-start gap-2.5 text-left">
             <input
               type="checkbox"
               checked={hasConsent}
@@ -148,17 +168,20 @@ export default function OtpGatedContactForm() {
                 setHasConsent(e.target.checked);
                 if (e.target.checked) setConsentError('');
               }}
-              className="mt-[3px] h-[18px] w-[18px] shrink-0 rounded border-slate-300 text-[#001D3D] focus:ring-[#001D3D]"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-red focus:ring-brand-red"
             />
-            <span className="text-[13px] leading-[1.6] text-slate-500">
-              I agree to Thinkarz's{' '}
-              <Link href="/terms-and-conditions" className="font-semibold text-slate-800 underline hover:text-[#001D3D]">T&amp;C</Link>{' '}
+            <span className="text-[12px] leading-relaxed text-slate-600">
+              I agree to the{' '}
+              <Link href="/terms-and-conditions" target="_blank" className="font-semibold text-slate-800 underline hover:text-brand-red">
+                Terms &amp; Conditions
+              </Link>{' '}
               and{' '}
-              <Link href="/privacy-policy" className="font-semibold text-slate-800 underline hover:text-[#001D3D]">Privacy Policy</Link>. 
-              This consent overrides any DNC/NDNC registrations.
+              <Link href="/privacy-policy" target="_blank" className="font-semibold text-slate-800 underline hover:text-brand-red">
+                Privacy Policy
+              </Link>.
             </span>
           </label>
-          {consentError && <p className="-mt-6 mb-4 text-left text-xs text-red-600">{consentError}</p>}
+          {consentError && <p className="-mt-4 mb-4 text-left text-xs text-red-600">{consentError}</p>}
 
           <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
             {isLoading ? 'Sending...' : 'Send OTP'}
@@ -168,27 +191,37 @@ export default function OtpGatedContactForm() {
 
       {step === 'form' && (
         <div className="text-center animate-fade-in">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
-            <ShieldCheck size={32} />
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+            <CheckCircle2 size={28} />
           </div>
-          <h2 className="mb-3 text-2xl font-bold text-slate-900">Number Verified</h2>
-          <p className="mb-8 text-[15px] text-slate-500 max-w-sm mx-auto">
-            Your phone number {countryCode} {phone} has been verified successfully.
+          <h2 className="mb-2 text-2xl font-bold text-slate-900">Number Verified</h2>
+          <p className="mb-6 text-[15px] text-slate-500 max-w-sm mx-auto">
+            Your phone number <span className="font-bold text-slate-900">{countryCode} {phone}</span> is verified.
           </p>
-          <button onClick={() => setIsFormOpen(true)} className="btn btn-primary w-full max-w-[280px]">
-            Open Contact Form
-          </button>
+          <div className="flex flex-col items-center gap-3">
+            <button onClick={() => setIsFormOpen(true)} className="btn btn-primary w-full max-w-[280px]">
+              Open Contact Form
+            </button>
+            <button
+              type="button"
+              onClick={handleReverify}
+              className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
+            >
+              Change Number / Re-verify
+            </button>
+          </div>
         </div>
       )}
 
       {/* Main Form Popup */}
       {step === 'form' && isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsFormOpen(false)} />
-          <div className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto rounded-2xl bg-white shadow-2xl animate-fade-up">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm p-4 sm:p-6 flex min-h-full items-center justify-center">
+          <div className="absolute inset-0" onClick={() => setIsFormOpen(false)} />
+          <div className="relative my-auto w-full max-w-[620px] max-h-[calc(100vh-3rem)] overflow-y-auto rounded-3xl bg-white shadow-2xl animate-fade-up">
             <button
               onClick={() => setIsFormOpen(false)}
-              className="absolute right-4 top-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 z-20"
+              className="sticky right-4 top-4 z-30 float-right -mb-10 mr-4 mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 shadow-sm"
+              aria-label="Close"
             >
               <X size={18} />
             </button>
@@ -206,11 +239,21 @@ export default function OtpGatedContactForm() {
                 <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
                 <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
-                <div className="rounded-xl border border-brand-blue/10 bg-brand-blueLight/60 px-4 py-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-blue">
-                    Verified Number
-                  </p>
-                  <p className="text-sm font-bold text-slate-900">{countryCode} {phone}</p>
+                <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3">
+                  <div>
+                    <div className="flex items-center gap-1.5 text-emerald-700">
+                      <CheckCircle2 size={14} />
+                      <p className="text-[11px] font-bold uppercase tracking-wider">Verified Number (Locked)</p>
+                    </div>
+                    <p className="text-sm font-bold text-slate-900 mt-0.5">{countryCode} {phone}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleReverify}
+                    className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
+                  >
+                    Change Number
+                  </button>
                 </div>
 
                 <div>

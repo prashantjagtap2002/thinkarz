@@ -1,10 +1,11 @@
 import PageHero from '@/components/PageHero';
 import Reveal from '@/components/Reveal';
+import BackButton from '@/components/BackButton';
 import { contactInfo } from '@/lib/content';
 
 export const metadata = {
-  title: 'Privacy Policy | Thinkarz',
-  description: 'Learn how Thinkarz collects, uses, and protects your personal data.',
+  title: 'Privacy Policy',
+  description: 'Learn how THINKARZ collects, uses, and protects your personal data.',
 };
 
 export default function PrivacyPage() {
@@ -17,11 +18,14 @@ export default function PrivacyPage() {
         image="/images/hero-banner.jpg"
       />
 
-      <section className="py-16 sm:py-24">
+      <section className="py-12 sm:py-16">
         <div className="container-page max-w-3xl">
+          <div className="mb-8">
+            <BackButton label="Back to previous page" />
+          </div>
           <Reveal className="prose prose-slate max-w-none">
             <p className="text-sm text-slate-600 leading-relaxed mb-6">
-              Thinkarz ("We," "Us," or "Our") is committed to safeguarding your privacy. This
+              THINKARZ ("We," "Us," or "Our") is committed to safeguarding your privacy. This
               Privacy Policy outlines how we collect, use, disclose, and protect your personal
               information when you visit our website.
             </p>

@@ -38,7 +38,7 @@ export default function Footer() {
             YOUR ULTIMATE CAR DESTINATION
           </p>
           <p className="mt-4 text-sm leading-relaxed text-slate-400">
-            Thinkarz is the pre-owned car venture of Gautam Modi Group, built on decades of trust,
+            THINKARZ is the pre-owned car venture of Gautam Modi Group, built on decades of trust,
             customer first approach, and a passion for mobility.
           </p>
           <div className="mt-5 flex gap-3">
@@ -144,7 +144,7 @@ export default function Footer() {
 
       <div className="border-t border-slate-700/60 py-5">
         <p className="container-page text-center text-xs text-slate-500">
-          © 2026 Thinkarz. All Rights Reserved.
+          © 2026 THINKARZ. All Rights Reserved.
         </p>
       </div>
     </footer>

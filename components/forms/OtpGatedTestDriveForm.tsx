@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { PhoneCall, ShieldCheck, X, CheckCircle2 } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
@@ -10,11 +11,14 @@ import { countryCodes } from '@/lib/countryCodes';
 
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 
+import { useVerifiedPhone } from '@/lib/verifiedPhone';
+
 const popularCars = cars.slice(0, 5);
 
 type PopupStep = 'otp' | 'form' | 'success';
 
 export default function OtpGatedTestDriveForm() {
+  const { verifiedData, isVerified, saveVerification, resetVerification } = useVerifiedPhone();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<PopupStep>('otp');
   const [phone, setPhone] = useState('');
@@ -22,10 +26,29 @@ export default function OtpGatedTestDriveForm() {
   const [otp, setOtp] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [otpError, setOtpError] = useState('');
+  const [hasConsent, setHasConsent] = useState(false);
+  const [consentError, setConsentError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [serverHash, setServerHash] = useState('');
 
+  // Sync state with verified phone data if available
+  useEffect(() => {
+    if (verifiedData) {
+      setPhone(verifiedData.phone);
+      setCountryCode(verifiedData.countryCode);
+      setStep('form');
+    }
+  }, [verifiedData]);
+
   function closePopup() {
+    setIsOpen(false);
+  }
+
+  function handleReverify() {
+    resetVerification();
+    setPhone('');
+    setOtp('');
+    setStep('otp');
     setIsOpen(false);
   }
 
@@ -53,6 +76,10 @@ export default function OtpGatedTestDriveForm() {
     e.preventDefault();
     const clean = phone.replace(/\s/g, '');
     if (!validatePhone(clean)) return;
+    if (!hasConsent) {
+      setConsentError('Please agree to the Terms & Conditions and Privacy Policy');
+      return;
+    }
     setIsLoading(true);
     setPhone(clean);
 
@@ -90,6 +117,7 @@ export default function OtpGatedTestDriveForm() {
       setIsLoading(false);
 
       if (res.success) {
+        saveVerification(phone, countryCode);
         setStep('form');
       } else {
         setOtpError(res.error || 'Invalid OTP');
@@ -124,64 +152,116 @@ export default function OtpGatedTestDriveForm() {
           Fill in your details and we'll get in touch to confirm.
         </p>
 
-        <form onSubmit={handleSendOtp}>
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
-              <PhoneCall size={18} strokeWidth={2} />
+        {isVerified ? (
+          <div className="space-y-5">
+            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 p-4">
+              <div>
+                <div className="flex items-center gap-1.5 text-emerald-700">
+                  <CheckCircle2 size={16} />
+                  <p className="text-xs font-bold uppercase tracking-wider">Verified Number</p>
+                </div>
+                <p className="mt-1 text-base font-bold text-slate-900">{countryCode} {phone}</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleReverify}
+                className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
+              >
+                Change Number
+              </button>
             </div>
-            <div>
-              <p className="text-[14px] font-bold text-slate-900 leading-tight">Enter your number</p>
-              <p className="text-[12px] text-slate-500 mt-0.5">We'll send a verification code</p>
-            </div>
-          </div>
 
-          <div className="mb-6">
-            <label htmlFor="td-phone" className="mb-2 block text-[14px] font-bold text-slate-700">Mobile Number</label>
-            <div className="flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
-              <CountryCodeSelect
-                value={countryCode}
-                onChange={(val) => {
-                  setCountryCode(val);
-                  if (phoneError) validatePhone(phone, val);
-                }}
-              />
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] shadow-md"
+            >
+              Book Test Drive Now
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSendOtp}>
+            <div className="mb-6 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
+                <PhoneCall size={18} strokeWidth={2} />
+              </div>
+              <div>
+                <p className="text-[14px] font-bold text-slate-900 leading-tight">Enter your number</p>
+                <p className="text-[12px] text-slate-500 mt-0.5">We'll send a verification code</p>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label htmlFor="td-phone" className="mb-2 block text-[14px] font-bold text-slate-700">Mobile Number</label>
+              <div className="flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
+                <CountryCodeSelect
+                  value={countryCode}
+                  onChange={(val) => {
+                    setCountryCode(val);
+                    if (phoneError) validatePhone(phone, val);
+                  }}
+                />
+                <input
+                  id="td-phone"
+                  type="tel"
+                  maxLength={countryCode === '+91' ? 10 : 15}
+                  placeholder={countryCode === '+91' ? "9876543210" : "Enter phone number"}
+                  value={phone}
+                  onChange={(e) => {
+                    const maxLen = countryCode === '+91' ? 10 : 15;
+                    const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
+                    setPhone(val);
+                    if (phoneError) validatePhone(val);
+                  }}
+                  className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8]"
+                />
+              </div>
+              {phoneError && <p className="mt-1.5 text-[13px] text-red-600">{phoneError}</p>}
+            </div>
+
+            <label className="mb-6 flex cursor-pointer items-start gap-2.5 text-left">
               <input
-                id="td-phone"
-                type="tel"
-                maxLength={countryCode === '+91' ? 10 : 15}
-                placeholder={countryCode === '+91' ? "9876543210" : "Enter phone number"}
-                value={phone}
+                type="checkbox"
+                checked={hasConsent}
                 onChange={(e) => {
-                  const maxLen = countryCode === '+91' ? 10 : 15;
-                  const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
-                  setPhone(val);
-                  if (phoneError) validatePhone(val);
+                  setHasConsent(e.target.checked);
+                  if (e.target.checked) setConsentError('');
                 }}
-                className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8]"
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-red focus:ring-brand-red"
               />
+              <span className="text-[12px] leading-relaxed text-slate-600">
+                I agree to the{' '}
+                <Link href="/terms-and-conditions" target="_blank" className="font-semibold text-slate-800 underline hover:text-brand-red">
+                  Terms &amp; Conditions
+                </Link>{' '}
+                and{' '}
+                <Link href="/privacy-policy" target="_blank" className="font-semibold text-slate-800 underline hover:text-brand-red">
+                  Privacy Policy
+                </Link>.
+              </span>
+            </label>
+            {consentError && <p className="-mt-4 mb-4 text-[13px] text-red-600">{consentError}</p>}
+
+            <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
+              {isLoading ? 'Sending...' : 'Send OTP'}
+            </button>
+
+            <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+              <ShieldCheck size={14} />
+              <p>Your number is safe with us. No spam.</p>
             </div>
-            {phoneError && <p className="mt-1.5 text-[13px] text-red-600">{phoneError}</p>}
-          </div>
-
-          <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
-            {isLoading ? 'Sending...' : 'Send OTP'}
-          </button>
-
-          <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
-            <ShieldCheck size={14} />
-            <p>Your number is safe with us. No spam.</p>
-          </div>
-        </form>
+          </form>
+        )}
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closePopup} />
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm p-4 sm:p-6 flex min-h-full items-center justify-center">
+          <div className="absolute inset-0" onClick={closePopup} />
 
-          <div className="relative w-full max-w-[620px] rounded-3xl bg-white shadow-2xl animate-fade-up">
+          <div className="relative my-auto w-full max-w-[620px] max-h-[calc(100vh-3rem)] overflow-y-auto rounded-3xl bg-white shadow-2xl animate-fade-up">
             <button
               onClick={closePopup}
-              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700"
+              className="sticky right-4 top-4 z-30 float-right -mb-10 mr-4 mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 shadow-sm"
               aria-label="Close"
             >
               <X size={18} />
@@ -257,9 +337,21 @@ export default function OtpGatedTestDriveForm() {
                     <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
                     <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
-                    <div className="rounded-lg border border-blue-100 bg-blue-50/50 px-4 py-3">
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-600">Verified Number</p>
-                      <p className="text-sm font-bold text-slate-900">{countryCode} {phone}</p>
+                    <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3">
+                      <div>
+                        <div className="flex items-center gap-1.5 text-emerald-700">
+                          <CheckCircle2 size={14} />
+                          <p className="text-[11px] font-bold uppercase tracking-wider">Verified Number (Locked)</p>
+                        </div>
+                        <p className="text-sm font-bold text-slate-900 mt-0.5">{countryCode} {phone}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleReverify}
+                        className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
+                      >
+                        Change Number
+                      </button>
                     </div>
 
                     <div>

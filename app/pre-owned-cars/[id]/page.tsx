@@ -19,12 +19,15 @@ import {
 } from 'lucide-react';
 import { cars, formatKms, formatPrice, getHighlights } from '@/lib/cars';
 import { carFaqs, contactInfo } from '@/lib/content';
+import { generateCarSchema, generateBreadcrumbSchema, generateFAQSchema } from '@/lib/structuredData';
 import CarCard from '@/components/CarCard';
 import CarGallery from '@/components/car-detail/CarGallery';
 import CarComparison from '@/components/car-detail/CarComparison';
 import EmiCalculator from '@/components/car-detail/EmiCalculator';
 import InspectionReport from '@/components/car-detail/InspectionReport';
 import FaqAccordion from '@/components/FaqAccordion';
+
+import BackButton from '@/components/BackButton';
 
 const trustBadges = [
   { icon: ShieldCheck, label: '140-Point Inspection' },
@@ -39,7 +42,24 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const car = cars.find((c) => c.id === id);
-  return { title: car ? `${car.make} ${car.model} | Thinkarz` : 'Car Not Found | Thinkarz' };
+  if (!car) return { title: 'Car Not Found | THINKARZ' };
+  const desc = `Buy ${car.year} ${car.make} ${car.model} ${car.variant} - ${formatKms(car.kms)} driven, ${car.fuel}, ${car.transmission}. THINKARZ certified pre-owned. Book test drive now.`;
+  return {
+    title: `${car.make} ${car.model} | THINKARZ`,
+    description: desc,
+    alternates: { canonical: `/pre-owned-cars/${car.id}` },
+    openGraph: {
+      title: `${car.year} ${car.make} ${car.model} - ${formatPrice(car.price)} | THINKARZ`,
+      description: desc,
+      images: [{ url: car.image, width: 800, height: 600, alt: `${car.make} ${car.model}` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${car.year} ${car.make} ${car.model} - ${formatPrice(car.price)} | THINKARZ`,
+      description: desc,
+      images: [car.image],
+    },
+  };
 }
 
 export default async function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -86,7 +106,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
         ['Colour', car.color],
         ['Seating Capacity', `${car.seats} Seater`],
         ['Kilometers Driven', formatKms(car.kms)],
-        ['Certification', car.certified ? 'Thinkarz Certified' : 'Standard Listing'],
+        ['Certification', car.certified ? 'THINKARZ Certified' : 'Standard Listing'],
       ],
     },
   ];
@@ -96,20 +116,67 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="container-page py-8 sm:py-12">
-      {/* Breadcrumb */}
-      <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
-        <Link href="/" className="hover:text-brand-red">
-          Home
-        </Link>
-        <ChevronRight size={14} />
-        <Link href="/pre-owned-cars" className="hover:text-brand-red">
-          Pre Owned Cars
-        </Link>
-        <ChevronRight size={14} />
-        <span className="font-medium text-slate-700">
-          {car.make} {car.model}
-        </span>
-      </nav>
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            generateCarSchema({
+              name: `${car.year} ${car.make} ${car.model} ${car.variant}`,
+              description: car.description,
+              image: car.image,
+              make: car.make,
+              model: car.model,
+              year: car.year,
+              price: car.price,
+              fuel: car.fuel,
+              transmission: car.transmission,
+              kms: car.kms,
+              color: car.color,
+              id: car.id,
+            }),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            generateBreadcrumbSchema([
+              { name: 'Home', url: 'https://thinkarz.com' },
+              { name: 'Pre Owned Cars', url: 'https://thinkarz.com/pre-owned-cars' },
+              {
+                name: `${car.make} ${car.model}`,
+                url: `https://thinkarz.com/pre-owned-cars/${car.id}`,
+              },
+            ]),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateFAQSchema(carFaqs)),
+        }}
+      />
+      {/* Top Bar: Minimal Back Button + Breadcrumbs side by side on the left */}
+      <div className="mb-6 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+        <BackButton label="Back" fallbackHref="/pre-owned-cars" />
+        <span className="text-slate-300">|</span>
+        <nav className="flex flex-wrap items-center gap-1.5">
+          <Link href="/" className="hover:text-brand-red transition-colors">
+            Home
+          </Link>
+          <ChevronRight size={13} className="text-slate-400" />
+          <Link href="/pre-owned-cars" className="hover:text-brand-red transition-colors">
+            Pre Owned Cars
+          </Link>
+          <ChevronRight size={13} className="text-slate-400" />
+          <span className="font-semibold text-slate-700">
+            {car.make} {car.model}
+          </span>
+        </nav>
+      </div>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.4fr_1fr]">
         <div>
@@ -172,7 +239,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
               </Link>
               <a
                 href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent(
-                  `Hi, I'm interested in the ${car.year} ${car.make} ${car.model} (${car.variant}) listed at ${formatPrice(car.price)} on Thinkarz.`
+                  `Hi, I'm interested in the ${car.year} ${car.make} ${car.model} (${car.variant}) listed at ${formatPrice(car.price)} on THINKARZ.`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -287,7 +354,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
                 Peace of Mind Guaranteed
               </span>
               <h2 className="mt-2 text-xl font-extrabold text-white sm:text-2xl">
-                The Thinkarz Buyer Assurance
+                The THINKARZ Buyer Assurance
               </h2>
             </div>
             <p className="text-xs text-slate-300 max-w-xs">

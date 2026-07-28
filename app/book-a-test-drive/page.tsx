@@ -14,7 +14,7 @@ import OtpGatedTestDriveForm from '@/components/forms/OtpGatedTestDriveForm';
 import { cars } from '@/lib/cars';
 
 export const metadata = {
-  title: 'Book a Test Drive | Thinkarz',
+  title: 'Book a Test Drive',
   description: 'Book a test drive for your favourite pre-owned car at our Malad West showroom. Choose your car, date and time slot.',
 };
 

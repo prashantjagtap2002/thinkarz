@@ -6,6 +6,7 @@ export default function CarCard({ car }: { car: Car }) {
   return (
     <Link
       href={`/pre-owned-cars/${car.id}`}
+      target="_blank"
       className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1.5 hover:border-brand-red/20 hover:shadow-xl"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">

@@ -11,7 +11,24 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = blogs.find((b) => b.slug === slug);
-  return { title: post ? `${post.title} | Thinkarz Blog` : 'Blog Not Found | Thinkarz' };
+  if (!post) return { title: 'Blog Not Found | THINKARZ' };
+  return {
+    title: `${post.title} | THINKARZ Blog`,
+    description: post.excerpt,
+    alternates: { canonical: `/blogs/${post.slug}` },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: [{ url: post.image, width: 1200, height: 630, alt: post.title }],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: [post.image],
+    },
+  };
 }
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {

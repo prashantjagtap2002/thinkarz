@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   Car as CarIcon,
@@ -94,6 +94,65 @@ const colorLabels = ['White', 'Grey', 'Red', 'Silver', 'Black', 'Blue', 'Other']
 const MIN_PRICE = 0;
 const MAX_PRICE = 2000000;
 const PRICE_STEP = 50000;
+function useFlipLayout(items: Car[]) {
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const prevPositions = useRef<Map<string, { left: number; top: number }>>(new Map());
+
+  const setCardRef = (id: string) => (el: HTMLDivElement | null) => {
+    if (el) {
+      cardRefs.current.set(id, el);
+    } else {
+      cardRefs.current.delete(id);
+    }
+  };
+
+  useLayoutEffect(() => {
+    const currentPositions = new Map<string, { left: number; top: number }>();
+
+    cardRefs.current.forEach((el, id) => {
+      const rect = el.getBoundingClientRect();
+      currentPositions.set(id, { left: rect.left, top: rect.top });
+    });
+
+    cardRefs.current.forEach((el, id) => {
+      const prev = prevPositions.current.get(id);
+      const current = currentPositions.get(id);
+
+      if (prev && current) {
+        const dx = prev.left - current.left;
+        const dy = prev.top - current.top;
+
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+          el.style.transition = 'none';
+          el.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              el.style.transition = 'transform 450ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease';
+              el.style.transform = 'translate3d(0, 0, 0)';
+            });
+          });
+        }
+      } else if (current && !prev) {
+        el.style.transition = 'none';
+        el.style.opacity = '0';
+        el.style.transform = 'scale(0.92) translate3d(0, 16px, 0)';
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            el.style.transition = 'transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease';
+            el.style.opacity = '1';
+            el.style.transform = 'translate3d(0, 0, 0)';
+          });
+        });
+      }
+    });
+
+    prevPositions.current = currentPositions;
+  }, [items]);
+
+  return setCardRef;
+}
 
 export default function PreOwnedCarsBrowser() {
   const searchParams = useSearchParams();
@@ -171,23 +230,23 @@ export default function PreOwnedCarsBrowser() {
   }, [make, budget, sellerType, fuel, transmission, bodyType, age, owners, kms, color, certifiedOnly, priceMin, priceMax, sortBy]);
 
   const prevFilteredLength = useRef(filtered.length);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (prevFilteredLength.current !== filtered.length) {
-      setFilterVersion((v) => v + 1);
+  function handlePageChange(newPage: number) {
+    setPage(newPage);
+    if (containerRef.current) {
+      const topOffset = containerRef.current.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: Math.max(0, topOffset), behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    prevFilteredLength.current = filtered.length;
-  }, [filtered.length]);
+  }
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const setCardRef = useFlipLayout(paginated);
 
-  useEffect(() => {
-    if (prevFilteredLength.current !== filtered.length || filtered.length !== prevFilteredLength.current) {
-      setFilterVersion((v) => v + 1);
-    }
-    prevFilteredLength.current = filtered.length;
-  }, [filtered.length]);
+  const gridKey = `${page}-${sortBy}-${certifiedOnly}-${priceMin}-${priceMax}-${make.join('-')}-${budget.join('-')}-${fuel.join('-')}-${transmission.join('-')}-${bodyType.join('-')}-${age.join('-')}-${kms.join('-')}-${color.join('-')}`;
 
   const stringSetters: Record<string, React.Dispatch<React.SetStateAction<string[]>>> = {
     make: setMake,
@@ -307,7 +366,7 @@ export default function PreOwnedCarsBrowser() {
   );
 
   return (
-    <div className="container-page py-10 sm:py-14">
+    <div ref={containerRef} className="container-page py-10 sm:py-14">
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">Pre Owned Cars</h1>
@@ -388,9 +447,9 @@ export default function PreOwnedCarsBrowser() {
               No cars match your filters. Try resetting them.
             </div>
           ) : (
-            <div key={filterVersion} className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 animate-fade-up">
-              {paginated.map((car, i) => (
-                <div key={car.id} className="animate-fade-up" style={{ animationDelay: `${i * 80}ms` }}>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              {paginated.map((car) => (
+                <div key={car.id} ref={setCardRef(car.id)} className="will-change-transform">
                   <CarCard car={car} />
                 </div>
               ))}
@@ -402,7 +461,7 @@ export default function PreOwnedCarsBrowser() {
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setPage(i + 1)}
+                  onClick={() => handlePageChange(i + 1)}
                   className={`flex h-9 w-9 items-center justify-center rounded-md text-sm font-semibold ${
                     page === i + 1
                       ? 'bg-brand-blue text-white'
@@ -521,10 +580,10 @@ function FilterSidebar(props: SidebarProps) {
                 maxValue={state.priceMax}
                 onChange={onPriceRangeChange}
               />
-            </div>
-            <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400">
-              <span>0</span>
-              <span>20L+</span>
+              <div className="relative mt-2 h-4 text-[11px] font-semibold text-slate-400">
+                <span className="absolute left-[9px] -translate-x-1/2">0</span>
+                <span className="absolute right-[9px] translate-x-1/2">20L+</span>
+              </div>
             </div>
           </div>
         </FilterSection>

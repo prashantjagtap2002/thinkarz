@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, FormEvent, ReactNode, Suspense, useContext, useState } from 'react';
+import Link from 'next/link';
 import { CheckCircle2 } from 'lucide-react';
 import { useUtmParams } from '@/hooks/useUtmParams';
 import { submitToGoogleSheets } from '@/lib/googleSheets';
@@ -48,6 +49,7 @@ export default function SubmittableForm({
   formType,
   validations,
   onSubmit,
+  hideConsent = false,
 }: {
   children: ReactNode;
   submitLabel: string;
@@ -58,6 +60,7 @@ export default function SubmittableForm({
   formType?: string;
   validations?: FieldValidation[];
   onSubmit?: () => void;
+  hideConsent?: boolean;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -135,6 +138,27 @@ export default function SubmittableForm({
         <Suspense fallback={null}>
           <UtmHiddenFields />
         </Suspense>
+        {!hideConsent && (
+          <label className="my-3 flex cursor-pointer items-start gap-2.5 text-left">
+            <input
+              type="checkbox"
+              required
+              defaultChecked
+              name="terms_consent"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-red focus:ring-brand-red"
+            />
+            <span className="text-[12px] leading-relaxed text-slate-600">
+              I agree to the{' '}
+              <Link href="/terms-and-conditions" target="_blank" className="font-semibold text-slate-800 underline hover:text-brand-red">
+                Terms &amp; Conditions
+              </Link>{' '}
+              and{' '}
+              <Link href="/privacy-policy" target="_blank" className="font-semibold text-slate-800 underline hover:text-brand-red">
+                Privacy Policy
+              </Link>.
+            </span>
+          </label>
+        )}
         <button type="submit" className="btn btn-primary mt-2 w-full">
           {submitLabel}
         </button>

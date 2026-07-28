@@ -6,27 +6,53 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageTransition from '@/components/PageTransition';
 import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton';
+import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/structuredData';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://thinkarz.com'),
   title: {
-    default: 'Thinkarz | Your Ultimate Car Destination',
-    template: '%s | Thinkarz',
+    default: 'THINKARZ | Your Ultimate Car Destination',
+    template: '%s | THINKARZ',
   },
   description:
-    'Thinkarz - trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
+    'THINKARZ - trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
   keywords: ['used cars', 'pre-owned cars', 'buy used cars Mumbai', 'sell car', 'car inspection', 'test drive'],
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     type: 'website',
-    siteName: 'Thinkarz',
-    title: 'Thinkarz | Your Ultimate Car Destination',
+    siteName: 'THINKARZ',
+    title: 'THINKARZ | Your Ultimate Car Destination',
     description: 'Trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
+    images: [
+      {
+        url: '/icon.png',
+        width: 512,
+        height: 512,
+        alt: 'THINKARZ Logo',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Thinkarz | Your Ultimate Car Destination',
+    title: 'THINKARZ | Your Ultimate Car Destination',
     description: 'Trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
+    images: ['/icon.png'],
+  },
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon.png', type: 'image/png' },
+    ],
+    shortcut: '/icon.png',
+    apple: '/icon.png',
   },
 };
 
@@ -40,6 +66,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`} suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateWebSiteSchema()) }}
+        />
         <Header />
         <PageTransition>
           <main>{children}</main>
