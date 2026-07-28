@@ -15,6 +15,12 @@ function generateHash(phone: string, otp: string): string {
 
 export async function sendWhatsAppOtp(countryCode: string, phone: string) {
   try {
+    const apiKey = process.env.WHATSAPP_API_KEY || '';
+    if (!apiKey) {
+      console.error('WhatsApp API Key Missing: WHATSAPP_API_KEY is not defined in .env.local');
+      return { success: false, error: 'WHATSAPP_API_KEY is missing in your .env.local file.' };
+    }
+
     // Format the phone number (remove + and spaces)
     const formattedCode = countryCode.replace(/\D/g, '');
     const formattedPhone = phone.replace(/\D/g, '');
@@ -30,7 +36,7 @@ export async function sendWhatsAppOtp(countryCode: string, phone: string) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-KEY': WHATSAPP_API_KEY,
+          'X-API-KEY': apiKey,
         },
         body: JSON.stringify({
           messaging_product: 'whatsapp',
@@ -73,7 +79,7 @@ export async function sendWhatsAppOtp(countryCode: string, phone: string) {
     if (!response.ok) {
       const errorData = await response.text();
       console.error('WhatsApp API Error:', response.status, errorData);
-      return { success: false, error: 'Failed to send OTP. Please try again later.' };
+      return { success: false, error: errorData || `WhatsApp API error (${response.status})` };
     }
 
     // Generate a hash to return to the client for verification
