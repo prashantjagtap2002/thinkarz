@@ -6,9 +6,7 @@ import { PhoneCall, ShieldCheck, X, CheckCircle2, BadgeIndianRupee } from 'lucid
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { countryCodes } from '@/lib/countryCodes';
-
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
-
 import { useVerifiedPhone } from '@/lib/verifiedPhone';
 
 const BASE_VALUE: Record<string, number> = {
@@ -38,12 +36,10 @@ function formatRupees(value: number) {
   return `Rs. ${(value / 100000).toFixed(2)} Lakh`;
 }
 
-type PopupStep = 'otp' | 'form' | 'success';
-
 export default function OtpGatedSellValuationForm() {
   const { verifiedData, isVerified, saveVerification, resetVerification } = useVerifiedPhone();
-  const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState<PopupStep>('otp');
+  const [step, setStep] = useState<'phone' | 'form' | 'success'>('phone');
+  const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [phone, setPhone] = useState('');
   const [countryCode, setCountryCode] = useState('+91');
   const [otp, setOtp] = useState('');
@@ -69,16 +65,11 @@ export default function OtpGatedSellValuationForm() {
     }
   }, [verifiedData]);
 
-  function closePopup() {
-    setIsOpen(false);
-  }
-
   function handleReverify() {
     resetVerification();
     setPhone('');
     setOtp('');
-    setStep('otp');
-    setIsOpen(false);
+    setStep('phone');
   }
 
   function validatePhone(value: string, code = countryCode) {
@@ -111,17 +102,14 @@ export default function OtpGatedSellValuationForm() {
     }
     setIsLoading(true);
     setPhone(clean);
-    
+
     try {
       const res = await sendWhatsAppOtp(countryCode, clean);
       setIsLoading(false);
 
       if (res.success && res.hash) {
         setServerHash(res.hash);
-        setStep('otp');
-        setOtp('');
-        setOtpError('');
-        setIsOpen(true);
+        setShowOtpPopup(true);
       } else {
         setPhoneError(res.error || 'Failed to send OTP');
       }
@@ -140,13 +128,14 @@ export default function OtpGatedSellValuationForm() {
     }
     setIsLoading(true);
     setOtpError('');
-    
+
     try {
       const res = await verifyWhatsAppOtp(countryCode, phone, otp, serverHash);
       setIsLoading(false);
 
       if (res.success) {
         saveVerification(phone, countryCode);
+        setShowOtpPopup(false);
         setStep('form');
       } else {
         setOtpError(res.error || 'Invalid OTP');
@@ -160,333 +149,326 @@ export default function OtpGatedSellValuationForm() {
 
   function handleFormSuccess() {
     setStep('success');
-    setModel('');
-    setYear('');
-    setKms('');
   }
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
+  function closeOtpPopup() {
+    setShowOtpPopup(false);
+    setOtp('');
+    setOtpError('');
+  }
 
   return (
-    <>
-      <div id="valuation-form" className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 lg:p-12">
-        <div className="mx-auto w-full">
-          <h2 className="text-[22px] font-bold text-slate-900">Request a Free Valuation</h2>
-          <p className="mb-8 text-[13px] text-slate-500 leading-relaxed mt-1">
-            Enter your car details and our team will get back to you with an expert valuation estimate.
-          </p>
+    <div id="valuation-form" className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 lg:p-12">
+      <div className="mx-auto w-full">
+        {step === 'phone' && (
+          <form onSubmit={handleSendOtp}>
+            <h2 className="text-[22px] font-bold text-slate-900">Request a Free Valuation</h2>
+            <p className="mb-8 text-[13px] text-slate-500 leading-relaxed mt-1">
+              Enter your car details and our team will get back to you with an expert valuation estimate.
+            </p>
 
-          {isVerified ? (
-            <div className="space-y-5">
-              <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 p-4">
+            <div className="mb-6 flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
+                <PhoneCall size={20} strokeWidth={2} />
+              </div>
+              <div>
+                <p className="text-[15px] font-bold text-slate-900 leading-tight">Enter your number</p>
+                <p className="text-[13px] text-slate-500 mt-0.5">We&apos;ll send a verification code</p>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <label htmlFor="sell-phone" className="mb-2 block text-[14px] font-bold text-slate-700">Mobile Number</label>
+              <div className="flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
+                <CountryCodeSelect
+                  value={countryCode}
+                  onChange={(val) => {
+                    setCountryCode(val);
+                    if (phoneError) validatePhone(phone, val);
+                  }}
+                />
+                <input
+                  id="sell-phone"
+                  type="tel"
+                  maxLength={countryCode === '+91' ? 10 : 15}
+                  placeholder={countryCode === '+91' ? "9876543210" : "Enter phone number"}
+                  value={phone}
+                  onChange={(e) => {
+                    const maxLen = countryCode === '+91' ? 10 : 15;
+                    const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
+                    setPhone(val);
+                    if (phoneError) validatePhone(val);
+                  }}
+                  className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8]"
+                />
+              </div>
+              {phoneError && <p className="mt-1.5 text-[13px] text-red-600">{phoneError}</p>}
+            </div>
+
+            <label className="mb-6 flex cursor-pointer items-start gap-2.5 text-left">
+              <input
+                type="checkbox"
+                checked={hasConsent}
+                onChange={(e) => {
+                  setHasConsent(e.target.checked);
+                  if (e.target.checked) setConsentError('');
+                }}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-[#e31e24] focus:ring-[#e31e24]"
+              />
+              <span className="text-[12px] leading-relaxed text-slate-600">
+                I agree to the{' '}
+                <Link href="/terms-and-conditions" target="_blank" className="font-semibold text-slate-800 underline hover:text-[#e31e24]">
+                  Terms &amp; Conditions
+                </Link>{' '}
+                and{' '}
+                <Link href="/privacy-policy" target="_blank" className="font-semibold text-slate-800 underline hover:text-[#e31e24]">
+                  Privacy Policy
+                </Link>.
+              </span>
+            </label>
+            {consentError && <p className="-mt-4 mb-4 text-[13px] text-red-600">{consentError}</p>}
+
+            <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
+              {isLoading ? 'Sending...' : 'Send OTP'}
+            </button>
+
+            <div className="mt-5 flex items-center justify-center gap-2 text-[12px] text-slate-400">
+              <ShieldCheck size={16} />
+              <p>Your number is safe with us. No spam.</p>
+            </div>
+          </form>
+        )}
+
+        {step === 'form' && (
+          <div className="w-full animate-fade-in">
+            <h2 className="text-[22px] font-bold text-slate-900">Request a Free Valuation</h2>
+            <p className="mb-6 text-[13px] text-slate-500 leading-relaxed mt-1">
+              Enter your car details and our team will get back to you with an expert valuation estimate.
+            </p>
+
+            <SubmittableForm
+              formType="Sell Your Car / Valuation Form"
+              submitLabel="Get Valuation"
+              successTitle="Valuation Request Received!"
+              successMessage="Our team will get back to you shortly to confirm your car's final value."
+              className="space-y-4"
+              onSubmit={handleFormSuccess}
+              validations={[
+                { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
+              ]}
+              successExtra={
+                estimate && (
+                  <div className="mt-5 w-full rounded-xl bg-slate-50 p-4 text-left border border-slate-200">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      <BadgeIndianRupee size={16} className="text-[#e31e24]" />
+                      Estimated Value
+                    </div>
+                    <p className="mt-1 text-xl font-extrabold text-slate-900">
+                      {formatRupees(estimate.low)} - {formatRupees(estimate.high)}
+                    </p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      Final price may vary after physical inspection.
+                    </p>
+                  </div>
+                )
+              }
+            >
+              <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
+              <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
+
+              <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3 mb-4">
                 <div>
                   <div className="flex items-center gap-1.5 text-emerald-700">
-                    <CheckCircle2 size={16} />
-                    <p className="text-xs font-bold uppercase tracking-wider">Verified Number</p>
+                    <CheckCircle2 size={14} />
+                    <p className="text-[11px] font-bold uppercase tracking-wider">Verified Number (Locked)</p>
                   </div>
-                  <p className="mt-1 text-base font-bold text-slate-900">{countryCode} {phone}</p>
+                  <p className="text-sm font-bold text-slate-900 mt-0.5">{countryCode} {phone}</p>
                 </div>
                 <button
                   type="button"
                   onClick={handleReverify}
                   className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
                 >
-                  Change Number
+                  Change Number / Re-verify
                 </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setIsOpen(true)}
-                className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] shadow-md"
-              >
-                Get Valuation Estimate
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSendOtp}>
-              <div className="mb-6 flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
-                  <PhoneCall size={20} strokeWidth={2} />
-                </div>
-                <div>
-                  <p className="text-[15px] font-bold text-slate-900 leading-tight">Enter your number</p>
-                  <p className="text-[13px] text-slate-500 mt-0.5">We'll send a verification code</p>
-                </div>
+              <div>
+                <label htmlFor="regNumber" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Registration Number</label>
+                <input id="regNumber" name="regNumber" required className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]" placeholder="e.g. MH01AB1234" />
+                <FieldError name="regNumber" />
               </div>
-
-              <div className="mb-8">
-                <label htmlFor="sell-phone" className="mb-2 block text-[14px] font-bold text-slate-700">Mobile Number</label>
-                <div className="flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
-                  <CountryCodeSelect
-                    value={countryCode}
-                    onChange={(val) => {
-                      setCountryCode(val);
-                      if (phoneError) validatePhone(phone, val);
-                    }}
-                  />
-                  <input
-                    id="sell-phone"
-                    type="tel"
-                    maxLength={countryCode === '+91' ? 10 : 15}
-                    placeholder={countryCode === '+91' ? "9876543210" : "Enter phone number"}
-                    value={phone}
-                    onChange={(e) => {
-                      const maxLen = countryCode === '+91' ? 10 : 15;
-                      const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
-                      setPhone(val);
-                      if (phoneError) validatePhone(val);
-                    }}
-                    className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8]"
-                  />
-                </div>
-                {phoneError && <p className="mt-1.5 text-[13px] text-red-600">{phoneError}</p>}
-              </div>
-
-              <label className="mb-6 flex cursor-pointer items-start gap-2.5 text-left">
+              <div>
+                <label htmlFor="carModel" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Car Model</label>
                 <input
-                  type="checkbox"
-                  checked={hasConsent}
-                  onChange={(e) => {
-                    setHasConsent(e.target.checked);
-                    if (e.target.checked) setConsentError('');
-                  }}
-                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-[#e31e24] focus:ring-[#e31e24]"
+                  id="carModel"
+                  name="carModel"
+                  required
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  list="car-model-options"
+                  placeholder="Type or select your car model"
+                  value={model}
+                  onChange={(e) => setModel(e.target.value)}
                 />
-                <span className="text-[12px] leading-relaxed text-slate-600">
-                  I agree to the{' '}
-                  <Link href="/terms-and-conditions" target="_blank" className="font-semibold text-slate-800 underline hover:text-[#e31e24]">
-                    Terms &amp; Conditions
-                  </Link>{' '}
-                  and{' '}
-                  <Link href="/privacy-policy" target="_blank" className="font-semibold text-slate-800 underline hover:text-[#e31e24]">
-                    Privacy Policy
-                  </Link>.
-                </span>
-              </label>
-              {consentError && <p className="-mt-4 mb-4 text-[13px] text-red-600">{consentError}</p>}
-
-              <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
-                {isLoading ? 'Sending...' : 'Send OTP'}
-              </button>
-
-              <div className="mt-5 flex items-center justify-center gap-2 text-[12px] text-slate-400">
-                <ShieldCheck size={16} />
-                <p>Your number is safe with us. No spam.</p>
+                <datalist id="car-model-options">
+                  <option value="Hatchback" />
+                  <option value="Sedan" />
+                  <option value="SUV" />
+                  <option value="Electric" />
+                </datalist>
+                <FieldError name="carModel" />
               </div>
-            </form>
-          )}
-        </div>
+              <div>
+                <label htmlFor="year" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Manufacturing Year</label>
+                <select
+                  id="year"
+                  name="year"
+                  required
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none"
+                  value={year}
+                  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2394a3b8\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat' }}
+                  onChange={(e) => setYear(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select Year
+                  </option>
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <option key={i}>{2024 - i}</option>
+                  ))}
+                </select>
+                <FieldError name="year" />
+              </div>
+              <div>
+                <label htmlFor="kms" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Kilometer Driven</label>
+                <input
+                  id="kms"
+                  name="kms"
+                  required
+                  type="number"
+                  min={0}
+                  step={1}
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  placeholder="e.g. 20,000 km"
+                  value={kms}
+                  onChange={(e) => setKms(e.target.value)}
+                />
+                <FieldError name="kms" />
+              </div>
+              <div>
+                <label htmlFor="email" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Email ID</label>
+                <input
+                  id="email"
+                  name="email"
+                  required
+                  type="email"
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  placeholder="Enter your email ID"
+                />
+                <FieldError name="email" />
+              </div>
+            </SubmittableForm>
+          </div>
+        )}
+
+        {step === 'success' && (
+          <div className="flex flex-col items-center justify-center py-10 text-center animate-fade-in">
+            <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-500/10 shadow-sm">
+              <CheckCircle2 size={44} className="stroke-[2.2]" />
+            </div>
+            <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-3xl">Valuation Request Received!</h3>
+            <p className="mt-3 max-w-md text-sm sm:text-base leading-relaxed text-slate-600 font-medium">
+              Our team will get back to you on <span className="font-bold text-slate-900">{countryCode} {phone}</span> shortly to confirm your car&apos;s final value.
+            </p>
+            {estimate && (
+              <div className="mt-5 w-full max-w-sm rounded-xl bg-slate-50 p-4 text-left border border-slate-200">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  <BadgeIndianRupee size={16} className="text-[#e31e24]" />
+                  Estimated Value Range
+                </div>
+                <p className="mt-1 text-xl font-extrabold text-slate-900">
+                  {formatRupees(estimate.low)} - {formatRupees(estimate.high)}
+                </p>
+                <p className="mt-1 text-xs text-slate-500">
+                  Final price may vary after physical inspection.
+                </p>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                setStep('form');
+                setModel('');
+                setYear('');
+                setKms('');
+              }}
+              className="btn btn-primary mt-8 w-full max-w-xs py-3 text-sm font-bold shadow-lg shadow-brand-red/20 transition-all hover:shadow-xl"
+            >
+              Request Another Valuation
+            </button>
+          </div>
+        )}
       </div>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm p-4 sm:p-6 flex min-h-full items-center justify-center">
-          <div className="absolute inset-0" onClick={closePopup} />
-
-          <div className="relative my-auto w-full max-w-[620px] max-h-[calc(100vh-3rem)] overflow-y-auto rounded-3xl bg-white shadow-2xl animate-fade-up">
+      {/* OTP Popup */}
+      {showOtpPopup && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeOtpPopup} />
+          <div className="relative mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-fade-up sm:p-8">
             <button
-              onClick={closePopup}
-              className="sticky right-4 top-4 z-30 float-right -mb-10 mr-4 mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 shadow-sm"
-              aria-label="Close"
+              onClick={closeOtpPopup}
+              className="absolute right-4 top-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
             >
               <X size={18} />
             </button>
 
-            {step !== 'success' && (
-              <div className="p-8 sm:p-12">
-                <h2 className="text-[24px] font-extrabold text-slate-900">Request a Free Valuation</h2>
-                <p className="mb-8 text-[15px] text-slate-500 leading-relaxed mt-1">
-                  Enter your car details and our team will get back to you with an expert valuation estimate.
-                </p>
-
-                {step === 'otp' && (
-                  <form onSubmit={handleVerifyOtp}>
-                    <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
-                        <ShieldCheck size={16} />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-900">Verify OTP</p>
-                        <p className="text-xs text-slate-500">
-                          Sent to <span className="font-semibold text-slate-700">{countryCode} {phone}</span>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="sell-otp" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">One-Time Password</label>
-                      <input
-                        id="sell-otp"
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={4}
-                        placeholder="0000"
-                        value={otp}
-                        onChange={(e) => {
-                          const val = e.target.value.replace(/\D/g, '').slice(0, 4);
-                          setOtp(val);
-                          if (otpError && val.length === 4) setOtpError('');
-                        }}
-                        className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-center text-lg font-bold tracking-[0.5em] outline-none focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
-                        autoFocus
-                      />
-                      {otpError && <p className="mt-1 text-xs text-red-600">{otpError}</p>}
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isLoading || otp.length < 4}
-                      className="mt-4 h-[42px] w-full rounded-[6px] bg-[#e31e24] text-[14px] font-semibold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-50"
-                    >
-                      {isLoading ? 'Verifying...' : 'Verify OTP'}
-                    </button>
-
-                    <p className="mt-3 text-center text-[11px] text-slate-400">
-                      Enter any 4-digit code to proceed.
-                    </p>
-                  </form>
-                )}
-
-                {step === 'form' && (
-                  <SubmittableForm
-                    formType="Sell Your Car / Valuation Form"
-                    submitLabel="Get Valuation"
-                    successTitle="Valuation Request Received!"
-                    successMessage="Our team will get back to you shortly to confirm your car's final value."
-                    className="space-y-4 max-h-[60vh] overflow-y-auto pr-2"
-                    onSubmit={handleFormSuccess}
-                    validations={[
-                      { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
-                    ]}
-                    successExtra={
-                      estimate && (
-                        <div className="mt-5 w-full rounded-xl bg-slate-50 p-4 text-left border border-slate-200">
-                          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                            <BadgeIndianRupee size={16} className="text-[#e31e24]" />
-                            Estimated Value
-                          </div>
-                          <p className="mt-1 text-xl font-extrabold text-slate-900">
-                            {formatRupees(estimate.low)} - {formatRupees(estimate.high)}
-                          </p>
-                          <p className="mt-1 text-xs text-slate-500">
-                            Final price may vary after physical inspection.
-                          </p>
-                        </div>
-                      )
-                    }
-                  >
-                    <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
-                    <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
-
-                    <div className="rounded-lg border border-[#cbd5e1] bg-slate-50 px-4 py-3 mb-2">
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#e31e24]">Verified Number</p>
-                      <p className="text-sm font-bold text-slate-900">{countryCode} {phone}</p>
-                    </div>
-
-                    <div>
-                      <label htmlFor="regNumber" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Registration Number</label>
-                      <input id="regNumber" name="regNumber" required className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]" placeholder="e.g. MH01AB1234" />
-                      <FieldError name="regNumber" />
-                    </div>
-                    <div>
-                      <label htmlFor="carModel" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Car Model</label>
-                      <input
-                        id="carModel"
-                        name="carModel"
-                        required
-                        className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
-                        list="car-model-options"
-                        placeholder="Type or select your car model"
-                        value={model}
-                        onChange={(e) => setModel(e.target.value)}
-                      />
-                      <datalist id="car-model-options">
-                        <option value="Hatchback" />
-                        <option value="Sedan" />
-                        <option value="SUV" />
-                        <option value="Electric" />
-                      </datalist>
-                      <FieldError name="carModel" />
-                    </div>
-                    <div>
-                      <label htmlFor="year" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Manufacturing Year</label>
-                      <select
-                        id="year"
-                        name="year"
-                        required
-                        className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none"
-                        value={year}
-                        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2394a3b8\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'m6 9 6 6 6-6\'/%3E%3C/svg%3E")', backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat' }}
-                        onChange={(e) => setYear(e.target.value)}
-                      >
-                        <option value="" disabled>
-                          Select Year
-                        </option>
-                        {Array.from({ length: 12 }).map((_, i) => (
-                          <option key={i}>{2024 - i}</option>
-                        ))}
-                      </select>
-                      <FieldError name="year" />
-                    </div>
-                    <div>
-                      <label htmlFor="kms" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Kilometer Driven</label>
-                      <input
-                        id="kms"
-                        name="kms"
-                        required
-                        type="number"
-                        min={0}
-                        step={1}
-                        className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
-                        placeholder="e.g. 20,000 km"
-                        value={kms}
-                        onChange={(e) => setKms(e.target.value)}
-                      />
-                      <FieldError name="kms" />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Email ID</label>
-                      <input
-                        id="email"
-                        name="email"
-                        required
-                        type="email"
-                        className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
-                        placeholder="Enter your email ID"
-                      />
-                      <FieldError name="email" />
-                    </div>
-                  </SubmittableForm>
-                )}
-              </div>
-            )}
-
-            {step === 'success' && (
-              <div className="flex flex-col items-center justify-center px-6 py-12 text-center sm:px-8 animate-fade-in">
-                <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-500/10 shadow-sm">
-                  <CheckCircle2 size={44} className="stroke-[2.2]" />
+            <form onSubmit={handleVerifyOtp}>
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
+                  <ShieldCheck size={16} />
                 </div>
-                <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-3xl">Valuation Request Received!</h3>
-                <p className="mt-3 max-w-md text-sm sm:text-base leading-relaxed text-slate-600 font-medium">
-                  Our team will get back to you shortly to confirm your car&apos;s final value.
-                </p>
-                <button onClick={closePopup} className="btn btn-primary mt-8 w-full max-w-xs py-3 text-sm font-bold shadow-lg shadow-brand-red/20 transition-all hover:shadow-xl">
-                  Done
-                </button>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Verify OTP</p>
+                  <p className="text-xs text-slate-500">
+                    Sent to <span className="font-semibold text-slate-700">{countryCode} {phone}</span>
+                  </p>
+                </div>
               </div>
-            )}
+
+              <div>
+                <label htmlFor="sell-otp" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">One-Time Password</label>
+                <input
+                  id="sell-otp"
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={4}
+                  placeholder="0000"
+                  value={otp}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 4);
+                    setOtp(val);
+                    if (otpError && val.length === 4) setOtpError('');
+                  }}
+                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-center text-lg font-bold tracking-[0.5em] outline-none focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  autoFocus
+                />
+                {otpError && <p className="mt-1 text-xs text-red-600">{otpError}</p>}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading || otp.length < 4}
+                className="mt-4 h-[42px] w-full rounded-[6px] bg-[#e31e24] text-[14px] font-semibold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-50"
+              >
+                {isLoading ? 'Verifying...' : 'Verify OTP'}
+              </button>
+
+              <p className="mt-3 text-center text-[11px] text-slate-400">
+                Enter any 4-digit code to proceed.
+              </p>
+            </form>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -49,7 +49,7 @@ export default function SubmittableForm({
   formType,
   validations,
   onSubmit,
-  hideConsent = false,
+  hideConsent = true,
 }: {
   children: ReactNode;
   submitLabel: string;
