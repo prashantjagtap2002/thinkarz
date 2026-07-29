@@ -253,12 +253,12 @@ export default function HomePage() {
       {/* Why choose us */}
       <section className="py-16 sm:py-20">
         <div className="container-page grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,320px)_1fr]">
-          <div>
+          <div className="text-center lg:text-left">
             <span className="section-eyebrow">Why THINKARZ</span>
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
               Why Choose THINKARZ?
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 max-w-lg mx-auto lg:mx-0">
               At THINKARZ, we are committed to delivering a seamless car buying experience with
               trust, transparency and complete peace of mind.
             </p>
