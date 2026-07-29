@@ -26,9 +26,14 @@ export default function TestimonialCarousel({ testimonials }: { testimonials: Te
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
     const children = el.children;
     if (children[activeIndex]) {
-      children[activeIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      el.scrollTo({
+        left: (children[activeIndex] as HTMLElement).offsetLeft - el.offsetLeft,
+        behavior: 'smooth',
+      });
     }
   }, [activeIndex]);
 
