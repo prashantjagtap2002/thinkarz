@@ -208,7 +208,7 @@ export default function OtpGatedSellValuationForm() {
   };
 
   return (
-    <div id="valuation-form" className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 lg:p-12">
+    <div id="valuation-form" className="flex h-fit flex-col justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 lg:p-12">
       <div className="mx-auto w-full">
         {step === 'phone' && (
           <form onSubmit={handleSendOtp}>

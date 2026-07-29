@@ -128,7 +128,7 @@ export default function OtpGatedContactForm() {
   }
 
   return (
-    <div className="flex h-full flex-col justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_4px_24px_-10px_rgba(0,0,0,0.05)] p-6 sm:p-10 lg:p-12">
+    <div className="flex h-fit flex-col justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_4px_24px_-10px_rgba(0,0,0,0.05)] p-6 sm:p-10 lg:p-12">
       {/* Phone verification step */}
       {step === 'phone' && (
         <form onSubmit={handleSendOtp} className="w-full text-center">
