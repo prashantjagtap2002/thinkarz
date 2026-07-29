@@ -12,7 +12,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className={`sticky top-0 border-b border-slate-200 bg-white/95 backdrop-blur ${open ? 'z-[70]' : 'z-50'}`}>
       <div className="container-page flex h-16 items-center justify-between gap-4 sm:h-20">
         <Logo />
 

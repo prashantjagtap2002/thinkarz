@@ -292,14 +292,9 @@ export default function HomePage() {
             {howItWorks.map(({ icon: Icon, step, desc }, i) => (
               <Reveal key={step} className="relative text-center" delay={i * 100}>
                 {i < howItWorks.length - 1 && (
-                  <>
-                    <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 text-slate-500 lg:block">
-                      <MoveRight size={20} />
-                    </div>
-                    <div className="mb-4 flex justify-center text-slate-400 lg:hidden">
-                      <ChevronDown size={20} />
-                    </div>
-                  </>
+                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 text-slate-500 lg:block">
+                    <MoveRight size={20} />
+                  </div>
                 )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-800 border border-slate-200/60 shadow-sm">
                   <Icon size={24} />
@@ -314,7 +309,7 @@ export default function HomePage() {
 
       {/* Promo banners */}
       <section className="container-page grid grid-cols-1 gap-6 py-16 sm:py-20 lg:grid-cols-2">
-        <Reveal className="flex h-full flex-col items-start justify-between gap-6 rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10">
+        <Reveal className="flex flex-col justify-between rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]">
           <div>
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
               <Tag size={22} />
@@ -324,7 +319,7 @@ export default function HomePage() {
               Get the best value for your car with a quick, free and hassle-free valuation.
             </p>
           </div>
-          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap mt-6">
             <Link href="/sell-your-car" className="btn btn-primary w-full sm:w-auto">
               Get Free Valuation
             </Link>
@@ -336,7 +331,7 @@ export default function HomePage() {
 
         <Reveal
           delay={90}
-          className="flex h-full flex-col items-start justify-between gap-6 rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10"
+          className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]"
         >
           <div>
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
@@ -349,7 +344,7 @@ export default function HomePage() {
               Compare price, mileage, power and features side by side before you decide.
             </p>
           </div>
-          <Link href="/compare-cars" className="btn btn-primary">
+          <Link href="/compare-cars" className="btn btn-primary mt-6">
             Compare Cars
           </Link>
         </Reveal>

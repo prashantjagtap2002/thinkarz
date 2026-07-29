@@ -39,8 +39,8 @@ export default function Footer() {
   return (
     <footer className="bg-brand-navy text-slate-300">
 
-      <div className="container-page grid grid-cols-2 gap-x-6 gap-y-10 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-        <div className="col-span-2 sm:col-span-2 md:col-span-3 lg:col-span-1">
+      <div className="container-page grid grid-cols-1 gap-y-10 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:gap-x-6">
+        <div className="lg:col-span-1">
           <Link href="/" className="inline-block">
             <span className="text-xl font-extrabold tracking-tight text-white sm:text-2xl">
               THIN<span className="text-brand-red text-[1.18em]">K</span>ARZ
