@@ -25,23 +25,23 @@ export default function CarCard({ car }: { car: Car }) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-sm font-bold uppercase leading-snug text-slate-900">
-          {car.make} - {car.model}
-        </h3>
-        <p className="mb-2 text-xs font-medium text-slate-500">{car.variant}</p>
+      <div className="flex flex-1 flex-col justify-between p-3.5 sm:p-4">
+        <div className="flex flex-col gap-1">
+          <h3 className="flex items-center text-xs sm:text-sm font-bold uppercase leading-snug text-slate-900 line-clamp-2 min-h-[2.5rem]">
+            {car.make} - {car.model}
+          </h3>
+          <p className="text-xs font-semibold text-slate-500 truncate h-4">{car.variant}</p>
+          <p className="text-[11px] sm:text-xs text-slate-500 line-clamp-2 min-h-[2.25rem]">
+            {car.year} &middot; {car.fuel} &middot; {formatKms(car.kms)} &middot; {car.color}
+          </p>
+        </div>
 
-        <p className="mb-3 text-xs text-slate-500">
-          {car.year} &middot; {car.fuel} &middot; {formatKms(car.kms)} &middot; {car.color}
-        </p>
-
-        <p className="text-lg font-bold text-slate-900">{formatPrice(car.price)}</p>
-        <p className="mb-4 text-xs text-slate-500">
-          EMI at Rs. {car.emi.toLocaleString('en-IN')}
-        </p>
-
-        <div className="mt-auto">
-          <div className="btn btn-primary w-full !py-2 text-xs pointer-events-none">
+        <div className="mt-3 pt-3 border-t border-slate-100/90">
+          <p className="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">{formatPrice(car.price)}</p>
+          <p className="mt-0.5 mb-3 text-[11px] sm:text-xs font-medium text-slate-500">
+            EMI at Rs. {car.emi.toLocaleString('en-IN')}
+          </p>
+          <div className="btn btn-primary w-full !py-2 text-xs pointer-events-none text-center">
             View Details
           </div>
         </div>

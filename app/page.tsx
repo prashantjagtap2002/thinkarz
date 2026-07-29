@@ -110,24 +110,24 @@ export default function HomePage() {
           {/* Two-column layout */}
           <div className="my-auto grid grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-12">
             {/* Left column — Copy */}
-            <div className="animate-fade-up">
+            <div className="animate-fade-up flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-red animate-soft-pulse" />
                 <span className="text-xs font-medium text-slate-300">Trusted by 50,000+ customers across Mumbai</span>
               </div>
 
-              <h1 className="text-[clamp(2rem,6vw,3.4rem)] font-extrabold leading-[1.1] tracking-tight text-white">
+              <h1 className="text-[clamp(2rem,6vw,3.4rem)] font-extrabold leading-[1.15] tracking-tight text-white">
                 Find Your Perfect
-                <br />
+                <br className="hidden sm:inline" />{' '}
                 <span className="bg-gradient-to-r from-brand-red via-[#FF4D52] to-brand-red bg-clip-text text-transparent">Pre-Owned Car</span>
               </h1>
 
-              <p className="mt-5 max-w-md text-base leading-relaxed text-slate-300/90">
+              <p className="mt-4 max-w-md text-base leading-relaxed text-slate-300/90">
                 Quality-assured cars with transparent pricing, complete documentation, and hassle-free ownership transfer.
               </p>
 
               {/* Trust checkmarks */}
-              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 lg:justify-start">
                 {[
                   '140+ Quality Checks',
                   '7-Day Easy Returns',
@@ -135,21 +135,21 @@ export default function HomePage() {
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2">
                     <CheckCircle2 size={15} className="text-brand-red shrink-0" />
-                    <span className="text-sm text-slate-300">{item}</span>
+                    <span className="text-xs sm:text-sm font-medium text-slate-300">{item}</span>
                   </div>
                 ))}
               </div>
 
               {/* CTA buttons */}
               <div
-                className="mt-8 flex flex-wrap gap-3 animate-fade-up"
+                className="mt-8 flex w-full flex-col gap-3 sm:flex-row sm:w-auto justify-center lg:justify-start animate-fade-up"
                 style={{ animationDelay: '200ms' }}
               >
-                <Link href="/pre-owned-cars" className="btn btn-primary px-8">
+                <Link href="/pre-owned-cars" className="btn btn-primary w-full sm:w-auto px-8 justify-center">
                   Browse All Cars
                   <ArrowRight size={16} />
                 </Link>
-                <Link href="/sell-your-car" className="btn btn-outline-white">
+                <Link href="/sell-your-car" className="btn btn-outline-white w-full sm:w-auto justify-center">
                   Sell Your Car
                 </Link>
               </div>
@@ -199,13 +199,13 @@ export default function HomePage() {
       </section>
 
       {/* Browse by brand */}
-      <section className="bg-slate-50 py-16 sm:py-20">
+      <section className="bg-slate-50 pt-10 pb-6 sm:pt-16 sm:pb-8">
         <div className="container-page">
-          <Reveal className="mb-8 flex items-center justify-between">
+          <Reveal className="mb-6 flex flex-col items-center justify-center text-center gap-1.5 sm:flex-row sm:justify-between sm:text-left">
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">Browse by Brand</h2>
             <Link
               href="/pre-owned-cars"
-              className="flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
             >
               View All Brands <ArrowRight size={16} />
             </Link>
@@ -228,16 +228,14 @@ export default function HomePage() {
         </div>
       </section>
 
-
-
       {/* Featured cars */}
-      <section className="bg-slate-50 py-16 sm:py-20">
+      <section className="bg-slate-50 pt-6 pb-12 sm:pt-8 sm:pb-16">
         <div className="container-page">
-          <Reveal className="mb-8 flex items-center justify-between">
+          <Reveal className="mb-6 flex flex-col items-center justify-center text-center gap-1.5 sm:flex-row sm:justify-between sm:text-left">
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">Featured Cars</h2>
             <Link
               href="/pre-owned-cars"
-              className="flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
             >
               View All Cars <ArrowRight size={16} />
             </Link>
@@ -265,14 +263,14 @@ export default function HomePage() {
               trust, transparency and complete peace of mind.
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 sm:gap-6">
             {whyChoose.map(({ icon: Icon, title, desc }) => (
               <Reveal
                 key={title}
-                className="rounded-xl border border-slate-200 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
+                className="rounded-xl border border-slate-200 p-4 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
-                  <Icon size={22} />
+                <div className="mb-3 sm:mb-4 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
+                  <Icon size={20} className="sm:h-5 sm:w-5" />
                 </div>
                 <h3 className="mb-1.5 font-bold text-slate-900">{title}</h3>
                 <p className="text-sm text-slate-600">{desc}</p>
@@ -292,7 +290,7 @@ export default function HomePage() {
             {howItWorks.map(({ icon: Icon, step, desc }, i) => (
               <Reveal key={step} className="relative text-center" delay={i * 100}>
                 {i < howItWorks.length - 1 && (
-                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 text-slate-500 lg:block">
+                  <div className="absolute right-[-1.5rem] top-8 hidden -translate-y-1/2 text-slate-400 lg:block">
                     <MoveRight size={20} />
                   </div>
                 )}
@@ -301,6 +299,11 @@ export default function HomePage() {
                 </div>
                 <h3 className="mb-1 font-bold text-slate-900">{step}</h3>
                 <p className="text-sm text-slate-600">{desc}</p>
+                {i < howItWorks.length - 1 && (
+                  <div className="mt-6 flex justify-center text-brand-red lg:hidden">
+                    <ChevronDown size={22} />
+                  </div>
+                )}
               </Reveal>
             ))}
           </div>
@@ -309,8 +312,8 @@ export default function HomePage() {
 
       {/* Promo banners */}
       <section className="container-page grid grid-cols-1 gap-6 py-16 sm:py-20 lg:grid-cols-2">
-        <Reveal className="flex flex-col justify-between rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]">
-          <div>
+        <Reveal className="flex flex-col items-center justify-between text-center rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]">
+          <div className="flex flex-col items-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
               <Tag size={22} />
             </div>
@@ -319,7 +322,7 @@ export default function HomePage() {
               Get the best value for your car with a quick, free and hassle-free valuation.
             </p>
           </div>
-          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap mt-6">
+          <div className="flex w-full flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap mt-6">
             <Link href="/sell-your-car" className="btn btn-primary w-full sm:w-auto">
               Get Free Valuation
             </Link>
@@ -331,9 +334,9 @@ export default function HomePage() {
 
         <Reveal
           delay={90}
-          className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]"
+          className="flex flex-col items-center justify-between text-center rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]"
         >
-          <div>
+          <div className="flex flex-col items-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
               <Scale size={22} />
             </div>
@@ -344,7 +347,7 @@ export default function HomePage() {
               Compare price, mileage, power and features side by side before you decide.
             </p>
           </div>
-          <Link href="/compare-cars" className="btn btn-primary mt-6">
+          <Link href="/compare-cars" className="btn btn-primary mt-6 w-full sm:w-auto">
             Compare Cars
           </Link>
         </Reveal>
@@ -353,13 +356,13 @@ export default function HomePage() {
       {/* Latest from blog */}
       <section className="bg-slate-50 py-16 sm:py-20">
         <div className="container-page">
-          <Reveal className="mb-8 flex items-center justify-between">
+          <Reveal className="mb-6 flex flex-col items-center justify-center text-center gap-1.5 sm:flex-row sm:justify-between sm:text-left">
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
               Latest From Our Blog
             </h2>
             <Link
               href="/blogs"
-              className="flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
             >
               View All Blogs <ArrowRight size={16} />
             </Link>

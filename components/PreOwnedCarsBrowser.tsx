@@ -86,80 +86,13 @@ function getBaseColor(color: string): string {
   return 'Other';
 }
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 8;
 
 const colorLabels = ['White', 'Grey', 'Red', 'Silver', 'Black', 'Blue', 'Other'] as const;
 
 const MIN_PRICE = 0;
 const PRICE_STEP = 50000;
-function useFlipLayout(items: Car[]) {
-  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
-  const prevPositions = useRef<Map<string, { left: number; top: number }>>(new Map());
 
-  const setCardRef = (id: string) => (el: HTMLDivElement | null) => {
-    if (el) {
-      cardRefs.current.set(id, el);
-    } else {
-      cardRefs.current.delete(id);
-    }
-  };
-
-  useIsomorphicLayoutEffect(() => {
-    const currentPositions = new Map<string, { left: number; top: number }>();
-    const rafIds: number[] = [];
-
-    cardRefs.current.forEach((el, id) => {
-      const rect = el.getBoundingClientRect();
-      currentPositions.set(id, { left: rect.left, top: rect.top });
-    });
-
-    cardRefs.current.forEach((el, id) => {
-      const prev = prevPositions.current.get(id);
-      const current = currentPositions.get(id);
-
-      if (prev && current) {
-        const dx = prev.left - current.left;
-        const dy = prev.top - current.top;
-
-        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
-          el.style.transition = 'none';
-          el.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
-
-          const id1 = requestAnimationFrame(() => {
-            const id2 = requestAnimationFrame(() => {
-              el.style.transition = 'transform 450ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease';
-              el.style.transform = 'translate3d(0, 0, 0)';
-            });
-            rafIds.push(id2);
-          });
-          rafIds.push(id1);
-        }
-      } else if (current && !prev) {
-        el.style.transition = 'none';
-        el.style.opacity = '0';
-        el.style.transform = 'scale(0.92) translate3d(0, 16px, 0)';
-
-        const id1 = requestAnimationFrame(() => {
-          const id2 = requestAnimationFrame(() => {
-            el.style.transition = 'transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease';
-            el.style.opacity = '1';
-            el.style.transform = 'translate3d(0, 0, 0)';
-          });
-          rafIds.push(id2);
-        });
-        rafIds.push(id1);
-      }
-    });
-
-    prevPositions.current = currentPositions;
-
-    return () => {
-      rafIds.forEach((id) => cancelAnimationFrame(id));
-    };
-  }, [items]);
-
-  return setCardRef;
-}
 
 export default function PreOwnedCarsBrowser() {
   const searchParams = useSearchParams();
@@ -252,7 +185,6 @@ export default function PreOwnedCarsBrowser() {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  const setCardRef = useFlipLayout(paginated);
 
   const stringSetters: Record<string, React.Dispatch<React.SetStateAction<string[]>>> = {
     make: setMake,
@@ -373,29 +305,66 @@ export default function PreOwnedCarsBrowser() {
   );
 
   return (
-    <div ref={containerRef} className="container-page py-10 sm:py-14">
-      <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <div ref={containerRef} className="container-page py-8 sm:py-14">
+      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">Pre Owned Cars</h1>
-          <p className="mt-2 max-w-xl text-sm text-slate-600">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900">Pre Owned Cars</h1>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-blueLight px-3 py-1 text-xs font-bold text-brand-blue">
+              <CarIcon size={14} /> {filtered.length} Cars
+            </span>
+          </div>
+          <p className="mt-2 max-w-xl text-xs sm:text-sm text-slate-600">
             Explore our wide range of quality pre-owned cars. Find the perfect car that fits your
             needs and budget.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="flex items-center gap-2 rounded-full bg-brand-blueLight px-4 py-2 text-sm font-semibold text-brand-blue">
-            <CarIcon size={16} /> {filtered.length} Cars Available
-          </span>
+
+        {/* Desktop Sort Control */}
+        <div className="hidden lg:flex items-center gap-3">
+          <div className="relative">
+            <select
+              className="field-input w-auto appearance-none pr-9 cursor-pointer text-xs font-semibold bg-white"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="newest">Sort By: Newest First</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="kms-low">Kilometers: Low to High</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Combined Controls Bar (Filters Button + Sort By Select side-by-side) */}
+      <div className="mb-6 grid grid-cols-2 gap-3 lg:hidden">
+        <button
+          onClick={() => setShowMobileFilters(true)}
+          className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2.5 px-3 text-xs font-bold text-slate-800 shadow-sm transition-colors hover:border-brand-red"
+        >
+          <SlidersHorizontal size={15} className="text-brand-red" />
+          <span>Filters</span>
+          {hasActiveFilters && (
+            <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-red px-1 text-[10px] text-white">
+              {activeChips.length}
+            </span>
+          )}
+        </button>
+
+        <div className="relative w-full">
           <select
-            className="field-input w-auto"
+            className="w-full h-full rounded-xl border border-slate-200 bg-white py-2.5 pl-5 pr-7 text-xs font-bold text-slate-800 shadow-sm appearance-none cursor-pointer outline-none focus:border-brand-red text-center"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
           >
-            <option value="newest">Sort By: Newest First</option>
+            <option value="newest">Newest First</option>
             <option value="price-low">Price: Low to High</option>
             <option value="price-high">Price: High to Low</option>
-            <option value="kms-low">Kilometers: Low to High</option>
+            <option value="kms-low">KMs: Low to High</option>
           </select>
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={15} />
         </div>
       </div>
 
@@ -424,28 +393,10 @@ export default function PreOwnedCarsBrowser() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
         {/* Filters — desktop sticky sidebar */}
         <aside className="hidden lg:block">
-          {/* The filter card's own content (many sections) can be nearly as
-              tall as the results column, which leaves position:sticky with
-              no room to move within its containing block and makes it look
-              broken. Capping the height and scrolling internally guarantees
-              it's always shorter than the viewport, so it actually sticks. */}
           <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
             {sidebar}
           </div>
         </aside>
-
-        {/* Mobile filter trigger */}
-        <button
-          onClick={() => setShowMobileFilters(true)}
-          className="flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 lg:hidden"
-        >
-          <SlidersHorizontal size={16} /> Filters
-          {hasActiveFilters && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-red px-1 text-[10px] text-white">
-              {activeChips.length}
-            </span>
-          )}
-        </button>
 
         {/* Results */}
         <div>
@@ -456,7 +407,7 @@ export default function PreOwnedCarsBrowser() {
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {paginated.map((car) => (
-                <div key={car.id} ref={setCardRef(car.id)} className="will-change-transform">
+                <div key={car.id}>
                   <CarCard car={car} />
                 </div>
               ))}

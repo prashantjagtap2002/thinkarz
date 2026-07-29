@@ -93,7 +93,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-[380px] overflow-hidden bg-brand-navy sm:min-h-[440px]">
+      <section className="relative flex min-h-[320px] sm:min-h-[400px] flex-col justify-end overflow-hidden bg-brand-navy py-12 sm:py-16">
         <div className="absolute inset-0">
           <Image
             src="/showroom_image/about-hero.png"
@@ -101,24 +101,22 @@ export default function AboutPage() {
             title="THINKARZ Showroom - Malad West, Mumbai"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-slate-900/40" />
         </div>
 
-        <div className="container-page absolute inset-x-0 bottom-12 sm:bottom-14">
-          <Reveal>
-            <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-wider text-white/70">
-              Who We Are
-            </span>
-            <h1 className="mt-1 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-              About THINKARZ
-            </h1>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
-              India&apos;s trusted pre-owned car destination from the Gautam Modi Group, built
-              on 35+ years of automotive expertise and a customer-first promise.
-            </p>
-          </Reveal>
+        <div className="container-page relative z-10 text-center sm:text-left">
+          <span className="mb-2 inline-block text-xs font-bold uppercase tracking-wider text-brand-red">
+            Who We Are
+          </span>
+          <h1 className="text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
+            About THINKARZ
+          </h1>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-200 sm:text-base mx-auto sm:mx-0">
+            India&apos;s trusted pre-owned car destination from the Gautam Modi Group, built
+            on 35+ years of automotive expertise and a customer-first promise.
+          </p>
         </div>
       </section>
 
@@ -189,20 +187,20 @@ export default function AboutPage() {
             </div>
           </Reveal>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 sm:mt-10 grid grid-cols-2 gap-3.5 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
             {values.map(({ icon: Icon, title, desc }, i) => (
               <Reveal
                 key={title}
                 delay={i * 100}
-                className="group rounded-lg border border-slate-200 bg-white p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_0_rgba(200,16,46,0.12)]"
+                className="group rounded-xl border border-slate-200 bg-white p-4 sm:p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_0_rgba(200,16,46,0.12)]"
               >
-                <div className="mb-4 flex justify-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-red/10 text-brand-red transition-all duration-300 group-hover:bg-brand-red group-hover:text-white">
-                    <Icon size={24} />
+                <div className="mb-3 sm:mb-4 flex justify-center">
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-brand-red/10 text-brand-red transition-all duration-300 group-hover:bg-brand-red group-hover:text-white">
+                    <Icon size={20} className="sm:h-6 sm:w-6" />
                   </div>
                 </div>
-                <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-500">{desc}</p>
+                <h3 className="text-xs sm:text-sm font-bold text-slate-900">{title}</h3>
+                <p className="mt-1.5 text-[11px] sm:text-xs leading-relaxed text-slate-500">{desc}</p>
               </Reveal>
             ))}
           </div>
@@ -267,19 +265,19 @@ export default function AboutPage() {
         <div className="container-page">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
             {/* Left — sticky heading */}
-            <div className="lg:sticky lg:top-28 lg:self-start">
+            <div className="text-center lg:text-left lg:sticky lg:top-28 lg:self-start">
               <p className="mb-3 text-xs font-bold uppercase tracking-widest text-brand-red">Quick Answers</p>
               <h2 className="text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl">
                 About THINKARZ:
-                <br />
+                <br className="hidden sm:inline" />{" "}
                 <span className="relative inline-block">
                   Frequently Asked
                   <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-brand-red" />
                 </span>
-                <br />
+                <br className="hidden sm:inline" />{" "}
                 Questions
               </h2>
-              <p className="mt-5 text-sm leading-relaxed text-slate-500">
+              <p className="mt-4 text-sm leading-relaxed text-slate-500 max-w-md mx-auto lg:mx-0">
                 Quick answers about our company, inspection process, and what we offer.
               </p>
             </div>
@@ -293,9 +291,9 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-white py-14 sm:py-16">
-        <div className="container-page text-center">
-          <Reveal>
+      <section className="py-12 sm:py-16">
+        <div className="container-page">
+          <Reveal className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-10 text-center shadow-sm">
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
               Ready to visit a showroom?
             </h2>
@@ -303,11 +301,11 @@ export default function AboutPage() {
               Book a free test drive or browse our handpicked inventory of certified
               pre-owned cars.
             </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Link href="/book-a-test-drive" className="btn btn-primary">
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
+              <Link href="/book-a-test-drive" className="btn btn-primary w-full sm:w-auto">
                 Book a Test Drive
               </Link>
-              <Link href="/pre-owned-cars" className="btn btn-outline">
+              <Link href="/pre-owned-cars" className="btn btn-outline w-full sm:w-auto">
                 Browse Cars
               </Link>
             </div>

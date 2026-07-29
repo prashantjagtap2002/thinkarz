@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Phone } from 'lucide-react';
@@ -10,6 +11,23 @@ import { navLinks, contactInfo } from '@/lib/content';
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent background scrolling when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [open]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -55,28 +73,31 @@ export default function Header() {
         </div>
       </div>
 
-      {open && (
-        <div className="fixed inset-0 z-[60] lg:hidden" style={{ background: 'rgba(0,0,0,0.5)' }}>
+      {open && mounted && createPortal(
+        <div className="fixed inset-0 z-[99999] lg:hidden animate-fade-in">
+          {/* Backdrop Overlay */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
-          <nav
-            id="mobile-menu"
-            className="absolute inset-y-0 left-0 w-[85%] max-w-sm flex flex-col bg-white shadow-xl"
-          >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-              <span className="text-lg font-extrabold text-slate-900">Menu</span>
+
+          {/* Top-Aligned Mobile Menu Container */}
+          <div className="relative z-10 w-full bg-white shadow-2xl border-b border-slate-200 max-h-[85vh] overflow-y-auto">
+            {/* Top Header Bar */}
+            <div className="flex h-16 sm:h-20 items-center justify-between px-6 border-b border-slate-100 bg-white">
+              <Logo />
               <button
                 onClick={() => setOpen(false)}
-                className="flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 hover:bg-brand-red hover:text-white transition-colors"
                 aria-label="Close menu"
               >
-                <X size={22} />
+                <X size={20} />
               </button>
             </div>
-            <div className="flex flex-1 flex-col justify-center px-6">
+
+            {/* Menu Nav Links Placed at the Top */}
+            <nav id="mobile-menu" className="flex flex-col p-4 gap-1 text-center">
               {navLinks.map((link) => {
                 const active = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
                 return (
@@ -84,28 +105,20 @@ export default function Header() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className={`rounded-lg px-4 py-4 text-lg font-medium transition-colors ${
+                    className={`flex items-center justify-center rounded-xl px-4 py-3.5 text-center text-base font-bold transition-all ${
                       active
-                        ? 'bg-brand-blueLight text-brand-red'
-                        : 'text-slate-700 hover:bg-slate-50'
+                        ? 'bg-red-50 text-brand-red font-extrabold'
+                        : 'text-slate-800 hover:bg-slate-50 hover:text-brand-red'
                     }`}
                   >
-                    {link.name}
+                    <span>{link.name}</span>
                   </Link>
                 );
               })}
-            </div>
-            <div className="border-t border-slate-100 px-6 py-6">
-              <a
-                href={`tel:${contactInfo.landlinePhone}`}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-red py-3.5 text-sm font-semibold text-white"
-              >
-                <Phone size={16} />
-                Call Us: {contactInfo.landlinePhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1 $2 $3')}
-              </a>
-            </div>
-          </nav>
-        </div>
+            </nav>
+          </div>
+        </div>,
+        document.body
       )}
     </header>
   );
