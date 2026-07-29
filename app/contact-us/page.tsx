@@ -119,7 +119,7 @@ export default function ContactUsPage() {
                 rel="noopener noreferrer"
                 className="btn btn-outline"
               >
-                Get Directions ↗
+                Get Directions →
               </a>
             </div>
           </div>

@@ -165,11 +165,11 @@ export default function BookTestDrivePage() {
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             Why Take a Test Drive?
           </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
             {reasons.map(({ title, desc }) => (
               <div
                 key={title}
-                className="flex gap-4 rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-brand-red/30 hover:shadow-sm"
+                className="flex gap-4 rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-brand-red/30 hover:shadow-sm w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)]"
               >
                 <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
                   <CheckCircle2 size={14} strokeWidth={3} />

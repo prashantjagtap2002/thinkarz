@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Facebook, Instagram, Youtube, Linkedin, MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { contactInfo } from '@/lib/content';
 
@@ -26,14 +29,25 @@ const company = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  function handleHomeClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
   return (
     <footer className="bg-brand-navy text-slate-300">
 
       <div className="container-page grid grid-cols-2 gap-x-6 gap-y-10 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         <div className="col-span-2 sm:col-span-2 md:col-span-3 lg:col-span-1">
-          <span className="text-xl font-extrabold tracking-tight text-white sm:text-2xl">
-            THIN<span className="text-brand-red text-[1.18em]">K</span>ARZ
-          </span>
+          <Link href="/" className="inline-block">
+            <span className="text-xl font-extrabold tracking-tight text-white sm:text-2xl">
+              THIN<span className="text-brand-red text-[1.18em]">K</span>ARZ
+            </span>
+          </Link>
           <p className="mt-1 text-[11px] font-semibold tracking-wide text-slate-400">
             YOUR ULTIMATE CAR DESTINATION
           </p>
@@ -81,7 +95,11 @@ export default function Footer() {
           <ul className="space-y-2.5">
             {quickLinks.map((link) => (
               <li key={link.name}>
-                <Link href={link.href} className="text-xs text-slate-400 hover:text-brand-red sm:text-sm">
+                <Link
+                  href={link.href}
+                  onClick={link.name === 'Home' ? handleHomeClick : undefined}
+                  className="text-xs text-slate-400 hover:text-brand-red sm:text-sm"
+                >
                   {link.name}
                 </Link>
               </li>
@@ -124,11 +142,15 @@ export default function Footer() {
             </li>
             <li className="flex gap-2.5">
               <Phone size={16} className="mt-0.5 shrink-0 text-brand-red" />
-              <span className="min-w-0 break-words">{contactInfo.phone}</span>
+              <a href={`tel:${contactInfo.phone}`} className="min-w-0 break-words hover:text-white transition-colors">
+                {contactInfo.phone}
+              </a>
             </li>
             <li className="flex gap-2.5">
               <Mail size={16} className="mt-0.5 shrink-0 text-brand-red" />
-              <span className="min-w-0 break-words">{contactInfo.email}</span>
+              <a href={`mailto:${contactInfo.email}`} className="min-w-0 break-words hover:text-white transition-colors">
+                {contactInfo.email}
+              </a>
             </li>
             <li className="flex gap-2.5">
               <Clock size={16} className="mt-0.5 shrink-0 text-brand-red" />

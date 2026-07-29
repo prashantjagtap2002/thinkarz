@@ -88,7 +88,10 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative flex min-h-[calc(100dvh-80px)] flex-col justify-center overflow-hidden bg-brand-navy">
+      <section
+        className="relative flex flex-col justify-center overflow-hidden bg-brand-navy"
+        style={{ minHeight: 'calc(100dvh - 80px)' }}
+      >
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -102,9 +105,9 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/90 via-brand-navy/70 to-brand-navy/25" />
         </div>
 
-        <div className="container-page relative flex flex-1 flex-col justify-between py-8 sm:py-12 lg:py-14">
+        <div className="container-page relative flex flex-1 flex-col justify-between py-6 sm:py-10 lg:py-12">
           {/* Two-column layout */}
-          <div className="my-auto grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="my-auto grid grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-12">
             {/* Left column — Copy */}
             <div className="animate-fade-up">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm">
@@ -112,7 +115,7 @@ export default function HomePage() {
                 <span className="text-xs font-medium text-slate-300">Trusted by 50,000+ customers across Mumbai</span>
               </div>
 
-              <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.4rem]">
+              <h1 className="text-[clamp(2rem,6vw,3.4rem)] font-extrabold leading-[1.1] tracking-tight text-white">
                 Find Your Perfect
                 <br />
                 <span className="bg-gradient-to-r from-brand-red via-[#FF4D52] to-brand-red bg-clip-text text-transparent">Pre-Owned Car</span>
@@ -176,7 +179,7 @@ export default function HomePage() {
 
           {/* Trust strip */}
           <div
-            className="mt-12 grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-8 sm:grid-cols-4 animate-fade-up"
+            className="mt-8 grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-6 sm:grid-cols-4 animate-fade-up"
             style={{ animationDelay: '300ms' }}
           >
             {trustBadges.map(({ icon: Icon, value, label }) => (

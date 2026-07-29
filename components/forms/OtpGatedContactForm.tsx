@@ -204,6 +204,7 @@ export default function OtpGatedContactForm() {
             onSubmit={() => setStep('success')}
             validations={[
               { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
+              { name: 'pincode', pattern: '^[1-9][0-9]{5}$', message: 'Enter a valid 6-digit pincode' },
             ]}
           >
             <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
@@ -248,6 +249,11 @@ export default function OtpGatedContactForm() {
                 <option>General Enquiry</option>
               </select>
               <FieldError name="subject" />
+            </div>
+            <div>
+              <label htmlFor="pincode" className="field-label">Pincode</label>
+              <input id="pincode" name="pincode" required type="text" inputMode="numeric" maxLength={6} className="field-input" placeholder="Enter your 6-digit pincode" />
+              <FieldError name="pincode" />
             </div>
             <div>
               <label htmlFor="message" className="field-label">Your Message</label>

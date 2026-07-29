@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FieldError } from './SubmittableForm';
 
 const TIME_SLOTS = [
@@ -10,40 +10,21 @@ const TIME_SLOTS = [
   { value: '16:00', label: '4:00 PM - 5:00 PM' },
 ] as const;
 
-function getTodayIsoDate() {
+function getTomorrowIsoDate() {
   const now = new Date();
+  now.setDate(now.getDate() + 1);
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
-function timeToMinutes(value: string) {
-  const [hours, minutes] = value.split(':').map(Number);
-  return hours * 60 + minutes;
-}
-
 export default function AppointmentFields() {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
-  const today = useMemo(() => getTodayIsoDate(), []);
+  const tomorrow = useMemo(() => getTomorrowIsoDate(), []);
 
-  const availableTimeSlots = useMemo(() => {
-    if (selectedDate !== today) {
-      return TIME_SLOTS;
-    }
-
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-    return TIME_SLOTS.filter((slot) => timeToMinutes(slot.value) > currentMinutes);
-  }, [selectedDate, today]);
-
-  useEffect(() => {
-    if (selectedTime && !availableTimeSlots.some((slot) => slot.value === selectedTime)) {
-      setSelectedTime('');
-    }
-  }, [availableTimeSlots, selectedTime]);
+  const availableTimeSlots = useMemo(() => TIME_SLOTS, []);
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -57,7 +38,7 @@ export default function AppointmentFields() {
             type="date"
             className="field-input"
             value={selectedDate}
-            min={today}
+            min={tomorrow}
             onKeyDown={(e) => e.preventDefault()}
             onClick={(e) => (e.target as HTMLInputElement).showPicker?.()}
             onChange={(e) => setSelectedDate(e.target.value)}
