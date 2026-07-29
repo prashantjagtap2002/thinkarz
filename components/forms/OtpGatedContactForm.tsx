@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { PhoneCall, ShieldCheck, X, CheckCircle2 } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
@@ -22,6 +22,13 @@ export default function OtpGatedContactForm() {
   const [consentError, setConsentError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [serverHash, setServerHash] = useState('');
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // Sync state with verified phone data if available
   useEffect(() => {
@@ -71,6 +78,7 @@ export default function OtpGatedContactForm() {
     setPhone(clean);
     try {
       const res = await sendWhatsAppOtp(countryCode, clean);
+      if (!isMountedRef.current) return;
       setIsLoading(false);
 
       if (res.success && res.hash) {
@@ -97,6 +105,7 @@ export default function OtpGatedContactForm() {
 
     try {
       const res = await verifyWhatsAppOtp(countryCode, phone, otp, serverHash);
+      if (!isMountedRef.current) return;
       setIsLoading(false);
 
       if (res.success) {

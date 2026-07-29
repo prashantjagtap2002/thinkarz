@@ -108,6 +108,7 @@ function useFlipLayout(items: Car[]) {
 
   useLayoutEffect(() => {
     const currentPositions = new Map<string, { left: number; top: number }>();
+    const rafIds: number[] = [];
 
     cardRefs.current.forEach((el, id) => {
       const rect = el.getBoundingClientRect();
@@ -126,29 +127,37 @@ function useFlipLayout(items: Car[]) {
           el.style.transition = 'none';
           el.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
 
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
+          const id1 = requestAnimationFrame(() => {
+            const id2 = requestAnimationFrame(() => {
               el.style.transition = 'transform 450ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease';
               el.style.transform = 'translate3d(0, 0, 0)';
             });
+            rafIds.push(id2);
           });
+          rafIds.push(id1);
         }
       } else if (current && !prev) {
         el.style.transition = 'none';
         el.style.opacity = '0';
         el.style.transform = 'scale(0.92) translate3d(0, 16px, 0)';
 
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
+        const id1 = requestAnimationFrame(() => {
+          const id2 = requestAnimationFrame(() => {
             el.style.transition = 'transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease';
             el.style.opacity = '1';
             el.style.transform = 'translate3d(0, 0, 0)';
           });
+          rafIds.push(id2);
         });
+        rafIds.push(id1);
       }
     });
 
     prevPositions.current = currentPositions;
+
+    return () => {
+      rafIds.forEach((id) => cancelAnimationFrame(id));
+    };
   }, [items]);
 
   return setCardRef;

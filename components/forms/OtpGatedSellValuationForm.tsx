@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { PhoneCall, ShieldCheck, X, CheckCircle2, BadgeIndianRupee } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
@@ -84,6 +84,7 @@ export default function OtpGatedSellValuationForm() {
   const [consentError, setConsentError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [serverHash, setServerHash] = useState('');
+  const isMountedRef = useRef(true);
 
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
@@ -100,6 +101,12 @@ export default function OtpGatedSellValuationForm() {
       setStep('form');
     }
   }, [verifiedData]);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   function handleReverify() {
     resetVerification();
@@ -141,6 +148,7 @@ export default function OtpGatedSellValuationForm() {
 
     try {
       const res = await sendWhatsAppOtp(countryCode, clean);
+      if (!isMountedRef.current) return;
       setIsLoading(false);
 
       if (res.success && res.hash) {
@@ -167,6 +175,7 @@ export default function OtpGatedSellValuationForm() {
 
     try {
       const res = await verifyWhatsAppOtp(countryCode, phone, otp, serverHash);
+      if (!isMountedRef.current) return;
       setIsLoading(false);
 
       if (res.success) {
