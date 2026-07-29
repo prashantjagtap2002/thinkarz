@@ -12,7 +12,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className={`sticky top-0 border-b border-slate-200 bg-white/95 backdrop-blur ${open ? 'z-[70]' : 'z-50'}`}>
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="container-page flex h-16 items-center justify-between gap-4 sm:h-20">
         <Logo />
 
@@ -56,15 +56,15 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-[60] lg:hidden">
+        <div className="fixed inset-0 z-[60] lg:hidden" style={{ background: 'rgba(0,0,0,0.5)' }}>
           <div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
           <nav
             id="mobile-menu"
-            className="relative z-10 flex h-full flex-col bg-white shadow-xl"
+            className="absolute inset-y-0 left-0 w-[85%] max-w-sm flex flex-col bg-white shadow-xl"
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
               <span className="text-lg font-extrabold text-slate-900">Menu</span>
