@@ -161,7 +161,6 @@ export default function OtpGatedContactForm() {
                 if (phoneError) validatePhone(val);
               }}
               className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:font-normal placeholder:text-slate-400"
-              autoFocus
             />
           </div>
           {phoneError && <p className="-mt-4 mb-4 text-left text-xs text-red-600">{phoneError}</p>}

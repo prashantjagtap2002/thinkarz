@@ -18,8 +18,6 @@ const quickLinks = [
 const services = [
   { name: 'Buy a Car', href: '/pre-owned-cars' },
   { name: 'Sell Your Car', href: '/sell-your-car' },
-  { name: 'Car Inspection', href: '/sell-your-car' },
-  { name: 'Finance Options', href: '/contact-us' },
 ];
 
 const company = [
@@ -57,19 +55,25 @@ export default function Footer() {
           </p>
           <div className="mt-5 flex gap-3">
             {[
-              { icon: Facebook, label: 'Facebook' },
-              { icon: Instagram, label: 'Instagram' },
+              { icon: Facebook, href: 'https://www.facebook.com/Thinkarz/', label: 'Facebook' },
+              { icon: Instagram, href: 'https://www.instagram.com/thinkarz/reels/', label: 'Instagram' },
               { icon: Youtube, label: 'YouTube' },
-              { icon: Linkedin, label: 'LinkedIn' },
-            ].map(({ icon: Icon, label }) => (
-              <button
-                key={label}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red"
-                aria-label={label}
-              >
-                <Icon size={16} />
-              </button>
-            ))}
+              { icon: Linkedin, href: 'https://www.linkedin.com/company/thinkcarz-technologies-private-limited/?originalSubdomain=in', label: 'LinkedIn' },
+            ].map(({ icon: Icon, href, label }) => {
+              const commonClass = "flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red";
+              if (href) {
+                return (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" className={commonClass} aria-label={label}>
+                    <Icon size={16} />
+                  </a>
+                );
+              }
+              return (
+                <button key={label} className={commonClass} aria-label={label}>
+                  <Icon size={16} />
+                </button>
+              );
+            })}
             <a
               href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent('Hello.')}`}
               target="_blank"

@@ -25,6 +25,7 @@ import HeroSearchWidget from '@/components/HeroSearchWidget';
 import Reveal from '@/components/Reveal';
 import BrandLogo from '@/components/BrandLogo';
 import NewsletterSignup from '@/components/NewsletterSignup';
+import TestimonialCarousel from '@/components/TestimonialCarousel';
 import { bodyTypes, budgetOptions, cars, formatPrice } from '@/lib/cars';
 import { testimonials } from '@/lib/content';
 import { blogs } from '@/lib/blogs';
@@ -210,13 +211,13 @@ export default function HomePage() {
             </Link>
           </Reveal>
           <Reveal>
-            <div className="grid grid-cols-2 rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-slate-200 gap-[1px] sm:grid-cols-3 md:grid-cols-6">
-              {brands.map((brand) => (
-                <Link
-                  key={brand}
-                  href={`/pre-owned-cars?make=${encodeURIComponent(brand)}`}
-                  className="flex flex-col items-center justify-center bg-white p-6 text-center hover:bg-slate-50 transition-colors"
-                >
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-3 md:grid-cols-6">
+            {brands.map((brand) => (
+              <Link
+                key={brand}
+                href={`/pre-owned-cars?make=${encodeURIComponent(brand)}`}
+                className="flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-4 text-center hover:bg-slate-50 transition-colors shadow-sm"
+              >
                   <div className="flex h-16 w-full items-center justify-center overflow-hidden">
                     <BrandLogo brand={brand} size={52} />
                   </div>
@@ -241,7 +242,7 @@ export default function HomePage() {
               View All Cars <ArrowRight size={16} />
             </Link>
           </Reveal>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
             {cars.slice(0, 4).map((car, i) => (
               <Reveal key={car.id} delay={i * 80}>
                 <CarCard car={car} />
@@ -404,54 +405,7 @@ export default function HomePage() {
             </h2>
           </Reveal>
 
-          {/* Desktop grid */}
-          <div className="hidden grid-cols-3 gap-6 sm:grid">
-            {testimonials.map((t, i) => (
-              <Reveal
-                key={t.name}
-                delay={i * 90}
-                className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-red/25 hover:shadow-md"
-              >
-                
-                <p className="mb-4 text-sm leading-relaxed text-slate-600">{t.quote}</p>
-                <div className="mb-2 flex gap-0.5 text-brand-red">
-                  {Array.from({ length: t.rating }).map((_, s) => (
-                    <Star key={s} size={14} fill="currentColor" />
-                  ))}
-                </div>
-                <p className="text-sm font-semibold text-slate-900">{t.name}</p>
-              </Reveal>
-            ))}
-          </div>
-
-          {/* Mobile carousel */}
-          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide sm:hidden">
-            {testimonials.map((t) => (
-              <div
-                key={t.name}
-                className="w-[85vw] shrink-0 snap-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
-              >
-                
-                <p className="mb-4 text-sm leading-relaxed text-slate-600">{t.quote}</p>
-                <div className="mb-2 flex gap-0.5 text-brand-red">
-                  {Array.from({ length: t.rating }).map((_, s) => (
-                    <Star key={s} size={14} fill="currentColor" />
-                  ))}
-                </div>
-                <p className="text-sm font-semibold text-slate-900">{t.name}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile dots */}
-          <div className="mt-4 flex justify-center gap-2 sm:hidden">
-            {testimonials.map((_, i) => (
-              <span
-                key={i}
-                className="h-2 w-2 rounded-full bg-slate-300"
-              />
-            ))}
-          </div>
+          <TestimonialCarousel testimonials={testimonials} />
         </div>
       </section>
     </>

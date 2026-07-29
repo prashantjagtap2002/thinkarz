@@ -454,7 +454,7 @@ export default function PreOwnedCarsBrowser() {
               No cars match your filters. Try resetting them.
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {paginated.map((car) => (
                 <div key={car.id} ref={setCardRef(car.id)} className="will-change-transform">
                   <CarCard car={car} />

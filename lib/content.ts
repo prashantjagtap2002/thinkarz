@@ -39,7 +39,7 @@ export const contactInfo = {
   ],
   phone: '+91-80806-34444',
   landlinePhone: '02242125678',
-  whatsappPhone: '919892929363',
+  whatsappPhone: '918080634444',
   email: 'info.thinkarz@gmail.com',
   hours: ['Mon - Sat: 10:00 AM - 7:00 PM', 'Sun: 10:00 AM - 5:00 PM'],
 };

@@ -56,25 +56,35 @@ export default function Header() {
       </div>
 
       {open && (
-        <>
+        <div className="fixed inset-0 z-[60] lg:hidden">
           <div
-            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            className="absolute inset-0 bg-black/50"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
           <nav
             id="mobile-menu"
-            className="absolute left-0 right-0 top-full z-50 border-t border-slate-200 bg-white shadow-xl lg:hidden"
+            className="relative z-10 flex h-full flex-col bg-white shadow-xl"
           >
-            <div className="container-page flex flex-col gap-1 py-4">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+              <span className="text-lg font-extrabold text-slate-900">Menu</span>
+              <button
+                onClick={() => setOpen(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100"
+                aria-label="Close menu"
+              >
+                <X size={22} />
+              </button>
+            </div>
+            <div className="flex flex-1 flex-col justify-center px-6">
               {navLinks.map((link) => {
-                const active = pathname === link.href;
+                const active = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className={`rounded-lg px-4 py-3 text-base font-medium transition-colors ${
+                    className={`rounded-lg px-4 py-4 text-lg font-medium transition-colors ${
                       active
                         ? 'bg-brand-blueLight text-brand-red'
                         : 'text-slate-700 hover:bg-slate-50'
@@ -85,17 +95,17 @@ export default function Header() {
                 );
               })}
             </div>
-            <div className="container-page border-t border-slate-100 py-4">
+            <div className="border-t border-slate-100 px-6 py-6">
               <a
                 href={`tel:${contactInfo.landlinePhone}`}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-red py-3 text-sm font-semibold text-white"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-red py-3.5 text-sm font-semibold text-white"
               >
                 <Phone size={16} />
                 Call Us: {contactInfo.landlinePhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1 $2 $3')}
               </a>
             </div>
           </nav>
-        </>
+        </div>
       )}
     </header>
   );

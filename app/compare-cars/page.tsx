@@ -341,7 +341,7 @@ export default function CompareCarsPage() {
           <h2 className="mb-8 text-xl font-extrabold text-slate-900 sm:text-2xl">
             Popular Comparisons
           </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {popularPairs.map(([aId, bId], i) => {
               const a = cars.find((c) => c.id === aId);
               const b = cars.find((c) => c.id === bId);

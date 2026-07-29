@@ -77,7 +77,7 @@ export default function CountryCodeSelect({ value, onChange }: CountryCodeSelect
         ref={buttonRef}
         type="button"
         onClick={() => (isOpen ? setIsOpen(false) : openDropdown())}
-        className="flex h-full w-[130px] items-center justify-between pl-3 pr-2.5 text-[14px] font-semibold text-slate-700 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
+        className="flex h-full w-[100px] items-center justify-between pl-2.5 pr-2 text-[14px] font-semibold text-slate-700 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-2 overflow-hidden">
           <img

@@ -153,7 +153,8 @@ export default function AboutPage() {
                   alt="THINKARZ team and showroom"
                   title="THINKARZ Team & Showroom"
                   fill
-                  className="object-cover"
+            className="object-cover"
+            unoptimized
                   sizes="(max-width: 1024px) 100vw, 540px"
                 />
               </div>
