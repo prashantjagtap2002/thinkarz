@@ -24,8 +24,6 @@ export default function AppointmentFields() {
   const [selectedTime, setSelectedTime] = useState('');
   const tomorrow = useMemo(() => getTomorrowIsoDate(), []);
 
-  const availableTimeSlots = useMemo(() => TIME_SLOTS, []);
-
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
@@ -59,13 +57,13 @@ export default function AppointmentFields() {
           required
           className="field-input"
           value={selectedTime}
-          disabled={!selectedDate || availableTimeSlots.length === 0}
+          disabled={!selectedDate}
           onChange={(e) => setSelectedTime(e.target.value)}
         >
           <option value="" disabled>
-            {selectedDate && availableTimeSlots.length === 0 ? 'No slots available today' : 'Select Time'}
+            Select Time
           </option>
-          {availableTimeSlots.map((slot) => (
+          {TIME_SLOTS.map((slot) => (
             <option key={slot.value} value={slot.value}>
               {slot.label}
             </option>
