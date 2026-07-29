@@ -32,14 +32,14 @@ export default function ContactUsPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/85 to-brand-navy/40" />
         </div>
-        <div className="container-page relative py-16 sm:py-20">
+        <div className="container-page relative py-16 text-center sm:text-left sm:py-20">
           <span className="section-eyebrow">Contact Us</span>
-          <h1 className="max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+          <h1 className="max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-4xl mx-auto sm:mx-0">
             We&apos;re Here
-            <br />
+            <br className="hidden sm:inline" />{" "}
             To Help You.
           </h1>
-          <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300">
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300 mx-auto sm:mx-0">
             Have a question or need assistance? Reach out to us &ndash; we&apos;d love to hear
             from you.
           </p>
@@ -49,26 +49,28 @@ export default function ContactUsPage() {
       <section className="container-page py-14 sm:py-20">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 items-start">
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-10 lg:p-12 lg:col-span-5 h-fit">
-            <h2 className="mb-4 text-[22px] font-bold text-[#1e293b]">
+            <h2 className="mb-2 text-[22px] font-bold text-[#1e293b]">
               Contact Information
             </h2>
-            <p className="mb-8 text-sm leading-[1.6] text-slate-500">
+            <p className="mb-6 text-sm leading-[1.6] text-slate-500">
               We are here to help with bookings, service queries, finance questions and anything else you need.
             </p>
 
-            <div className="space-y-6">
+            <div className="space-y-5">
               {touchPoints.map(({ icon: Icon, title, lines }) => (
-                <div key={title} className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e2e8f0] text-[#475569]">
+                <div key={title} className="flex items-start gap-3.5 text-left">
+                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e2e8f0] text-[#475569]">
                     <Icon size={18} />
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-slate-900">{title}</p>
-                    {lines.map((line) => (
-                      <p key={line} className="text-sm text-slate-600 break-words">
-                        {line}
-                      </p>
-                    ))}
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-slate-900 leading-tight">{title}</p>
+                    <div className="mt-1 space-y-0.5">
+                      {lines.map((line) => (
+                        <p key={line} className="text-xs sm:text-sm text-slate-600 leading-relaxed break-words">
+                          {line}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -106,9 +108,9 @@ export default function ContactUsPage() {
                 className="object-cover"
               />
             </div>
-            <div className="p-6">
+            <div className="p-6 text-center sm:text-left flex flex-col items-center sm:items-start">
               <h3 className="mb-1.5 text-lg font-bold text-slate-900">Visit Our Showroom</h3>
-              <span className="mb-3 block h-1 w-10 bg-brand-red" />
+              <span className="mb-3 block h-1 w-10 bg-brand-red rounded-full" />
               <p className="mb-4 text-sm leading-relaxed text-slate-600">
                 Experience our wide range of pre-owned cars and get expert advice from our team.
                 We look forward to welcoming you!
@@ -117,9 +119,9 @@ export default function ContactUsPage() {
                 href="https://maps.app.goo.gl/j1DSAt9Dy3wuXHwy6"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-outline"
+                className="btn btn-outline inline-flex items-center justify-center"
               >
-                Get Directions →
+                Get Directions &rarr;
               </a>
             </div>
           </div>
@@ -130,7 +132,7 @@ export default function ContactUsPage() {
       <section className="container-page pb-16 sm:pb-24">
         <div className="mt-4 grid grid-cols-1 gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
           {/* Left — sticky heading */}
-          <div className="lg:sticky lg:top-28 lg:self-start">
+          <div className="text-center lg:text-left lg:sticky lg:top-28 lg:self-start">
             <p className="mb-3 text-xs font-bold uppercase tracking-widest text-brand-red">Quick Answers</p>
             <h2 className="text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl">
               About THINKARZ:
@@ -142,7 +144,7 @@ export default function ContactUsPage() {
               <br />
               Questions
             </h2>
-            <p className="mt-5 text-sm leading-relaxed text-slate-500">
+            <p className="mt-5 text-sm leading-relaxed text-slate-500 max-w-md mx-auto lg:mx-0">
               Quick answers about our company, inspection process, and what we offer.
             </p>
           </div>

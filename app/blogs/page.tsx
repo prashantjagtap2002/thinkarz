@@ -69,14 +69,14 @@ export default function BlogsPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/85 to-brand-navy/40" />
         </div>
-        <div className="container-page relative py-16 sm:py-20">
+        <div className="container-page relative py-16 text-center sm:text-left sm:py-20">
           <span className="section-eyebrow">Blogs</span>
-          <h1 className="max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+          <h1 className="max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-4xl mx-auto sm:mx-0">
             Car Insights.
-            <br />
+            <br className="hidden sm:inline" />{" "}
             Expert Advice.
           </h1>
-          <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300">
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300 mx-auto sm:mx-0">
             Stay updated with the latest automotive trends, tips and news from the world of cars.
           </p>
         </div>
@@ -147,15 +147,15 @@ export default function BlogsPage() {
                 No blogs match your search. Try a different keyword or category.
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
                 {paginated.map((post) => (
                   <Link
                     key={post.slug}
                     href={`/blogs/${post.slug}`}
-                    className="group overflow-hidden rounded-xl border border-slate-200"
+                    className="group flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white"
                   >
-                    <div className="bg-slate-50 px-5 pb-5 pt-5">
-                      <div className="relative mb-4 aspect-[16/10] w-full overflow-hidden rounded-lg">
+                    <div className="bg-slate-50 p-3 sm:p-5">
+                      <div className="relative mb-3 sm:mb-4 aspect-[16/10] w-full overflow-hidden rounded-lg">
                         <Image
                           src={post.image}
                           alt={post.title}
@@ -164,15 +164,15 @@ export default function BlogsPage() {
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
-                      <h3 className="text-sm font-bold leading-snug text-slate-900 group-hover:text-brand-red transition-colors">
+                      <h3 className="text-xs sm:text-sm font-bold leading-snug text-slate-900 group-hover:text-brand-red transition-colors line-clamp-2">
                         {post.title}
                       </h3>
                     </div>
-                    <div className="bg-white px-5 pb-5">
-                      <span className="mb-2 inline-block rounded-full bg-brand-blueLight px-2.5 py-0.5 text-[11px] font-semibold text-brand-blue">
+                    <div className="bg-white p-3 pt-0 sm:p-5 sm:pt-0">
+                      <span className="mb-2 inline-block rounded-full bg-brand-blueLight px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold text-brand-blue">
                         {post.category}
                       </span>
-                      <div className="mb-3 flex items-center gap-3 text-[11px] text-slate-500">
+                      <div className="mb-2 flex flex-wrap items-center gap-2 text-[10px] sm:text-[11px] text-slate-500">
                         <span className="flex items-center gap-1">
                           <CalendarDays size={12} /> {post.date}
                         </span>
@@ -180,7 +180,7 @@ export default function BlogsPage() {
                           <Clock size={12} /> {post.readTime}
                         </span>
                       </div>
-                      <span className="text-xs font-semibold text-brand-red">Read More &rarr;</span>
+                      <span className="text-[11px] sm:text-xs font-semibold text-brand-red">Read More &rarr;</span>
                     </div>
                   </Link>
                 ))}
@@ -220,45 +220,57 @@ export default function BlogsPage() {
             )}
           </div>
 
-          <aside className="space-y-8">
-            <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                value={search}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                placeholder="Search blogs..."
-                className="field-input pl-9"
-              />
+          <aside className="space-y-6">
+            {/* Search Widget */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 className="mb-3 text-xs font-extrabold uppercase tracking-wider text-slate-900">Search Articles</h3>
+              <div className="relative">
+                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  value={search}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  placeholder="Search blogs..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none transition-colors focus:border-brand-red focus:bg-white focus:ring-1 focus:ring-brand-red"
+                />
+              </div>
             </div>
 
-            <div>
-              <h3 className="mb-4 text-sm font-bold text-slate-900">Categories</h3>
-              <ul className="space-y-2.5">
-                {blogCategories.map((c) => (
-                  <li key={c.name}>
+            {/* Categories Widget */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 className="mb-3.5 text-xs font-extrabold uppercase tracking-wider text-slate-900">Categories</h3>
+              <div className="flex flex-col gap-2">
+                {blogCategories.map((c) => {
+                  const isActive = category === c.name;
+                  return (
                     <button
+                      key={c.name}
                       onClick={() => handleCategoryClick(c.name)}
-                      className={`flex w-full items-center justify-between text-left text-sm transition-colors ${
-                        category === c.name
-                          ? 'font-semibold text-brand-red'
-                          : 'text-slate-600 hover:text-brand-red'
+                      className={`flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-all ${
+                        isActive
+                          ? 'bg-brand-red text-white shadow-md'
+                          : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-brand-red'
                       }`}
                     >
                       <span>{c.name}</span>
-                      <span className="text-slate-400">{c.count}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-slate-200/70 text-slate-500'
+                      }`}>
+                        {c.count}
+                      </span>
                     </button>
-                  </li>
-                ))}
-              </ul>
+                  );
+                })}
+              </div>
             </div>
 
-            <div>
-              <h3 className="mb-4 text-sm font-bold text-slate-900">Popular Posts</h3>
-              <ul className="space-y-4">
+            {/* Popular Posts Widget */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 className="mb-3.5 text-xs font-extrabold uppercase tracking-wider text-slate-900">Popular Posts</h3>
+              <ul className="space-y-2.5">
                 {popular.map((p) => (
                   <li key={p.slug}>
-                    <Link href={`/blogs/${p.slug}`} className="flex gap-4 group">
-                      <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-slate-100 shadow-sm">
+                    <Link href={`/blogs/${p.slug}`} className="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-slate-50">
+                      <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-100 shadow-sm">
                         <Image 
                           src={p.image} 
                           alt={p.title}
@@ -267,18 +279,17 @@ export default function BlogsPage() {
                           className="object-cover transition-transform duration-300 group-hover:scale-105" 
                         />
                       </div>
-                      <div className="flex flex-col justify-center">
-                        <h4 className="text-sm font-semibold leading-snug text-slate-900 group-hover:text-brand-red transition-colors line-clamp-2">
+                      <div className="flex flex-col justify-center min-w-0">
+                        <h4 className="text-xs font-bold leading-snug text-slate-900 group-hover:text-brand-red transition-colors line-clamp-2">
                           {p.title}
                         </h4>
-                        <p className="mt-1.5 text-xs text-slate-400">{p.date}</p>
+                        <p className="mt-1 text-[11px] font-medium text-slate-400">{p.date}</p>
                       </div>
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
-
           </aside>
         </div>
       </section>

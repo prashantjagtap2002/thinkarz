@@ -60,7 +60,7 @@ const reasons = [
   },
 ];
 
-const popularCars = cars.slice(0, 5);
+const popularCars = cars.slice(0, 4);
 
 export default function BookTestDrivePage() {
   return (
@@ -79,18 +79,18 @@ export default function BookTestDrivePage() {
         </div>
 
         <div className="container-page relative grid grid-cols-1 items-center gap-10 py-16 sm:py-20 lg:grid-cols-2">
-          <div>
+          <div className="text-center lg:text-left">
             <span className="section-eyebrow">Book a Test Drive</span>
             <h1 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl">
               Feel the Drive.
-              <br />
+              <br className="hidden sm:inline" />{" "}
               Make the Right Choice.
             </h1>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-300">
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-300 mx-auto lg:mx-0">
               Experience the car you love before you buy. Book a test drive at your convenience.
             </p>
 
-            <div className="mt-10 space-y-6">
+            <div className="mt-10 space-y-6 flex flex-col items-center lg:items-start">
               {[
                 {
                   icon: CarFront,
@@ -108,7 +108,7 @@ export default function BookTestDrivePage() {
                   desc: 'Get feature walkthroughs and complete vehicle history from our product experts.',
                 },
               ].map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="flex gap-4 max-w-md">
+                <div key={title} className="flex flex-row items-start gap-4 max-w-md text-left">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10 text-brand-red">
                     <Icon size={20} />
                   </div>
@@ -139,21 +139,21 @@ export default function BookTestDrivePage() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
             {steps.map(({ title, desc }, index) => (
               <div key={title} className="relative text-center">
-                {index < steps.length - 1 && (
-                  <>
-                    <div className="absolute right-[-2rem] top-6 hidden -translate-y-1/2 items-center lg:flex">
-                      <MoveRight size={24} className="text-slate-300" />
-                    </div>
-                    <div className="mb-6 flex justify-center text-slate-300 lg:hidden">
-                      <ChevronDown size={20} />
-                    </div>
-                  </>
-                )}
                 <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-slate-50 text-lg font-black text-slate-400 border-2 border-slate-100">
                   {index + 1}
                 </div>
                 <h3 className="mb-2 font-bold text-slate-900">{title}</h3>
                 <p className="text-[13px] leading-relaxed text-slate-600 max-w-[200px] mx-auto">{desc}</p>
+                {index < steps.length - 1 && (
+                  <>
+                    <div className="absolute right-[-2rem] top-6 hidden -translate-y-1/2 items-center lg:flex">
+                      <MoveRight size={24} className="text-slate-300" />
+                    </div>
+                    <div className="mt-6 flex justify-center text-slate-300 lg:hidden">
+                      <ChevronDown size={20} />
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
@@ -165,18 +165,18 @@ export default function BookTestDrivePage() {
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             Why Take a Test Drive?
           </h2>
-          <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
             {reasons.map(({ title, desc }) => (
               <div
                 key={title}
-                className="flex gap-4 rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-brand-red/30 hover:shadow-sm w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)]"
+                className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2.5 sm:gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 transition-colors hover:border-brand-red/30 hover:shadow-sm"
               >
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
-                  <CheckCircle2 size={14} strokeWidth={3} />
+                <div className="mt-0.5 flex h-7 w-7 sm:h-6 sm:w-6 shrink-0 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
+                  <CheckCircle2 size={15} strokeWidth={3} />
                 </div>
                 <div>
-                  <h3 className="mb-1 text-[14px] font-bold text-slate-900">{title}</h3>
-                  <p className="text-[13px] leading-relaxed text-slate-600">{desc}</p>
+                  <h3 className="mb-1 text-xs sm:text-[14px] font-bold text-slate-900">{title}</h3>
+                  <p className="text-[11px] sm:text-[13px] leading-relaxed text-slate-600">{desc}</p>
                 </div>
               </div>
             ))}
@@ -227,14 +227,14 @@ export default function BookTestDrivePage() {
       </section>
 
       <section className="container-page pb-16 sm:pb-20">
-        <div className="flex flex-col items-start gap-6 rounded-2xl bg-brand-navy p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
-          <div>
-            <h3 className="text-xl font-bold text-white sm:text-2xl">Can&apos;t Visit Right Now?</h3>
-            <p className="mt-2 max-w-md text-sm text-slate-300">
+        <div className="flex flex-col items-center text-center gap-6 rounded-2xl bg-brand-navy p-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left sm:p-10">
+          <div className="w-full text-center sm:text-left">
+            <h3 className="text-xl font-bold text-white sm:text-2xl text-center sm:text-left">Can&apos;t Visit Right Now?</h3>
+            <p className="mt-2 max-w-md text-sm text-slate-300 mx-auto sm:mx-0 text-center sm:text-left">
               Schedule your test drive at a time that suits you best. We&apos;ll make it happen!
             </p>
           </div>
-          <ScrollToTopButton className="btn btn-primary">
+          <ScrollToTopButton className="btn btn-primary w-full sm:w-auto">
             Schedule Test Drive
           </ScrollToTopButton>
         </div>

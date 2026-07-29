@@ -71,14 +71,14 @@ export default function SellYourCarPage() {
     <>
       <section className="py-14 sm:py-20">
         <div className="container-page grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 items-start">
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 text-center lg:text-left">
             <span className="section-eyebrow">Sell Your Car</span>
             <h1 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
               Sell Your Car.
-              <br />
+              <br className="hidden sm:inline" />{" "}
               Fast, Easy &amp; Hassle-Free.
             </h1>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-600">
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-600 mx-auto lg:mx-0">
               Get the best value for your car with a quick, transparent and secure process.
             </p>
             <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-2xl">
@@ -112,21 +112,21 @@ export default function SellYourCarPage() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8">
             {steps.map(({ icon: Icon, title, desc }, i) => (
               <div key={title} className="relative text-center">
-                {i < steps.length - 1 && (
-                  <>
-                    <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center sm:flex">
-                      <MoveRight size={28} className="text-slate-400" />
-                    </div>
-                    <div className="mb-4 flex justify-center text-slate-400 sm:hidden">
-                      <ChevronDown size={20} />
-                    </div>
-                  </>
-                )}
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
                   <Icon size={26} />
                 </div>
                 <h3 className="mb-1 font-bold text-slate-900">{title}</h3>
                 <p className="text-sm text-slate-600">{desc}</p>
+                {i < steps.length - 1 && (
+                  <>
+                    <div className="absolute right-[-2rem] top-8 hidden -translate-y-1/2 items-center sm:flex">
+                      <MoveRight size={28} className="text-slate-400" />
+                    </div>
+                    <div className="mt-4 flex justify-center text-slate-400 sm:hidden">
+                      <ChevronDown size={20} />
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
@@ -143,17 +143,17 @@ export default function SellYourCarPage() {
           </h2>
           <span className="mx-auto mb-12 block h-1 w-12 bg-brand-red" />
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-6 lg:grid-cols-5">
             {reasons.map(({ icon: Icon, title, desc, iconBg, iconColor }) => (
               <div
                 key={title}
-                className="rounded-xl border border-white/10 bg-white/5 p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
+                className="rounded-xl border border-white/10 bg-white/5 p-4 sm:p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
               >
-                <div className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full ${iconBg} ${iconColor}`}>
-                  <Icon size={22} />
+                <div className={`mx-auto mb-3 sm:mb-4 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full ${iconBg} ${iconColor}`}>
+                  <Icon size={20} />
                 </div>
-                <h3 className="mb-1.5 text-sm font-bold text-white">{title}</h3>
-                <p className="text-xs leading-relaxed text-slate-300">{desc}</p>
+                <h3 className="mb-1 sm:mb-1.5 text-xs sm:text-sm font-bold text-white">{title}</h3>
+                <p className="text-[11px] sm:text-xs leading-relaxed text-slate-300">{desc}</p>
               </div>
             ))}
           </div>
@@ -172,15 +172,15 @@ export default function SellYourCarPage() {
               className="object-cover opacity-20"
             />
           </div>
-          <div className="relative flex flex-col items-start gap-6 p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+          <div className="relative flex flex-col items-center text-center gap-6 p-6 sm:p-10 sm:flex-row sm:items-center sm:justify-between sm:text-left">
             <div>
               <h3 className="text-xl font-bold text-white sm:text-2xl">Ready to sell your car?</h3>
-              <p className="mt-2 max-w-md text-sm text-slate-300">
+              <p className="mt-2 max-w-md text-sm text-slate-300 mx-auto sm:mx-0">
                 Get the best value for your car with THINKARZ. It&apos;s quick, easy and
                 hassle-free.
               </p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="flex flex-col gap-3 w-full sm:w-auto sm:flex-row sm:flex-wrap">
               <ScrollToTopButton className="btn btn-primary w-full sm:w-auto">
                 Get Free Valuation
               </ScrollToTopButton>

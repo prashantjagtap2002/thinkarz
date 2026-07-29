@@ -39,8 +39,8 @@ export default function Footer() {
   return (
     <footer className="bg-brand-navy text-slate-300">
 
-      <div className="container-page grid grid-cols-1 gap-y-10 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:gap-x-6">
-        <div className="lg:col-span-1">
+      <div className="container-page grid grid-cols-1 gap-y-10 py-14 text-center sm:text-left sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:gap-x-6">
+        <div className="lg:col-span-1 flex flex-col items-center sm:items-start">
           <Link href="/" className="inline-block">
             <span className="text-xl font-extrabold tracking-tight text-white sm:text-2xl">
               THIN<span className="text-brand-red text-[1.18em]">K</span>ARZ
@@ -53,27 +53,16 @@ export default function Footer() {
             THINKARZ is the pre-owned car venture of Gautam Modi Group, built on decades of trust,
             customer first approach, and a passion for mobility.
           </p>
-          <div className="mt-5 flex gap-3">
+          <div className="mt-5 flex justify-center sm:justify-start gap-3">
             {[
               { icon: Facebook, href: 'https://www.facebook.com/Thinkarz/', label: 'Facebook' },
               { icon: Instagram, href: 'https://www.instagram.com/thinkarz/reels/', label: 'Instagram' },
-              { icon: Youtube, label: 'YouTube' },
               { icon: Linkedin, href: 'https://www.linkedin.com/company/thinkcarz-technologies-private-limited/?originalSubdomain=in', label: 'LinkedIn' },
-            ].map(({ icon: Icon, href, label }) => {
-              const commonClass = "flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red";
-              if (href) {
-                return (
-                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" className={commonClass} aria-label={label}>
-                    <Icon size={16} />
-                  </a>
-                );
-              }
-              return (
-                <button key={label} className={commonClass} aria-label={label}>
-                  <Icon size={16} />
-                </button>
-              );
-            })}
+            ].map(({ icon: Icon, href, label }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red" aria-label={label}>
+                <Icon size={16} />
+              </a>
+            ))}
             <a
               href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent('Hello.')}`}
               target="_blank"
@@ -139,24 +128,24 @@ export default function Footer() {
         <div>
           <h4 className="mb-4 text-sm font-semibold text-white sm:text-base">Contact Us</h4>
           <ul className="space-y-3 text-sm text-slate-400">
-            <li className="flex gap-2.5">
-              <MapPin size={16} className="mt-0.5 shrink-0 text-brand-red" />
+            <li className="flex items-start justify-center sm:justify-start gap-2.5 text-left">
+              <MapPin size={16} className="mt-1 shrink-0 text-brand-red" />
               <span className="min-w-0 break-words">{contactInfo.address.join(', ')}</span>
             </li>
-            <li className="flex gap-2.5">
-              <Phone size={16} className="mt-0.5 shrink-0 text-brand-red" />
+            <li className="flex items-center justify-center sm:justify-start gap-2.5 text-left">
+              <Phone size={16} className="shrink-0 text-brand-red" />
               <a href={`tel:${contactInfo.phone}`} className="min-w-0 break-words hover:text-white transition-colors">
                 {contactInfo.phone}
               </a>
             </li>
-            <li className="flex gap-2.5">
-              <Mail size={16} className="mt-0.5 shrink-0 text-brand-red" />
+            <li className="flex items-center justify-center sm:justify-start gap-2.5 text-left">
+              <Mail size={16} className="shrink-0 text-brand-red" />
               <a href={`mailto:${contactInfo.email}`} className="min-w-0 break-words hover:text-white transition-colors">
                 {contactInfo.email}
               </a>
             </li>
-            <li className="flex gap-2.5">
-              <Clock size={16} className="mt-0.5 shrink-0 text-brand-red" />
+            <li className="flex items-start justify-center sm:justify-start gap-2.5 text-left">
+              <Clock size={16} className="mt-1 shrink-0 text-brand-red" />
               <span className="min-w-0 break-words">
                 {contactInfo.hours[0]}
                 <br />

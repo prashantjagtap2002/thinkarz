@@ -227,13 +227,15 @@ export default function AboutPage() {
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
             <Reveal
               delay={0}
-              className="rounded-lg border border-white/15 bg-white/5 p-6 text-left"
+              className="rounded-xl border border-white/15 bg-white/5 p-6 sm:p-8 text-center flex flex-col items-center justify-center backdrop-blur-sm"
             >
-              <CheckCircle2 className="h-5 w-5 text-white" />
-              <h3 className="mt-3 text-base font-semibold text-white">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-red/20 text-brand-red">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-extrabold text-white sm:text-lg">
                 140-Point Quality Inspection
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/70">
+              <p className="mt-2 text-xs sm:text-sm leading-relaxed text-white/80">
                 Our factory-trained technicians inspect every car across 140 checkpoints
                 covering the engine, transmission, brakes, suspension, electricals, tyres,
                 interior, and exterior. Only cars that meet our standards make it to the
@@ -243,13 +245,15 @@ export default function AboutPage() {
 
             <Reveal
               delay={100}
-              className="rounded-lg border border-white/15 bg-white/5 p-6 text-left"
+              className="rounded-xl border border-white/15 bg-white/5 p-6 sm:p-8 text-center flex flex-col items-center justify-center backdrop-blur-sm"
             >
-              <CheckCircle2 className="h-5 w-5 text-white" />
-              <h3 className="mt-3 text-base font-semibold text-white">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-red/20 text-brand-red">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-extrabold text-white sm:text-lg">
                 7-Day Easy Return
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/70">
+              <p className="mt-2 text-xs sm:text-sm leading-relaxed text-white/80">
                 We stand behind every car we sell. If you&apos;re not completely satisfied
                 with your purchase, our 7-day easy return window gives you the confidence to
                 buy with zero stress. Plus, every car comes with a comprehensive warranty
@@ -261,7 +265,7 @@ export default function AboutPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-14 sm:py-20">
+      <section className="pt-12 pb-6 sm:pt-16 sm:pb-8">
         <div className="container-page">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
             {/* Left — sticky heading */}
@@ -291,7 +295,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-12 sm:py-16">
+      <section className="pt-2 pb-12 sm:pt-4 sm:pb-16">
         <div className="container-page">
           <Reveal className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-10 text-center shadow-sm">
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">

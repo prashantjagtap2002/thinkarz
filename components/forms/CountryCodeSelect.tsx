@@ -77,20 +77,20 @@ export default function CountryCodeSelect({ value, onChange }: CountryCodeSelect
         ref={buttonRef}
         type="button"
         onClick={() => (isOpen ? setIsOpen(false) : openDropdown())}
-        className="flex h-full w-[100px] items-center justify-between pl-2.5 pr-2 text-[14px] font-semibold text-slate-700 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
+        className="flex h-full w-[116px] sm:w-[124px] items-center justify-between pl-2.5 pr-1.5 text-[13px] sm:text-[14px] font-semibold text-slate-700 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
       >
-        <div className="flex items-center gap-2 overflow-hidden">
+        <div className="flex items-center gap-1.5 overflow-hidden">
           <img
             src={`https://flagcdn.com/w40/${currentCountry.code.toLowerCase()}.png`}
             alt={currentCountry.code}
-            className="h-[15px] w-[22px] block shrink-0 object-cover rounded-[2px] shadow-sm"
+            className="h-[14px] w-[20px] block shrink-0 object-cover rounded-[2px] shadow-sm"
           />
-          <span className="truncate text-slate-800">
-            {currentCountry.code} ({currentCountry.dial})
+          <span className="whitespace-nowrap font-bold text-slate-800 text-[13px]">
+            {currentCountry.code} {currentCountry.dial}
           </span>
         </div>
         <ChevronDown
-          size={15}
+          size={14}
           className={`shrink-0 text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>

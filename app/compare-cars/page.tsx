@@ -128,12 +128,12 @@ export default function CompareCarsPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/85 to-brand-navy/40" />
         </div>
-        <div className="container-page relative py-16 sm:py-20">
+        <div className="container-page relative py-16 text-center sm:text-left sm:py-20">
           <span className="section-eyebrow">Compare Cars</span>
-          <h1 className="max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+          <h1 className="max-w-xl text-3xl font-extrabold leading-tight text-white sm:text-4xl mx-auto sm:mx-0">
             Compare Specifications, Features &amp; Pricing
           </h1>
-          <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300">
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300 mx-auto sm:mx-0">
             Important decisions like a car purchase are often confusing. Compare price, mileage,
             power and performance side by side before you decide.
           </p>
@@ -338,7 +338,7 @@ export default function CompareCarsPage() {
       {/* Popular comparisons */}
       <section className="bg-slate-50 py-14 sm:py-20">
         <div className="container-page">
-          <h2 className="mb-8 text-xl font-extrabold text-slate-900 sm:text-2xl">
+          <h2 className="mb-8 text-xl font-extrabold text-slate-900 sm:text-2xl text-center sm:text-left">
             Popular Comparisons
           </h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -354,21 +354,21 @@ export default function CompareCarsPage() {
                 >
                   <div className="mb-4 flex items-center gap-2">
                     <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg bg-slate-100">
-                          <Image src={a.image} alt={`${a.make} ${a.model}`} title={`${a.make} ${a.model}`} fill className="object-cover" />
-                        </div>
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-brand-red text-[11px] font-bold text-brand-red">
-                          VS
-                        </span>
-                        <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg bg-slate-100">
-                          <Image src={b.image} alt={`${b.make} ${b.model}`} title={`${b.make} ${b.model}`} fill className="object-cover" />
+                      <Image src={a.image} alt={`${a.make} ${a.model}`} title={`${a.make} ${a.model}`} fill className="object-cover" />
+                    </div>
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-brand-red text-[11px] font-bold text-brand-red">
+                      VS
+                    </span>
+                    <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg bg-slate-100">
+                      <Image src={b.image} alt={`${b.make} ${b.model}`} title={`${b.make} ${b.model}`} fill className="object-cover" />
                     </div>
                   </div>
-                  <div className="mb-4 flex items-center justify-between text-xs">
-                    <div>
+                  <div className="mb-4 flex items-start justify-between text-xs gap-2">
+                    <div className="flex-1 text-center">
                       <p className="font-bold uppercase text-slate-900">{a.make} {a.model}</p>
                       <p className="mt-0.5 text-slate-500">{formatPrice(a.price)} onwards</p>
                     </div>
-                    <div className="text-right">
+                    <div className="flex-1 text-center">
                       <p className="font-bold uppercase text-slate-900">{b.make} {b.model}</p>
                       <p className="mt-0.5 text-slate-500">{formatPrice(b.price)} onwards</p>
                     </div>
@@ -383,7 +383,7 @@ export default function CompareCarsPage() {
 
           <Link
             href="/pre-owned-cars"
-            className="mt-8 flex items-center gap-1 text-sm font-semibold text-brand-red hover:underline"
+            className="mt-8 flex items-center justify-center sm:justify-start gap-1 text-sm font-semibold text-brand-red hover:underline"
           >
             Compare Cars of Your Choice <ChevronRight size={16} />
           </Link>

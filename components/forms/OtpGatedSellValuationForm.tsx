@@ -211,14 +211,14 @@ export default function OtpGatedSellValuationForm() {
     <div id="valuation-form" className="flex h-fit flex-col justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 lg:p-12">
       <div className="mx-auto w-full">
         {step === 'phone' && (
-          <form onSubmit={handleSendOtp}>
-            <h2 className="text-[22px] font-bold text-slate-900">Request a Free Valuation</h2>
-            <p className="mb-8 text-[13px] text-slate-500 leading-relaxed mt-1">
+          <form onSubmit={handleSendOtp} className="text-center sm:text-left">
+            <h2 className="text-[22px] font-bold text-slate-900 text-center sm:text-left">Request a Free Valuation</h2>
+            <p className="mb-8 text-[13px] text-slate-500 leading-relaxed mt-1 text-center sm:text-left">
               Enter your car details and our team will get back to you with an expert valuation estimate.
             </p>
 
-            <div className="mb-6 flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24]">
+            <div className="mb-6 flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4 text-center sm:text-left">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24] shrink-0">
                 <PhoneCall size={20} strokeWidth={2} />
               </div>
               <div>
@@ -227,8 +227,8 @@ export default function OtpGatedSellValuationForm() {
               </div>
             </div>
 
-            <div className="mb-8">
-              <label htmlFor="sell-phone" className="mb-2 block text-[14px] font-bold text-slate-700">Mobile Number</label>
+            <div className="mb-8 text-left">
+              <label htmlFor="sell-phone" className="mb-2 block text-[14px] font-bold text-slate-700 text-center sm:text-left">Mobile Number</label>
               <div className="flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
                 <CountryCodeSelect
                   value={countryCode}
@@ -252,10 +252,10 @@ export default function OtpGatedSellValuationForm() {
                   className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8]"
                 />
               </div>
-              {phoneError && <p className="mt-1.5 text-[13px] text-red-600">{phoneError}</p>}
+              {phoneError && <p className="mt-1.5 text-[13px] text-red-600 text-center sm:text-left">{phoneError}</p>}
             </div>
 
-            <label className="mb-6 flex cursor-pointer items-start gap-2.5 text-left">
+            <label className="mb-6 flex cursor-pointer items-start justify-center sm:justify-start gap-2.5 text-center sm:text-left">
               <input
                 type="checkbox"
                 checked={hasConsent}
@@ -276,7 +276,7 @@ export default function OtpGatedSellValuationForm() {
                 </Link>.
               </span>
             </label>
-            {consentError && <p className="-mt-4 mb-4 text-[13px] text-red-600">{consentError}</p>}
+            {consentError && <p className="-mt-4 mb-4 text-[13px] text-red-600 text-center sm:text-left">{consentError}</p>}
 
             <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
               {isLoading ? 'Sending...' : 'Send OTP'}
@@ -290,9 +290,9 @@ export default function OtpGatedSellValuationForm() {
         )}
 
         {step === 'form' && (
-          <div className="w-full animate-fade-in">
-            <h2 className="text-[22px] font-bold text-slate-900">Request a Free Valuation</h2>
-            <p className="mb-6 text-[13px] text-slate-500 leading-relaxed mt-1">
+          <div className="w-full animate-fade-in text-center sm:text-left">
+            <h2 className="text-[22px] font-bold text-slate-900 text-center sm:text-left">Request a Free Valuation</h2>
+            <p className="mb-6 text-[13px] text-slate-500 leading-relaxed mt-1 text-center sm:text-left">
               Enter your car details and our team will get back to you with an expert valuation estimate.
             </p>
 

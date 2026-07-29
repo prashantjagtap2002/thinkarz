@@ -180,18 +180,19 @@ export default function HomePage() {
 
           {/* Trust strip */}
           <div
-            className="mt-8 grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-6 sm:grid-cols-4 animate-fade-up"
+            className="mt-8 grid grid-cols-2 gap-3 sm:gap-6 border-t border-white/[0.06] pt-6 sm:grid-cols-4 animate-fade-up"
             style={{ animationDelay: '300ms' }}
           >
             {trustBadges.map(({ icon: Icon, value, label }) => (
-              <div key={label} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-slate-300">
-                  <Icon size={18} />
+              <div
+                key={label}
+                className="flex flex-col items-center justify-center text-center p-3.5 sm:p-4 rounded-xl bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm"
+              >
+                <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-red/15 text-brand-red">
+                  <Icon size={20} />
                 </div>
-                <div>
-                  <p className="text-sm font-bold text-white">{value}</p>
-                  <p className="text-[11px] text-slate-400">{label}</p>
-                </div>
+                <p className="text-sm font-bold text-white leading-snug">{value}</p>
+                <p className="mt-0.5 text-[11px] text-slate-300/80 leading-tight">{label}</p>
               </div>
             ))}
           </div>
