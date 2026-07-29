@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { PhoneCall, ShieldCheck, X, CheckCircle2 } from 'lucide-react';
+import { PhoneCall, ShieldCheck, X, CheckCircle2, ChevronDown } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
@@ -264,22 +264,28 @@ export default function OtpGatedTestDriveForm() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="car" className="field-label">Select Car</label>
-                <select id="car" name="car" required className="field-input" defaultValue="">
-                  <option value="" disabled>Select Car Model</option>
-                  {popularCars.map((car) => (
-                    <option key={car.id} value={`${car.make} ${car.model}`}>{car.make} {car.model}</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select id="car" name="car" required className="field-input appearance-none pr-10 cursor-pointer" defaultValue="">
+                    <option value="" disabled>Select Car Model</option>
+                    {popularCars.map((car) => (
+                      <option key={car.id} value={`${car.make} ${car.model}`}>{car.make} {car.model}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                </div>
                 <FieldError name="car" />
               </div>
               <div>
                 <label htmlFor="variant" className="field-label">Variant (Optional)</label>
-                <select id="variant" name="variant" className="field-input" defaultValue="">
-                  <option value="" disabled>Select Variant</option>
-                  <option>Base</option>
-                  <option>Mid</option>
-                  <option>Top</option>
-                </select>
+                <div className="relative">
+                  <select id="variant" name="variant" className="field-input appearance-none pr-10 cursor-pointer" defaultValue="">
+                    <option value="" disabled>Select Variant</option>
+                    <option>Base</option>
+                    <option>Mid</option>
+                    <option>Top</option>
+                  </select>
+                  <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                </div>
               </div>
             </div>
             <AppointmentFields />

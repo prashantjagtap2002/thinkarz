@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { PhoneCall, ShieldCheck, X, CheckCircle2 } from 'lucide-react';
+import { PhoneCall, ShieldCheck, X, CheckCircle2, ChevronDown } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
@@ -247,15 +247,18 @@ export default function OtpGatedContactForm() {
             </div>
             <div>
               <label htmlFor="subject" className="field-label">Subject</label>
-              <select id="subject" name="subject" required className="field-input" defaultValue="">
-                <option value="" disabled>
-                  Select a subject
-                </option>
-                <option>Buying a Car</option>
-                <option>Selling a Car</option>
-                <option>Service Appointment</option>
-                <option>General Enquiry</option>
-              </select>
+              <div className="relative">
+                <select id="subject" name="subject" required className="field-input appearance-none pr-10 cursor-pointer" defaultValue="">
+                  <option value="" disabled>
+                    Select a subject
+                  </option>
+                  <option>Buying a Car</option>
+                  <option>Selling a Car</option>
+                  <option>Service Appointment</option>
+                  <option>General Enquiry</option>
+                </select>
+                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+              </div>
               <FieldError name="subject" />
             </div>
             <div>

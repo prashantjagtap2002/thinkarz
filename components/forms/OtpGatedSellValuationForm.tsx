@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { PhoneCall, ShieldCheck, X, CheckCircle2, BadgeIndianRupee } from 'lucide-react';
+import { PhoneCall, ShieldCheck, X, CheckCircle2, BadgeIndianRupee, ChevronDown } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
@@ -389,22 +389,24 @@ export default function OtpGatedSellValuationForm() {
               {/* 4. Manufacturing Year */}
               <div>
                 <label htmlFor="year" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Manufacturing Year</label>
-                <select
-                  id="year"
-                  name="year"
-                  required
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none"
-                  value={year}
-                  style={selectStyle}
-                  onChange={(e) => setYear(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Select Year
-                  </option>
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <option key={i}>{currentYear - i}</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    id="year"
+                    name="year"
+                    required
+                    className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white pl-3.5 pr-10 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none cursor-pointer"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Year
+                    </option>
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <option key={i} value={currentYear - i}>{currentYear - i}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                </div>
                 <FieldError name="year" />
               </div>
 

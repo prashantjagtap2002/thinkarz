@@ -73,26 +73,6 @@ export default function ContactUsPage() {
                 </div>
               ))}
             </div>
-
-            <div className="mt-8 pt-6 border-t border-slate-200/80">
-              <a
-                href="https://maps.app.goo.gl/j1DSAt9Dy3wuXHwy6"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between rounded-xl bg-white p-4 border border-slate-200 shadow-sm transition-all hover:border-brand-red/40 hover:shadow-md group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-brand-red">
-                    <MapPin size={18} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-slate-900 group-hover:text-brand-red transition-colors">Showroom Location</p>
-                    <p className="text-[11px] text-slate-500">Malad West, Mumbai</p>
-                  </div>
-                </div>
-                <span className="text-xs font-semibold text-brand-red">Get Directions →</span>
-              </a>
-            </div>
           </div>
 
           <div className="w-full h-fit lg:col-span-7">
