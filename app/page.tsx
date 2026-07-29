@@ -408,7 +408,7 @@ export default function HomePage() {
           <div className="hidden grid-cols-3 gap-6 sm:grid">
             {testimonials.map((t, i) => (
               <Reveal
-                key={i}
+                key={t.name}
                 delay={i * 90}
                 className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-red/25 hover:shadow-md"
               >
@@ -426,9 +426,9 @@ export default function HomePage() {
 
           {/* Mobile carousel */}
           <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide sm:hidden">
-            {testimonials.map((t, i) => (
+            {testimonials.map((t) => (
               <div
-                key={i}
+                key={t.name}
                 className="w-[85vw] shrink-0 snap-center rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
               >
                 

@@ -54,7 +54,8 @@ export default function MakeOfferModal({ car, onClose }: MakeOfferModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!offerValue.trim()) return;
+    const raw = offerValue.replace(/[^0-9.]/g, '').trim();
+    if (!raw || isNaN(Number(raw))) return;
 
     const payload = {
       form_type: 'Make an Offer / Buy Enquiry Modal',

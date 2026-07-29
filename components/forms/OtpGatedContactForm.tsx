@@ -6,11 +6,10 @@ import { PhoneCall, ShieldCheck, X, CheckCircle2 } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
-import { countryCodes } from '@/lib/countryCodes';
 import { useVerifiedPhone } from '@/lib/verifiedPhone';
 
 export default function OtpGatedContactForm() {
-  const { verifiedData, isVerified, saveVerification, resetVerification } = useVerifiedPhone();
+  const { verifiedData, saveVerification, resetVerification } = useVerifiedPhone();
   const [step, setStep] = useState<'phone' | 'form' | 'success'>('phone');
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [phone, setPhone] = useState('');

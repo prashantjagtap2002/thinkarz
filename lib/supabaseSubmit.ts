@@ -46,6 +46,7 @@ export async function submitToSupabase(payload: Record<string, any>): Promise<bo
       dataToInsert.phone = cleanPayload.phone || cleanPayload.mobile || null;
       dataToInsert.email = cleanPayload.email || null;
       dataToInsert.subject = cleanPayload.subject || null;
+      dataToInsert.pincode = cleanPayload.pincode || null;
       dataToInsert.message = cleanPayload.message || null;
     } else if (tableName === 'book_a_test_drive_form') {
       dataToInsert.car_model = cleanPayload.car_model || cleanPayload.car || cleanPayload.carModel || null;

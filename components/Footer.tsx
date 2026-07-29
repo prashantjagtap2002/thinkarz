@@ -57,19 +57,18 @@ export default function Footer() {
           </p>
           <div className="mt-5 flex gap-3">
             {[
-              { icon: Facebook, href: '#', label: 'Facebook' },
-              { icon: Instagram, href: '#', label: 'Instagram' },
-              { icon: Youtube, href: '#', label: 'YouTube' },
-              { icon: Linkedin, href: '#', label: 'LinkedIn' },
-            ].map(({ icon: Icon, href, label }) => (
-              <a
+              { icon: Facebook, label: 'Facebook' },
+              { icon: Instagram, label: 'Instagram' },
+              { icon: Youtube, label: 'YouTube' },
+              { icon: Linkedin, label: 'LinkedIn' },
+            ].map(({ icon: Icon, label }) => (
+              <button
                 key={label}
-                href={href}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red"
                 aria-label={label}
               >
                 <Icon size={16} />
-              </a>
+              </button>
             ))}
             <a
               href={`https://wa.me/${contactInfo.whatsappPhone}?text=${encodeURIComponent('Hello.')}`}

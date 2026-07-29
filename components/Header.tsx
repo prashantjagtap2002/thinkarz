@@ -18,7 +18,7 @@ export default function Header() {
 
         <nav className="hidden items-center gap-6 lg:flex">
           {navLinks.map((link) => {
-            const active = pathname === link.href;
+            const active = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useLayoutEffect as useIsomorphicLayoutEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   Car as CarIcon,
@@ -90,9 +90,7 @@ const PAGE_SIZE = 9;
 
 const colorLabels = ['White', 'Grey', 'Red', 'Silver', 'Black', 'Blue', 'Other'] as const;
 
-// Price slider bounds derived from the inventory.
 const MIN_PRICE = 0;
-const MAX_PRICE = 2000000;
 const PRICE_STEP = 50000;
 function useFlipLayout(items: Car[]) {
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -106,7 +104,7 @@ function useFlipLayout(items: Car[]) {
     }
   };
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const currentPositions = new Map<string, { left: number; top: number }>();
     const rafIds: number[] = [];
 
@@ -165,6 +163,7 @@ function useFlipLayout(items: Car[]) {
 
 export default function PreOwnedCarsBrowser() {
   const searchParams = useSearchParams();
+  const maxPrice = useMemo(() => Math.ceil(Math.max(...cars.map((c) => c.price), 0) / PRICE_STEP) * PRICE_STEP, []);
   const bodyTypeOptions = useMemo(() => uniqueValues('bodyType'), []);
   const makeOptions = useMemo(() => uniqueValues('make'), []);
   const budgetLabels = useMemo(() => budgetOptions.map((option) => option.label), []);
@@ -187,7 +186,7 @@ export default function PreOwnedCarsBrowser() {
   const [color, setColor] = useState<string[]>([]);
   const [certifiedOnly, setCertifiedOnly] = useState(false);
   const [priceMin, setPriceMin] = useState(MIN_PRICE);
-  const [priceMax, setPriceMax] = useState(MAX_PRICE);
+  const [priceMax, setPriceMax] = useState(maxPrice);
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -209,7 +208,7 @@ export default function PreOwnedCarsBrowser() {
     [],
   );
 
-  const priceSliderActive = priceMax !== MAX_PRICE;
+  const priceSliderActive = priceMax !== maxPrice;
 
   const filtered = useMemo(() => {
     let result = cars.filter((c) => {
@@ -254,8 +253,6 @@ export default function PreOwnedCarsBrowser() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const setCardRef = useFlipLayout(paginated);
-
-  const gridKey = `${page}-${sortBy}-${certifiedOnly}-${priceMin}-${priceMax}-${make.join('-')}-${budget.join('-')}-${fuel.join('-')}-${transmission.join('-')}-${bodyType.join('-')}-${age.join('-')}-${kms.join('-')}-${color.join('-')}`;
 
   const stringSetters: Record<string, React.Dispatch<React.SetStateAction<string[]>>> = {
     make: setMake,
@@ -316,7 +313,7 @@ export default function PreOwnedCarsBrowser() {
       label: `${formatPrice(priceMin)} - ${formatPrice(priceMax)}`,
       clear: () => {
         setPriceMin(MIN_PRICE);
-        setPriceMax(MAX_PRICE);
+        setPriceMax(maxPrice);
       },
     });
 
@@ -335,7 +332,7 @@ export default function PreOwnedCarsBrowser() {
     setColor([]);
     setCertifiedOnly(false);
     setPriceMin(MIN_PRICE);
-    setPriceMax(MAX_PRICE);
+    setPriceMax(maxPrice);
     setPage(1);
   }
 
@@ -371,6 +368,7 @@ export default function PreOwnedCarsBrowser() {
       onPriceRangeChange={onPriceRangeChange}
       onReset={resetFilters}
       hasActiveFilters={hasActiveFilters}
+      maxPrice={maxPrice}
     />
   );
 
@@ -407,9 +405,9 @@ export default function PreOwnedCarsBrowser() {
           <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
             Active:
           </span>
-          {activeChips.map((chip, i) => (
+          {activeChips.map((chip) => (
             <button
-              key={i}
+              key={chip.label}
               onClick={chip.clear}
               className="flex items-center gap-1.5 rounded-full bg-brand-blueLight px-3 py-1.5 text-xs font-semibold text-brand-blue transition-colors hover:bg-brand-red/10 hover:text-brand-red"
             >
@@ -538,6 +536,7 @@ type SidebarProps = {
     colorCounts: Map<string, number>;
   };
   hasActiveFilters: boolean;
+  maxPrice: number;
   onToggle: (field: string, value: string) => void;
   onCertifiedChange: (value: boolean) => void;
   onPriceRangeChange: (minVal: number, maxVal: number) => void;
@@ -545,7 +544,7 @@ type SidebarProps = {
 };
 
 function FilterSidebar(props: SidebarProps) {
-  const { state, counts, hasActiveFilters, onToggle, onCertifiedChange, onPriceRangeChange, onReset } = props;
+  const { state, counts, hasActiveFilters, maxPrice, onToggle, onCertifiedChange, onPriceRangeChange, onReset } = props;
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
@@ -583,7 +582,7 @@ function FilterSidebar(props: SidebarProps) {
             <div className="px-2">
               <PriceRangeSlider
                 min={MIN_PRICE}
-                max={MAX_PRICE}
+                max={maxPrice}
                 step={PRICE_STEP}
                 minValue={state.priceMin}
                 maxValue={state.priceMax}
@@ -798,7 +797,7 @@ function FilterSection({
           className={`text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
       </button>
-      <div className={`overflow-hidden transition-all duration-200 ${open ? 'mt-3 max-h-[600px]' : 'max-h-0'}`}>
+      <div className={`overflow-hidden transition-all duration-200 overflow-y-auto ${open ? 'mt-3 max-h-[60vh]' : 'max-h-0'}`}>
         {children}
       </div>
     </div>

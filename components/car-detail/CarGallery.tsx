@@ -15,6 +15,8 @@ export default function CarGallery({
 }) {
   const [active, setActive] = useState(0);
 
+  if (images.length === 0) return null;
+
   return (
     <div>
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100">

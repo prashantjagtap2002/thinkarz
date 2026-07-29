@@ -113,7 +113,7 @@ export default function SellValuationForm() {
             Select Year
           </option>
           {Array.from({ length: 12 }).map((_, i) => (
-            <option key={i}>{2024 - i}</option>
+            <option key={i}>{new Date().getFullYear() - i}</option>
           ))}
         </select>
         <FieldError name="year" />

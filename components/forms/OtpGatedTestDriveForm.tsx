@@ -7,7 +7,6 @@ import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm'
 import AppointmentFields from '@/components/forms/AppointmentFields';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { cars } from '@/lib/cars';
-import { countryCodes } from '@/lib/countryCodes';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 import { useVerifiedPhone } from '@/lib/verifiedPhone';
 

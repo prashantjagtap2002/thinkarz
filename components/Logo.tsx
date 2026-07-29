@@ -14,7 +14,7 @@ export default function Logo({ dark = false }: { dark?: boolean }) {
         YOUR ULTIMATE CAR DESTINATION
       </span>
       <span
-        className={`text-[8px] font-medium tracking-wide ${dark ? 'text-slate-400' : 'text-slate-400'}`}
+        className="text-[8px] font-medium tracking-wide text-slate-400"
       >
         BY GAUTAM MODI GROUP
       </span>

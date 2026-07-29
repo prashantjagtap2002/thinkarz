@@ -37,8 +37,10 @@ export default function AppointmentFields() {
             className="field-input"
             value={selectedDate}
             min={tomorrow}
-            onKeyDown={(e) => e.preventDefault()}
-            onClick={(e) => (e.target as HTMLInputElement).showPicker?.()}
+            readOnly
+            onClick={(e) => {
+              (e.target as HTMLInputElement).showPicker?.();
+            }}
             onChange={(e) => setSelectedDate(e.target.value)}
           />
           {!selectedDate && (

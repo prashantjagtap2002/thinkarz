@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { PhoneCall, ShieldCheck, X, CheckCircle2, BadgeIndianRupee } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
-import { countryCodes } from '@/lib/countryCodes';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 import { useVerifiedPhone } from '@/lib/verifiedPhone';
 
@@ -403,7 +402,7 @@ export default function OtpGatedSellValuationForm() {
                     Select Year
                   </option>
                   {Array.from({ length: 12 }).map((_, i) => (
-                    <option key={i}>{2024 - i}</option>
+                    <option key={i}>{currentYear - i}</option>
                   ))}
                 </select>
                 <FieldError name="year" />
