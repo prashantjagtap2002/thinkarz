@@ -447,8 +447,8 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
       </div>
 
       {/* CTA */}
-      <div className="mt-16 flex flex-col items-start gap-6 rounded-2xl bg-brand-navy p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
-        <div>
+      <div className="mt-16 flex flex-col items-center text-center sm:flex-row sm:items-center sm:justify-between sm:text-left gap-6 rounded-2xl bg-brand-navy p-6 sm:p-10">
+        <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
           <h3 className="text-xl font-bold text-white sm:text-2xl">
             Interested in this {car.make} {car.model}?
           </h3>
@@ -456,11 +456,11 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
             Book a test drive or talk to our team to take the next step.
           </p>
         </div>
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Link href="/book-a-test-drive" className="btn btn-primary w-full sm:w-auto">
+        <div className="flex flex-col w-full sm:w-auto gap-3 sm:flex-row sm:flex-wrap">
+          <Link href="/book-a-test-drive" className="btn btn-primary w-full sm:w-auto text-center justify-center">
             Book Test Drive
           </Link>
-          <Link href="/contact-us" className="btn btn-outline-white w-full sm:w-auto">
+          <Link href="/contact-us" className="btn btn-outline-white w-full sm:w-auto text-center justify-center">
             Talk to Expert
           </Link>
         </div>

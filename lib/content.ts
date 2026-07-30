@@ -101,12 +101,17 @@ export const carFaqs = [
   {
     question: "Is this car's ownership and accident history verified?",
     answer:
-      "Yes. Every THINKARZ car goes through a documentation check covering RC, ownership transfer history, and accident/insurance claim records before it's listed.",
+      "Yes. Every THINKARZ car goes through a rigorous documentation check covering RC, ownership transfer history, insurance claim records, and service history before listing.",
   },
   {
     question: 'What does the 140-point inspection cover?',
     answer:
       'Our inspection covers engine and transmission health, electricals, AC, suspension, brakes, tyres, body and paint condition, and interior fittings — every certified car passes all checks before listing.',
+  },
+  {
+    question: 'How does the car buying process work at THINKARZ?',
+    answer:
+      'Our process is simple and transparent: 1. Browse our certified inventory online or visit our Malad West showroom. 2. Book a free test drive. 3. Choose your preferred financing or payment option. 4. Complete quick paperwork and drive home your car.',
   },
   {
     question: 'Can I get a loan for this car?',
@@ -119,13 +124,28 @@ export const carFaqs = [
       'Absolutely. Get a free instant valuation for your current car and its value can be adjusted against the purchase price of this car.',
   },
   {
+    question: 'Do you handle RC transfer and RTO paperwork?',
+    answer:
+      'Yes, 100%! We take care of the entire RC transfer process, RTO documentation, and insurance transfer at zero hassle to you.',
+  },
+  {
     question: 'Is a test drive available before I buy?',
     answer:
       'Yes, you can book a free test drive at our Malad (West) showroom at a time that works for you, with no obligation to buy.',
   },
   {
-    question: "What is THINKARZ's return policy?",
+    question: 'What payment methods do you accept?',
     answer:
-      "If you're not fully satisfied, certified cars come with a 7-day easy return window from the date of delivery, subject to standard terms.",
+      'We accept all major payment modes including Net Banking (NEFT/RTGS), Credit/Debit cards, UPI, Cheques, and direct bank loan disbursements.',
+  },
+  {
+    question: 'Are prices negotiable at THINKARZ?',
+    answer:
+      'We follow a fixed and transparent pricing model based on real-time market data and comprehensive car condition reports, ensuring you get the fairest price upfront without stressful haggling.',
+  },
+  {
+    question: "What is THINKARZ's warranty and return policy?",
+    answer:
+      "All THINKARZ Certified vehicles come with a comprehensive warranty package covering core engine, transmission, and electrical components, alongside a 7-day money-back return guarantee.",
   },
 ];
