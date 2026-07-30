@@ -241,23 +241,23 @@ export default function OtpGatedTestDriveForm() {
             <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
             <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
-            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 p-3.5 sm:p-4 mb-5 text-left">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-                  <CheckCircle2 size={20} />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 p-3.5 sm:p-4 mb-5 gap-2.5 text-left">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                  <CheckCircle2 size={18} />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5 text-emerald-700">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Verified Number</span>
-                    <span className="rounded bg-emerald-200/80 px-1.5 py-0.5 text-[9px] font-bold uppercase text-emerald-900">Locked</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Verified Number</span>
+                    <span className="rounded bg-emerald-200/60 px-1.5 py-0.5 text-[9px] font-bold uppercase text-emerald-800">Locked</span>
                   </div>
-                  <p className="text-sm font-extrabold text-slate-900 mt-0.5">{countryCode} {phone}</p>
+                  <p className="text-sm font-extrabold text-slate-900">{countryCode} {phone}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={handleReverify}
-                className="text-xs font-bold text-[#e31e24] hover:underline shrink-0 text-right cursor-pointer"
+                className="text-xs font-bold text-[#e31e24] hover:underline shrink-0 text-left sm:text-right cursor-pointer"
               >
                 Change Number
               </button>

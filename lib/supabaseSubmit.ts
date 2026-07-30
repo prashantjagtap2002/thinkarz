@@ -13,7 +13,7 @@ export async function submitToSupabase(payload: Record<string, any>): Promise<bo
     let tableName = '';
 
     // Map form types to their corresponding Supabase table names
-    if (formType === 'Sell Your Car / Valuation Form') tableName = 'sell_your_car_valuation_form';
+    if (formType === 'Sell Your Car / Valuation Form' || formType === 'Sell Valuation Form') tableName = 'sell_your_car_valuation_form';
     else if (formType === 'Contact Us Form') tableName = 'contact_us_form';
     else if (formType === 'Book a Test Drive Form') tableName = 'book_a_test_drive_form';
     else if (formType === 'Make an Offer / Buy Enquiry Modal') tableName = 'make_an_offer_buy_enquiry_modal';
