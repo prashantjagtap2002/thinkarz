@@ -211,7 +211,7 @@ export default function OtpGatedSellValuationForm() {
         setResendTimer(30);
         const newCount = resendCount + 1;
         setResendCount(newCount);
-        setResendSuccessMsg(`New OTP sent via WhatsApp! (${newCount}/3 resends used)`);
+        setResendSuccessMsg('New OTP sent via WhatsApp!');
         setTimeout(() => {
           if (isMountedRef.current) setResendSuccessMsg('');
         }, 5000);
@@ -630,7 +630,7 @@ export default function OtpGatedSellValuationForm() {
                   Didn&apos;t receive the code?{' '}
                   {resendCount >= 3 ? (
                     <span className="text-slate-400 font-semibold">
-                      Max resends reached (3/3)
+                      Try after 30 min
                     </span>
                   ) : resendTimer > 0 ? (
                     <span className="font-semibold text-slate-700">
