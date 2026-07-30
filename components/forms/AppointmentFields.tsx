@@ -26,9 +26,9 @@ export default function AppointmentFields() {
   const tomorrow = useMemo(() => getTomorrowIsoDate(), []);
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 text-left">
       <div>
-        <label htmlFor="date" className="field-label">Preferred Date</label>
+        <label htmlFor="date" className="field-label text-left">Preferred Date</label>
         <div className="relative flex items-center">
           <input
             id="date"
@@ -38,20 +38,20 @@ export default function AppointmentFields() {
             min={tomorrow}
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="field-input w-full cursor-pointer pr-10 bg-white text-slate-700 font-medium [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+            className="field-input w-full cursor-pointer pr-10 bg-white text-slate-700 font-medium appearance-none !bg-none [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-inner-spin-button]:hidden [&::-webkit-clear-button]:hidden"
           />
-          <Calendar className="absolute right-3.5 top-1/2 -translate-y-1/2 text-brand-red pointer-events-none" size={18} />
+          <Calendar className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#e31e24] pointer-events-none" size={18} />
         </div>
         <FieldError name="date" />
       </div>
       <div>
-        <label htmlFor="time" className="field-label">Preferred Time</label>
+        <label htmlFor="time" className="field-label text-left">Preferred Time</label>
         <div className="relative">
           <select
             id="time"
             name="time"
             required
-            className="field-input appearance-none pr-10 cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed"
+            className="field-input appearance-none pr-10 cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed text-left"
             value={selectedTime}
             disabled={!selectedDate}
             onChange={(e) => setSelectedTime(e.target.value)}

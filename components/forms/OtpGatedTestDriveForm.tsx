@@ -141,13 +141,13 @@ export default function OtpGatedTestDriveForm() {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
       {step === 'phone' && (
-        <form onSubmit={handleSendOtp} className="w-full text-center sm:text-left">
-          <h2 className="text-[22px] font-bold text-slate-900 text-center sm:text-left">Book Your Test Drive</h2>
-          <p className="mb-6 text-[13px] text-slate-500 leading-relaxed mt-1 text-center sm:text-left">
+        <form onSubmit={handleSendOtp} className="w-full text-left">
+          <h2 className="text-2xl font-bold text-slate-900 text-left">Book Your Test Drive</h2>
+          <p className="mb-6 text-sm text-slate-500 leading-relaxed mt-1 text-left">
             Fill in your details and we&apos;ll get in touch to confirm.
           </p>
 
-          <div className="mb-6 flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4 text-center sm:text-left">
+          <div className="mb-6 flex items-center justify-start gap-3.5 text-left">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24] shrink-0">
               <PhoneCall size={20} strokeWidth={2} />
             </div>
@@ -158,7 +158,7 @@ export default function OtpGatedTestDriveForm() {
           </div>
 
           <div className="mb-6 text-left">
-            <label htmlFor="td-phone" className="mb-2 block text-[15px] font-bold text-slate-800 text-center sm:text-left">Mobile Number</label>
+            <label htmlFor="td-phone" className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-700 text-left">Mobile Number</label>
             <div className="flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
               <CountryCodeSelect
                 value={countryCode}
@@ -182,10 +182,10 @@ export default function OtpGatedTestDriveForm() {
                 className="flex-1 bg-transparent px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8]"
               />
             </div>
-            {phoneError && <p className="mt-1.5 text-[13px] text-red-600 text-center sm:text-left">{phoneError}</p>}
+            {phoneError && <p className="mt-1.5 text-xs text-red-600 text-left">{phoneError}</p>}
           </div>
 
-          <label className="mb-6 flex cursor-pointer items-start justify-center sm:justify-start gap-2.5 text-center sm:text-left">
+          <label className="mb-6 flex cursor-pointer items-start justify-start gap-2.5 text-left">
             <input
               type="checkbox"
               checked={hasConsent}
@@ -195,7 +195,7 @@ export default function OtpGatedTestDriveForm() {
               }}
               className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-red focus:ring-brand-red"
             />
-            <span className="text-[12px] leading-relaxed text-slate-600">
+            <span className="text-[12px] leading-relaxed text-slate-600 text-left">
               I agree to the{' '}
               <Link href="/terms-and-conditions" target="_blank" className="font-semibold text-slate-800 underline hover:text-brand-red">
                 Terms &amp; Conditions
@@ -206,13 +206,13 @@ export default function OtpGatedTestDriveForm() {
               </Link>.
             </span>
           </label>
-          {consentError && <p className="-mt-4 mb-4 text-[13px] text-red-600 text-center sm:text-left">{consentError}</p>}
+          {consentError && <p className="-mt-4 mb-4 text-xs text-red-600 text-left">{consentError}</p>}
 
           <button type="submit" disabled={!hasConsent || isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-50 disabled:cursor-not-allowed shadow-md">
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
 
-          <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+          <div className="mt-4 flex items-center justify-start gap-1.5 text-[11px] text-slate-400 text-left">
             <ShieldCheck size={14} />
             <p>Your number is safe with us. No spam.</p>
           </div>
@@ -220,9 +220,9 @@ export default function OtpGatedTestDriveForm() {
       )}
 
       {step === 'form' && (
-        <div className="w-full animate-fade-in text-center sm:text-left">
-          <h2 className="text-[22px] font-bold text-slate-900 text-center sm:text-left">Book Your Test Drive</h2>
-          <p className="mb-6 text-[13px] text-slate-500 leading-relaxed mt-1 text-center sm:text-left">
+        <div className="w-full text-left animate-fade-in">
+          <h2 className="mb-1 text-2xl font-bold text-slate-900 text-left">Book Your Test Drive</h2>
+          <p className="mb-6 text-sm text-slate-500 text-left">
             Fill in your details and we&apos;ll get in touch to confirm.
           </p>
 
@@ -231,7 +231,7 @@ export default function OtpGatedTestDriveForm() {
             submitLabel="Book Test Drive"
             successTitle="Test Drive Booked!"
             successMessage="We'll call you shortly to confirm your slot at our Malad (West) showroom."
-            className="space-y-4"
+            className="space-y-4 text-left"
             validations={[
               { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
             ]}
@@ -240,43 +240,43 @@ export default function OtpGatedTestDriveForm() {
             <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
             <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 p-3.5 sm:p-4 mb-5 gap-2.5 text-left">
-                <div className="flex items-center gap-2.5">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-                    <CheckCircle2 size={18} />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5 text-emerald-700">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Verified Number</span>
-                      <span className="rounded bg-emerald-200/60 px-1.5 py-0.5 text-[9px] font-bold uppercase text-emerald-800">Locked</span>
-                    </div>
-                    <p className="text-sm font-extrabold text-slate-900">{countryCode} {phone}</p>
-                  </div>
+            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 p-3.5 sm:p-4 mb-5 text-left">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                  <CheckCircle2 size={20} />
                 </div>
-                <button
-                  type="button"
-                  onClick={handleReverify}
-                  className="text-xs font-bold text-[#e31e24] hover:underline shrink-0 text-left sm:text-right cursor-pointer"
-                >
-                  Change Number
-                </button>
+                <div>
+                  <div className="flex items-center gap-1.5 text-emerald-700">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Verified Number</span>
+                    <span className="rounded bg-emerald-200/80 px-1.5 py-0.5 text-[9px] font-bold uppercase text-emerald-900">Locked</span>
+                  </div>
+                  <p className="text-sm font-extrabold text-slate-900 mt-0.5">{countryCode} {phone}</p>
+                </div>
               </div>
+              <button
+                type="button"
+                onClick={handleReverify}
+                className="text-xs font-bold text-[#e31e24] hover:underline shrink-0 text-right cursor-pointer"
+              >
+                Change Number
+              </button>
+            </div>
 
-            <div>
-              <label htmlFor="name" className="field-label">Full Name</label>
-              <input id="name" name="name" required className="field-input" placeholder="Enter your name" />
+            <div className="text-left">
+              <label htmlFor="name" className="field-label text-left">Full Name</label>
+              <input id="name" name="name" required className="field-input text-left" placeholder="Enter your name" />
               <FieldError name="name" />
             </div>
-            <div>
-              <label htmlFor="email" className="field-label">Email Address</label>
-              <input id="email" name="email" required type="email" className="field-input" placeholder="Enter your email address" />
+            <div className="text-left">
+              <label htmlFor="email" className="field-label text-left">Email Address</label>
+              <input id="email" name="email" required type="email" className="field-input text-left" placeholder="Enter your email address" />
               <FieldError name="email" />
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 text-left">
               <div>
-                <label htmlFor="car" className="field-label">Select Car</label>
+                <label htmlFor="car" className="field-label text-left">Select Car</label>
                 <div className="relative">
-                  <select id="car" name="car" required className="field-input appearance-none pr-10 cursor-pointer" defaultValue="">
+                  <select id="car" name="car" required className="field-input appearance-none pr-10 cursor-pointer text-left" defaultValue="">
                     <option value="" disabled>Select Car Model</option>
                     {popularCars.map((car) => (
                       <option key={car.id} value={`${car.make} ${car.model}`}>{car.make} {car.model}</option>
@@ -287,9 +287,9 @@ export default function OtpGatedTestDriveForm() {
                 <FieldError name="car" />
               </div>
               <div>
-                <label htmlFor="variant" className="field-label">Variant (Optional)</label>
+                <label htmlFor="variant" className="field-label text-left">Variant (Optional)</label>
                 <div className="relative">
-                  <select id="variant" name="variant" className="field-input appearance-none pr-10 cursor-pointer" defaultValue="">
+                  <select id="variant" name="variant" className="field-input appearance-none pr-10 cursor-pointer text-left" defaultValue="">
                     <option value="" disabled>Select Variant</option>
                     <option>Base</option>
                     <option>Mid</option>
@@ -300,13 +300,13 @@ export default function OtpGatedTestDriveForm() {
               </div>
             </div>
             <AppointmentFields />
-            <div>
-              <label htmlFor="location" className="field-label">Preferred Location</label>
-              <input id="location" name="location" className="field-input" defaultValue="Malad (West), Mumbai" readOnly />
+            <div className="text-left">
+              <label htmlFor="location" className="field-label text-left">Preferred Location</label>
+              <input id="location" name="location" className="field-input text-left" defaultValue="Malad (West), Mumbai" readOnly />
             </div>
-            <div>
-              <label htmlFor="notes" className="field-label">Additional Notes (Optional)</label>
-              <textarea id="notes" name="notes" className="field-input" rows={3} placeholder="Tell us anything we should know" />
+            <div className="text-left">
+              <label htmlFor="notes" className="field-label text-left">Additional Notes (Optional)</label>
+              <textarea id="notes" name="notes" className="field-input text-left" rows={3} placeholder="Tell us anything we should know" />
             </div>
           </SubmittableForm>
         </div>
