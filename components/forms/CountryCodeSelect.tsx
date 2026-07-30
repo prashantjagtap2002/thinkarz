@@ -82,7 +82,7 @@ export default function CountryCodeSelect({ value, onChange }: CountryCodeSelect
         <div className="flex items-center gap-1 overflow-hidden">
           <img
             src={`https://flagcdn.com/w40/${currentCountry.code.toLowerCase()}.png`}
-            alt={currentCountry.code}
+            alt={`Flag of country ${currentCountry.code}`}
             className="h-[13px] w-[18px] block shrink-0 object-cover rounded-[2px] shadow-sm"
           />
           <span className="whitespace-nowrap font-bold text-slate-800 text-[12px] sm:text-[13px]">
@@ -133,7 +133,7 @@ export default function CountryCodeSelect({ value, onChange }: CountryCodeSelect
                   >
                     <img
                       src={`https://flagcdn.com/w40/${c.code.toLowerCase()}.png`}
-                      alt={c.code}
+                      alt={`Flag of country ${c.code}`}
                       className="h-[14px] w-[20px] block shrink-0 object-cover rounded-[2px] shadow-sm"
                     />
                     <span className="truncate">

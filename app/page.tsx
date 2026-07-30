@@ -23,6 +23,23 @@ import {
 import CarCard from '@/components/CarCard';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
 import Reveal from '@/components/Reveal';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'THINKARZ | Certified Pre-Owned Cars | Gautam Modi Group',
+  description:
+    'Buy, sell & exchange 140-point quality checked pre-owned cars at THINKARZ by Gautam Modi Group. Enjoy 35+ years of trust, instant valuation, transparent pricing, and hassle-free paper transfer.',
+  keywords: [
+    'used cars',
+    'pre-owned cars',
+    'certified used cars',
+    'buy used car',
+    'sell car online',
+    'car valuation',
+    'Gautam Modi Group',
+    'THINKARZ',
+  ],
+};
 import BrandLogo from '@/components/BrandLogo';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import TestimonialCarousel from '@/components/TestimonialCarousel';

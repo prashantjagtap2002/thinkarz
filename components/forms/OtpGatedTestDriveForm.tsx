@@ -26,6 +26,10 @@ export default function OtpGatedTestDriveForm() {
   const [consentError, setConsentError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [serverHash, setServerHash] = useState('');
+  const [resendTimer, setResendTimer] = useState(30);
+  const [resendCount, setResendCount] = useState(0);
+  const [isResending, setIsResending] = useState(false);
+  const [resendSuccessMsg, setResendSuccessMsg] = useState('');
   const isMountedRef = useRef(true);
 
   useEffect(() => {
@@ -33,6 +37,19 @@ export default function OtpGatedTestDriveForm() {
       isMountedRef.current = false;
     };
   }, []);
+
+  // Resend OTP Countdown Timer
+  useEffect(() => {
+    let timerId: NodeJS.Timeout;
+    if (showOtpPopup && resendTimer > 0) {
+      timerId = setInterval(() => {
+        setResendTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timerId) clearInterval(timerId);
+    };
+  }, [showOtpPopup, resendTimer]);
 
   // Sync state with verified phone data if available
   useEffect(() => {
@@ -93,6 +110,9 @@ export default function OtpGatedTestDriveForm() {
 
       if (res.success && res.hash) {
         setServerHash(res.hash);
+        setOtp('');
+        setResendTimer(30);
+        setResendSuccessMsg('');
         setShowOtpPopup(true);
       } else {
         setPhoneError(res.error || 'Failed to send OTP');
@@ -101,6 +121,41 @@ export default function OtpGatedTestDriveForm() {
       console.error('Client action error:', err);
       setIsLoading(false);
       setPhoneError('Server unreachable. Please try again.');
+    }
+  }
+
+  async function handleResendOtp() {
+    if (resendTimer > 0 || isResending) return;
+    if (resendCount >= 3) {
+      setOtpError('Maximum resends reached (3 per session).');
+      return;
+    }
+    setIsResending(true);
+    setOtpError('');
+    setResendSuccessMsg('');
+
+    try {
+      const res = await sendWhatsAppOtp(countryCode, phone);
+      if (!isMountedRef.current) return;
+      setIsResending(false);
+
+      if (res.success && res.hash) {
+        setServerHash(res.hash);
+        setOtp('');
+        setResendTimer(30);
+        const newCount = resendCount + 1;
+        setResendCount(newCount);
+        setResendSuccessMsg(`New OTP sent via WhatsApp! (${newCount}/3 resends used)`);
+        setTimeout(() => {
+          if (isMountedRef.current) setResendSuccessMsg('');
+        }, 5000);
+      } else {
+        setOtpError(res.error || 'Failed to resend OTP');
+      }
+    } catch (err) {
+      console.error('Client resend action error:', err);
+      setIsResending(false);
+      setOtpError('Server unreachable. Please try again.');
     }
   }
 
@@ -338,7 +393,9 @@ export default function OtpGatedTestDriveForm() {
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeOtpPopup} />
           <div className="relative mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-fade-up sm:p-8">
             <button
+              type="button"
               onClick={closeOtpPopup}
+              aria-label="Close verification popup"
               className="absolute right-4 top-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
             >
               <X size={18} />
@@ -385,9 +442,34 @@ export default function OtpGatedTestDriveForm() {
                 {isLoading ? 'Verifying...' : 'Verify OTP'}
               </button>
 
-              <p className="mt-3 text-center text-[11px] text-slate-400">
-                Enter any 4-digit code to proceed.
-              </p>
+              <div className="mt-4 text-center">
+                {resendSuccessMsg && (
+                  <p className="mb-2 text-xs font-semibold text-emerald-600 animate-fade-in">
+                    {resendSuccessMsg}
+                  </p>
+                )}
+                <p className="text-xs text-slate-500">
+                  Didn&apos;t receive the code?{' '}
+                  {resendCount >= 3 ? (
+                    <span className="text-slate-400 font-semibold">
+                      Max resends reached (3/3)
+                    </span>
+                  ) : resendTimer > 0 ? (
+                    <span className="font-semibold text-slate-700">
+                      Resend in <span className="text-[#e31e24] font-bold">{resendTimer}s</span>
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResendOtp}
+                      disabled={isResending}
+                      className="font-bold text-[#e31e24] hover:underline disabled:opacity-50 cursor-pointer"
+                    >
+                      {isResending ? 'Sending...' : 'Resend OTP'}
+                    </button>
+                  )}
+                </p>
+              </div>
             </form>
           </div>
         </div>

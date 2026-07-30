@@ -1,5 +1,5 @@
 export const GOOGLE_SHEETS_WEB_APP_URL =
-  'https://script.google.com/macros/s/AKfycbxyJJXslQncg-C3XvlLTms9ZdibW-zwNzLXl3mgkNkdxN-0ecTY8Di1sh3yNaEH8LX1/exec';
+  process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEB_APP_URL || '';
 
 export async function submitToGoogleSheets(payload: Record<string, any>): Promise<boolean> {
   try {

@@ -46,13 +46,19 @@ export const metadata: Metadata = {
     description: 'Trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
     images: ['/icon.png'],
   },
+  manifest: '/manifest.webmanifest',
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
   icons: {
     icon: [
       { url: '/icon.png', type: 'image/png' },
       { url: '/favicon.png', type: 'image/png' },
     ],
     shortcut: '/icon.png',
-    apple: '/icon.png',
+    apple: [
+      { url: '/icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
 };
 

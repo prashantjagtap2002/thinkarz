@@ -8,15 +8,26 @@ import { submitToGoogleSheets } from '@/lib/googleSheets';
 export default function NewsletterSignup() {
   const [subscribed, setSubscribed] = useState(false);
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
   const utm = useUtmParams();
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!email.trim()) return;
+    const cleanEmail = email.trim();
+    if (!cleanEmail) {
+      setError('Email address is required');
+      return;
+    }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    setError('');
     submitToGoogleSheets({
       form_type: 'Newsletter Signup',
-      email,
+      email: cleanEmail,
       ...utm,
     });
 
@@ -39,10 +50,14 @@ export default function NewsletterSignup() {
         required
         type="email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          if (error) setError('');
+        }}
         placeholder="Enter your email"
-        className="mb-3 w-full rounded-md border border-slate-600 bg-transparent px-3 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-red focus:outline-none"
+        className="mb-2 w-full rounded-md border border-slate-600 bg-transparent px-3 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-red focus:outline-none"
       />
+      {error && <p className="mb-2 text-xs text-red-400">{error}</p>}
       <button type="submit" className="btn btn-primary w-full">
         Subscribe
       </button>

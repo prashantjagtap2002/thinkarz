@@ -1,17 +1,47 @@
 'use server';
 
 import crypto from 'crypto';
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/server';
 
-const WHATSAPP_API_KEY = process.env.WHATSAPP_API_KEY || '';
-const OTP_SECRET = process.env.OTP_SECRET || 'fallback-secret-development-only';
+function getOtpSecret(): string {
+  const secret = process.env.OTP_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('CRITICAL SECURITY ERROR: OTP_SECRET environment variable is missing.');
+    }
+    return 'fallback-secret-development-only-replace-in-env';
+  }
+  return secret;
+}
 
-// Helper to create a secure hash of the OTP and phone number
-function generateHash(phone: string, otp: string): string {
+// Helper to create a secure hash of the OTP, phone number, and timestamp
+function generateHash(phone: string, otp: string, timestamp: number): string {
   return crypto
-    .createHmac('sha256', OTP_SECRET)
-    .update(`${phone}:${otp}`)
+    .createHmac('sha256', getOtpSecret())
+    .update(`${phone}:${otp}:${timestamp}`)
     .digest('hex');
+}
+
+async function getDailyOtpCount(fullPhone: string): Promise<number> {
+  try {
+    const supabase = await createClient();
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count, error } = await supabase
+      .from('otp_logs')
+      .select('*', { count: 'exact', head: true })
+      .eq('full_phone', fullPhone)
+      .eq('action', 'send_otp')
+      .eq('status', 'sent')
+      .gte('created_at', twentyFourHoursAgo);
+
+    if (error) {
+      console.warn('Could not query OTP count from Supabase:', error.message);
+      return 0;
+    }
+    return count || 0;
+  } catch (err) {
+    return 0;
+  }
 }
 
 async function logOtpEvent(data: {
@@ -23,7 +53,7 @@ async function logOtpEvent(data: {
   error_message?: string | null;
 }) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     await supabase.from('otp_logs').insert([data]);
   } catch (err) {
     console.error('Failed to write OTP log to Supabase:', err);
@@ -36,6 +66,21 @@ export async function sendWhatsAppOtp(countryCode: string, phone: string) {
   const to = `${formattedCode}${formattedPhone}`;
 
   try {
+    // 1. Rate Limiting: Max 5 OTP requests per phone number per 24 hours
+    const dailyCount = await getDailyOtpCount(to);
+    if (dailyCount >= 5) {
+      const limitMsg = 'Daily OTP limit reached (5 per day) for this phone number. Please try again tomorrow.';
+      await logOtpEvent({
+        country_code: countryCode,
+        phone: phone,
+        full_phone: to,
+        action: 'send_otp',
+        status: 'rate_limited',
+        error_message: limitMsg,
+      });
+      return { success: false, error: limitMsg };
+    }
+
     const apiKey = process.env.WHATSAPP_API_KEY || '';
     if (!apiKey) {
       const errMsg = 'WHATSAPP_API_KEY is missing in your .env.local file.';
@@ -51,8 +96,8 @@ export async function sendWhatsAppOtp(countryCode: string, phone: string) {
       return { success: false, error: errMsg };
     }
 
-    // Generate a random 4-digit OTP
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    // Generate a cryptographically secure random 4-digit OTP
+    const otp = crypto.randomInt(1000, 10000).toString();
 
     // Call the WhatsApp API
     const response = await fetch(
@@ -115,8 +160,10 @@ export async function sendWhatsAppOtp(countryCode: string, phone: string) {
       return { success: false, error: errorData || `WhatsApp API error (${response.status})` };
     }
 
-    // Generate a hash to return to the client for verification
-    const hash = generateHash(to, otp);
+    // 2. Generate a timestamped secure hash (5-minute validity)
+    const timestamp = Date.now();
+    const signature = generateHash(to, otp, timestamp);
+    const hash = `${timestamp}.${signature}`;
 
     await logOtpEvent({
       country_code: countryCode,
@@ -153,9 +200,33 @@ export async function verifyWhatsAppOtp(
   const to = `${formattedCode}${formattedPhone}`;
 
   try {
-    const calculatedHash = generateHash(to, typedOtp);
+    if (!serverHash || !serverHash.includes('.')) {
+      return { success: false, error: 'Invalid or expired OTP token. Please resend code.' };
+    }
 
-    if (calculatedHash === serverHash) {
+    const [timestampStr, signature] = serverHash.split('.');
+    const timestamp = parseInt(timestampStr, 10);
+
+    if (isNaN(timestamp)) {
+      return { success: false, error: 'Malformed verification token.' };
+    }
+
+    // Check 5-minute expiration (5 * 60 * 1000 = 300,000 ms)
+    if (Date.now() - timestamp > 5 * 60 * 1000) {
+      await logOtpEvent({
+        country_code: countryCode,
+        phone: phone,
+        full_phone: to,
+        action: 'verify_otp',
+        status: 'expired',
+        error_message: 'OTP expired (exceeded 5 minutes)',
+      });
+      return { success: false, error: 'OTP has expired (valid for 5 minutes). Please click Resend OTP.' };
+    }
+
+    const expectedSignature = generateHash(to, typedOtp, timestamp);
+
+    if (signature === expectedSignature) {
       await logOtpEvent({
         country_code: countryCode,
         phone: phone,

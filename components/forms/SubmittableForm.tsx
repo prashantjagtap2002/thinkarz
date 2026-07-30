@@ -89,7 +89,7 @@ export default function SubmittableForm({
     return Object.keys(newErrors).length === 0;
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formElement = e.currentTarget;
     if (!validate(formElement)) return;
@@ -104,9 +104,11 @@ export default function SubmittableForm({
       payload[key] = value;
     });
 
-    // Send payload asynchronously to Google Sheets and Supabase
-    submitToGoogleSheets(payload);
-    submitToSupabase(payload);
+    // Await form dispatch via Promise.allSettled so neither call blocks or swallows errors
+    await Promise.allSettled([
+      submitToGoogleSheets(payload),
+      submitToSupabase(payload),
+    ]);
 
     onSubmit?.();
     setSubmitted(true);
