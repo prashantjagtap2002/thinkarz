@@ -58,6 +58,10 @@ const reasons = [
     title: 'Expert Guidance',
     desc: 'Get your queries answered by our product experts.',
   },
+  {
+    title: 'Easy Scheduling',
+    desc: 'Pick your convenient date & preferred time slot.',
+  },
 ];
 
 const popularCars = cars.slice(0, 4);
@@ -108,7 +112,7 @@ export default function BookTestDrivePage() {
                   desc: 'Get feature walkthroughs and complete vehicle history from our product experts.',
                 },
               ].map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="flex flex-row items-start gap-4 max-w-md text-left">
+                <div key={title} className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 max-w-md">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10 text-brand-red">
                     <Icon size={20} />
                   </div>

@@ -48,18 +48,18 @@ export default function ContactUsPage() {
 
       <section className="container-page py-14 sm:py-20">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 items-start">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-10 lg:p-12 lg:col-span-5 h-fit">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-10 lg:p-12 lg:col-span-5 h-fit text-center sm:text-left">
             <h2 className="mb-2 text-[22px] font-bold text-[#1e293b]">
               Contact Information
             </h2>
-            <p className="mb-6 text-sm leading-[1.6] text-slate-500">
+            <p className="mb-6 text-sm leading-[1.6] text-slate-500 max-w-md mx-auto sm:mx-0">
               We are here to help with bookings, service queries, finance questions and anything else you need.
             </p>
 
             <div className="space-y-5">
               {touchPoints.map(({ icon: Icon, title, lines }) => (
-                <div key={title} className="flex items-start gap-3.5 text-left">
-                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e2e8f0] text-[#475569]">
+                <div key={title} className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3.5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e2e8f0] text-[#475569]">
                     <Icon size={18} />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -88,7 +88,7 @@ export default function ContactUsPage() {
       {/* Map + showroom */}
       <section className="container-page pb-14 sm:pb-20">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200">
+          <div className="hidden sm:block aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200">
             <iframe
               title="THINKARZ showroom location"
               src="https://maps.google.com/maps?q=19.182148,72.836216&z=15&output=embed"

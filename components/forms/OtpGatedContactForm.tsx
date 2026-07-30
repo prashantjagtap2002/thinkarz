@@ -188,7 +188,7 @@ export default function OtpGatedContactForm() {
           </label>
           {consentError && <p className="-mt-4 mb-4 text-left text-xs text-red-600">{consentError}</p>}
 
-          <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
+          <button type="submit" disabled={!hasConsent || isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-50 disabled:cursor-not-allowed shadow-md">
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
         </form>

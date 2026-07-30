@@ -141,18 +141,18 @@ export default function OtpGatedTestDriveForm() {
             Fill in your details and we&apos;ll get in touch to confirm.
           </p>
 
-          <div className="mb-6 flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 text-center sm:text-left">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24] shrink-0">
-              <PhoneCall size={18} strokeWidth={2} />
+          <div className="mb-6 flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4 text-center sm:text-left">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fef2f2] text-[#e31e24] shrink-0">
+              <PhoneCall size={20} strokeWidth={2} />
             </div>
             <div>
-              <p className="text-[14px] font-bold text-slate-900 leading-tight">Enter your number</p>
-              <p className="text-[12px] text-slate-500 mt-0.5">We&apos;ll send a verification code</p>
+              <p className="text-[16px] sm:text-[18px] font-bold text-slate-900 leading-tight">Enter your number</p>
+              <p className="text-[13px] text-slate-500 mt-0.5">We&apos;ll send a verification code</p>
             </div>
           </div>
 
           <div className="mb-6 text-left">
-            <label htmlFor="td-phone" className="mb-2 block text-[14px] font-bold text-slate-700 text-center sm:text-left">Mobile Number</label>
+            <label htmlFor="td-phone" className="mb-2 block text-[15px] font-bold text-slate-800 text-center sm:text-left">Mobile Number</label>
             <div className="flex h-[52px] overflow-hidden rounded-[8px] border border-[#cbd5e1] bg-white focus-within:border-[#e31e24] focus-within:ring-1 focus-within:ring-[#e31e24]">
               <CountryCodeSelect
                 value={countryCode}
@@ -202,7 +202,7 @@ export default function OtpGatedTestDriveForm() {
           </label>
           {consentError && <p className="-mt-4 mb-4 text-[13px] text-red-600 text-center sm:text-left">{consentError}</p>}
 
-          <button type="submit" disabled={isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-70 shadow-md">
+          <button type="submit" disabled={!hasConsent || isLoading} className="h-[52px] w-full rounded-[8px] bg-[#e31e24] text-[15px] font-bold text-white transition-colors hover:bg-[#c81a20] disabled:opacity-50 disabled:cursor-not-allowed shadow-md">
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
 

@@ -268,7 +268,7 @@ export default function HomePage() {
             {whyChoose.map(({ icon: Icon, title, desc }) => (
               <Reveal
                 key={title}
-                className="rounded-xl border border-slate-200 p-4 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
+                className="flex flex-col items-center text-center rounded-xl border border-slate-200 p-4 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-md"
               >
                 <div className="mb-3 sm:mb-4 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
                   <Icon size={20} className="sm:h-5 sm:w-5" />

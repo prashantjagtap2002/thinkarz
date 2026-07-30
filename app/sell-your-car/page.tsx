@@ -64,6 +64,13 @@ const reasons = [
     iconBg: 'bg-rose-500/15',
     iconColor: 'text-rose-400',
   },
+  {
+    icon: CalendarClock,
+    title: 'Free RC Transfer',
+    desc: 'Hassle-free ownership & paper transfer.',
+    iconBg: 'bg-teal-500/15',
+    iconColor: 'text-teal-400',
+  },
 ];
 
 export default function SellYourCarPage() {
@@ -143,7 +150,7 @@ export default function SellYourCarPage() {
           </h2>
           <span className="mx-auto mb-12 block h-1 w-12 bg-brand-red" />
 
-          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-6 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-6 lg:grid-cols-6">
             {reasons.map(({ icon: Icon, title, desc, iconBg, iconColor }) => (
               <div
                 key={title}
