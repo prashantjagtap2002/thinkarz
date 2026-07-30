@@ -216,6 +216,7 @@ export default function OtpGatedContactForm() {
             className="space-y-4"
             onSubmit={() => setStep('success')}
             validations={[
+              { name: 'name', pattern: '^[a-zA-Z\\s\\.]{2,50}$', message: 'Enter a valid full name (letters only)' },
               { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
               { name: 'pincode', pattern: '^[1-9][0-9]{5}$', message: 'Enter a valid 6-digit pincode' },
             ]}
@@ -371,7 +372,15 @@ export default function OtpGatedContactForm() {
       {/* Reverify Confirmation Modal */}
       {showReverifyModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl text-center border border-slate-100">
+          <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl text-center border border-slate-100">
+            <button
+              type="button"
+              onClick={() => setShowReverifyModal(false)}
+              className="absolute right-4 top-4 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
+              aria-label="Close modal"
+            >
+              <X size={18} />
+            </button>
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-amber-600">
               <AlertCircle size={28} />
             </div>

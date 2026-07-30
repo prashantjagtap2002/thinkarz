@@ -177,7 +177,7 @@ export const cars: Car[] = [
   },
   {
     id: 'tata-nexon-ev-xz-plus',
-    make: 'TATA',
+    make: 'Tata',
     model: 'NEXON EV',
     variant: 'XZ+',
     year: 2023,
