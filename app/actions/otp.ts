@@ -56,7 +56,7 @@ export async function sendWhatsAppOtp(countryCode: string, phone: string) {
 
     // Call the WhatsApp API
     const response = await fetch(
-      'https://messaginghub.solutions/relaybridge/api/v1/meta/67d2dcdf2898a702bdf1d0c5/messages',
+      'https://messaginghub.solutions/relaybridge/api/v1/meta/67ff5b35f59e04c3b1513294/messages',
       {
         method: 'POST',
         headers: {
