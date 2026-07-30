@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { PhoneCall, ShieldCheck, X, CheckCircle2, ChevronDown } from 'lucide-react';
+import { PhoneCall, ShieldCheck, X, CheckCircle2, ChevronDown, AlertCircle } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
@@ -12,6 +12,7 @@ export default function OtpGatedContactForm() {
   const { verifiedData, saveVerification, resetVerification } = useVerifiedPhone();
   const [step, setStep] = useState<'phone' | 'form' | 'success'>('phone');
   const [showOtpPopup, setShowOtpPopup] = useState(false);
+  const [showReverifyModal, setShowReverifyModal] = useState(false);
   const [phone, setPhone] = useState('');
   const [countryCode, setCountryCode] = useState('+91');
   const [otp, setOtp] = useState('');
@@ -39,6 +40,11 @@ export default function OtpGatedContactForm() {
   }, [verifiedData]);
 
   function handleReverify() {
+    setShowReverifyModal(true);
+  }
+
+  function confirmReverify() {
+    setShowReverifyModal(false);
     resetVerification();
     setPhone('');
     setOtp('');
@@ -217,22 +223,27 @@ export default function OtpGatedContactForm() {
             <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
             <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
-            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3 mb-4">
-              <div>
-                <div className="flex items-center gap-1.5 text-emerald-700">
-                  <CheckCircle2 size={14} />
-                  <p className="text-[11px] font-bold uppercase tracking-wider">Verified Number (Locked)</p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 p-3.5 sm:p-4 mb-5 gap-2.5 text-left">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                    <CheckCircle2 size={18} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5 text-emerald-700">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Verified Number</span>
+                      <span className="rounded bg-emerald-200/60 px-1.5 py-0.5 text-[9px] font-bold uppercase text-emerald-800">Locked</span>
+                    </div>
+                    <p className="text-sm font-extrabold text-slate-900">{countryCode} {phone}</p>
+                  </div>
                 </div>
-                <p className="text-sm font-bold text-slate-900 mt-0.5">{countryCode} {phone}</p>
+                <button
+                  type="button"
+                  onClick={handleReverify}
+                  className="text-xs font-bold text-[#e31e24] hover:underline shrink-0 text-left sm:text-right cursor-pointer"
+                >
+                  Change Number
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={handleReverify}
-                className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
-              >
-                Change Number / Re-verify
-              </button>
-            </div>
 
             <div>
               <label htmlFor="name" className="field-label">Full Name</label>
@@ -353,6 +364,37 @@ export default function OtpGatedContactForm() {
                 Enter any 4-digit code to proceed.
               </p>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Reverify Confirmation Modal */}
+      {showReverifyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl text-center border border-slate-100">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+              <AlertCircle size={28} />
+            </div>
+            <h3 className="text-lg font-extrabold text-slate-900">Change Phone Number?</h3>
+            <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              If you change your phone number, you will need to re-verify the new number with a new OTP. Are you sure you want to proceed?
+            </p>
+            <div className="mt-6 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowReverifyModal(false)}
+                className="btn btn-outline flex-1 !py-2.5 text-xs font-bold"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmReverify}
+                className="btn btn-primary flex-1 !py-2.5 text-xs font-bold"
+              >
+                Yes, Change
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { PhoneCall, ShieldCheck, X, CheckCircle2, BadgeIndianRupee, ChevronDown } from 'lucide-react';
+import { PhoneCall, ShieldCheck, X, CheckCircle2, BadgeIndianRupee, ChevronDown, AlertCircle } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
@@ -107,7 +107,14 @@ export default function OtpGatedSellValuationForm() {
     };
   }, []);
 
+  const [showReverifyModal, setShowReverifyModal] = useState(false);
+
   function handleReverify() {
+    setShowReverifyModal(true);
+  }
+
+  function confirmReverify() {
+    setShowReverifyModal(false);
     resetVerification();
     setPhone('');
     setOtp('');
@@ -290,28 +297,28 @@ export default function OtpGatedSellValuationForm() {
         )}
 
         {step === 'form' && (
-          <div className="w-full animate-fade-in text-center sm:text-left">
-            <h2 className="text-[22px] font-bold text-slate-900 text-center sm:text-left">Request a Free Valuation</h2>
-            <p className="mb-6 text-[13px] text-slate-500 leading-relaxed mt-1 text-center sm:text-left">
-              Enter your car details and our team will get back to you with an expert valuation estimate.
+          <div className="w-full text-left animate-fade-in">
+            <h2 className="mb-1 text-2xl font-bold text-slate-900 text-left">Car &amp; Contact Details</h2>
+            <p className="mb-6 text-sm text-slate-500 text-left">
+              Fill in your car details to receive your expert valuation estimate.
             </p>
 
             <SubmittableForm
-              formType="Sell Your Car / Valuation Form"
+              formType="Sell Valuation Form"
               submitLabel="Get Valuation"
               successTitle="Valuation Request Received!"
-              successMessage="Our team will get back to you shortly to confirm your car's final value."
-              className="space-y-4"
+              successMessage={`Our team will get back to you on ${countryCode} ${phone} shortly to confirm your car's final value.`}
+              className="space-y-4 text-left"
               onSubmit={handleFormSuccess}
               validations={[
                 { name: 'email', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', message: 'Enter a valid email address' },
               ]}
               successExtra={
                 estimate && (
-                  <div className="mt-5 w-full rounded-xl bg-slate-50 p-4 text-left border border-slate-200">
+                  <div className="mt-5 w-full max-w-sm rounded-xl bg-slate-50 p-4 text-left border border-slate-200">
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
                       <BadgeIndianRupee size={16} className="text-[#e31e24]" />
-                      Estimated Value
+                      Estimated Value Range
                     </div>
                     <p className="mt-1 text-xl font-extrabold text-slate-900">
                       {formatRupees(estimate.low)} - {formatRupees(estimate.high)}
@@ -326,44 +333,53 @@ export default function OtpGatedSellValuationForm() {
               <input type="hidden" name="mobile" value={`${countryCode} ${phone}`} />
               <input type="hidden" name="phone" value={`${countryCode} ${phone}`} />
 
-              <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3 mb-4">
-                <div>
-                  <div className="flex items-center gap-1.5 text-emerald-700">
-                    <CheckCircle2 size={14} />
-                    <p className="text-[11px] font-bold uppercase tracking-wider">Verified Number (Locked)</p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 p-3.5 sm:p-4 mb-5 gap-2.5 text-left">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                    <CheckCircle2 size={18} />
                   </div>
-                  <p className="text-sm font-bold text-slate-900 mt-0.5">{countryCode} {phone}</p>
+                  <div>
+                    <div className="flex items-center gap-1.5 text-emerald-700">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Verified Number</span>
+                      <span className="rounded bg-emerald-200/60 px-1.5 py-0.5 text-[9px] font-bold uppercase text-emerald-800">Locked</span>
+                    </div>
+                    <p className="text-sm font-extrabold text-slate-900">{countryCode} {phone}</p>
+                  </div>
                 </div>
                 <button
                   type="button"
                   onClick={handleReverify}
-                  className="text-xs font-semibold text-brand-red underline hover:text-brand-red/80"
+                  className="text-xs font-bold text-[#e31e24] hover:underline shrink-0 text-left sm:text-right cursor-pointer"
                 >
-                  Change Number / Re-verify
+                  Change Number
                 </button>
               </div>
 
               {/* 1. Registration Number */}
-              <div>
-                <label htmlFor="regNumber" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Registration Number</label>
+              <div className="text-left">
+                <label htmlFor="regNumber" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700 text-left">
+                  Registration Number
+                </label>
                 <input
                   id="regNumber"
                   name="regNumber"
                   required
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  className="h-[46px] w-full rounded-[8px] border border-[#cbd5e1] bg-white px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
                   placeholder="e.g. MH01AB1234"
                 />
                 <FieldError name="regNumber" />
               </div>
 
               {/* 2. Brand */}
-              <div>
-                <label htmlFor="brand" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Brand</label>
+              <div className="text-left">
+                <label htmlFor="brand" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700 text-left">
+                  Brand
+                </label>
                 <input
                   id="brand"
                   name="brand"
                   required
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  className="h-[46px] w-full rounded-[8px] border border-[#cbd5e1] bg-white px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
                   placeholder="e.g. Maruti Suzuki, Hyundai, Tata"
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
@@ -372,13 +388,15 @@ export default function OtpGatedSellValuationForm() {
               </div>
 
               {/* 3. Model */}
-              <div>
-                <label htmlFor="carModel" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Model</label>
+              <div className="text-left">
+                <label htmlFor="carModel" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700 text-left">
+                  Model
+                </label>
                 <input
                   id="carModel"
                   name="carModel"
                   required
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  className="h-[46px] w-full rounded-[8px] border border-[#cbd5e1] bg-white px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
                   placeholder="e.g. Swift, Creta, Nexon, City"
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
@@ -387,14 +405,16 @@ export default function OtpGatedSellValuationForm() {
               </div>
 
               {/* 4. Manufacturing Year */}
-              <div>
-                <label htmlFor="year" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Manufacturing Year</label>
+              <div className="text-left">
+                <label htmlFor="year" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700 text-left">
+                  Manufacturing Year
+                </label>
                 <div className="relative">
                   <select
                     id="year"
                     name="year"
                     required
-                    className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white pl-3.5 pr-10 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none cursor-pointer"
+                    className="h-[46px] w-full rounded-[8px] border border-[#cbd5e1] bg-white pl-4 pr-10 text-[15px] font-medium text-slate-900 outline-none focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24] appearance-none cursor-pointer"
                     value={year}
                     onChange={(e) => setYear(e.target.value)}
                   >
@@ -411,8 +431,10 @@ export default function OtpGatedSellValuationForm() {
               </div>
 
               {/* 5. Kilometer Driven */}
-              <div>
-                <label htmlFor="kms" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Kilometer Driven</label>
+              <div className="text-left">
+                <label htmlFor="kms" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700 text-left">
+                  Kilometer Driven
+                </label>
                 <input
                   id="kms"
                   name="kms"
@@ -420,7 +442,7 @@ export default function OtpGatedSellValuationForm() {
                   type="number"
                   min={0}
                   step={1}
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  className="h-[46px] w-full rounded-[8px] border border-[#cbd5e1] bg-white px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
                   placeholder="e.g. 20,000 km"
                   value={kms}
                   onChange={(e) => setKms(e.target.value)}
@@ -429,14 +451,16 @@ export default function OtpGatedSellValuationForm() {
               </div>
 
               {/* 6. Email ID */}
-              <div>
-                <label htmlFor="email" className="mb-1.5 block text-[13px] font-semibold text-[#334155]">Email ID</label>
+              <div className="text-left">
+                <label htmlFor="email" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700 text-left">
+                  Email ID
+                </label>
                 <input
                   id="email"
                   name="email"
                   required
                   type="email"
-                  className="h-[42px] w-full rounded-[6px] border border-[#cbd5e1] bg-white px-3.5 text-[14px] text-[#334155] outline-none placeholder:font-normal placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
+                  className="h-[46px] w-full rounded-[8px] border border-[#cbd5e1] bg-white px-4 text-[15px] font-medium text-slate-900 outline-none placeholder:text-[#94a3b8] focus:border-[#e31e24] focus:ring-1 focus:ring-[#e31e24]"
                   placeholder="Enter your email ID"
                 />
                 <FieldError name="email" />
@@ -542,6 +566,37 @@ export default function OtpGatedSellValuationForm() {
                 Enter any 4-digit code to proceed.
               </p>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Reverify Confirmation Modal */}
+      {showReverifyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl text-center border border-slate-100">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+              <AlertCircle size={28} />
+            </div>
+            <h3 className="text-lg font-extrabold text-slate-900">Change Phone Number?</h3>
+            <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              If you change your phone number, you will need to re-verify the new number with a new OTP. Are you sure you want to proceed?
+            </p>
+            <div className="mt-6 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowReverifyModal(false)}
+                className="btn btn-outline flex-1 !py-2.5 text-xs font-bold"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmReverify}
+                className="btn btn-primary flex-1 !py-2.5 text-xs font-bold"
+              >
+                Yes, Change
+              </button>
+            </div>
           </div>
         </div>
       )}
