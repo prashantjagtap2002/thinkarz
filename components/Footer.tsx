@@ -147,9 +147,9 @@ export default function Footer() {
             <li className="flex items-start justify-center sm:justify-start gap-2.5 text-left">
               <Clock size={16} className="mt-1 shrink-0 text-brand-red" />
               <span className="min-w-0 break-words">
-                {contactInfo.hours[0]}
-                <br />
-                {contactInfo.hours[1]}
+                {contactInfo.hours.map((item, idx) => (
+                  <span key={idx} className="block">{item}</span>
+                ))}
               </span>
             </li>
           </ul>

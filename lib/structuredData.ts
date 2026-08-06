@@ -7,11 +7,11 @@ export function generateOrganizationSchema() {
     logo: 'https://thinkarz.com/icon.png',
     description:
       'THINKARZ - trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
-    telephone: '+91-80806-34444',
+    telephone: '+91 80806 34444',
     email: 'info.thinkarz@gmail.com',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Dheeraj Sagar, Building, New Link Rd, Opp. Goregaon Sports Club',
+      streetAddress: 'Dheeraj Sagar Building, New Link Rd, Opp. Goregaon Sports Club, Ekta Nagar',
       addressLocality: 'Malad West, Mumbai',
       addressRegion: 'Maharashtra',
       postalCode: '400064',
@@ -25,15 +25,9 @@ export function generateOrganizationSchema() {
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         opens: '10:00',
-        closes: '19:00',
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Sunday',
-        opens: '10:00',
-        closes: '17:00',
+        closes: '18:30',
       },
     ],
     sameAs: [
