@@ -7,7 +7,7 @@ export function generateOrganizationSchema() {
     logo: 'https://thinkarz.com/icon.png',
     description:
       'THINKARZ - trusted pre-owned cars, transparent deals. Buy, sell, service and test drive quality used cars in Mumbai.',
-    telephone: '+91 80806 34444',
+    telephone: '+91 99999 99999',
     email: 'info.thinkarz@gmail.com',
     address: {
       '@type': 'PostalAddress',
