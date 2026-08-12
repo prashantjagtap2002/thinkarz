@@ -26,7 +26,6 @@ export const navLinks = [
   { name: 'Compare Cars', href: '/compare-cars' },
   { name: 'Sell Your Car', href: '/sell-your-car' },
   { name: 'Book a Test Drive', href: '/book-a-test-drive' },
-  { name: 'Blogs', href: '/blogs' },
   { name: 'Contact Us', href: '/contact-us' },
 ];
 
