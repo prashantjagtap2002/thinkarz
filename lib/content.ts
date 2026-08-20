@@ -1,8 +1,8 @@
 export const testimonials = [
   {
-    name: 'Rahul Sharma',
+    name: 'Ayush Soni',
     quote:
-      'Amazing experience! The team at THINKARZ helped me find the perfect car. Transparent process and no hidden charges.',
+      'Bought my XUV300 W8 (O) from Thinkarz and had a great experience. The car was in excellent condition as promised, and the staff were honest, helpful, and professional. Highly recommended for anyone looking for a reliable used car!',
     rating: 5,
   },
   {

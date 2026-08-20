@@ -16,7 +16,6 @@ import {
   FileCheck,
   Star,
   Scale,
-  Clock,
   MoveRight,
   ChevronDown,
 } from 'lucide-react';
@@ -45,7 +44,6 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 import TestimonialCarousel from '@/components/TestimonialCarousel';
 import { bodyTypes, budgetOptions, cars, formatPrice } from '@/lib/cars';
 import { testimonials } from '@/lib/content';
-import { blogs } from '@/lib/blogs';
 import BodyTypeIcon from '@/components/BodyTypeIcon';
 
 const brands = Array.from(new Set(cars.map((c) => c.make))).sort();
@@ -369,47 +367,6 @@ export default function HomePage() {
             Compare Cars
           </Link>
         </Reveal>
-      </section>
-
-      {/* Latest from blog */}
-      <section className="bg-slate-50 py-16 sm:py-20">
-        <div className="container-page">
-          <Reveal className="mb-6 flex flex-col items-center justify-center text-center gap-1.5 sm:flex-row sm:justify-between sm:text-left">
-            <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
-              Latest From Our Blog
-            </h2>
-            <Link
-              href="/blogs"
-              className="inline-flex items-center gap-1 text-sm font-semibold text-brand-red transition-transform duration-300 hover:translate-x-1 hover:underline"
-            >
-              View All Blogs <ArrowRight size={16} />
-            </Link>
-          </Reveal>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {blogs.slice(0, 3).map((post, i) => (
-              <Reveal
-                key={post.slug}
-                delay={i * 90}
-                className="overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/30 hover:shadow-lg"
-              >
-                <Link href={`/blogs/${post.slug}`}>
-                  <div className="relative aspect-[16/10] w-full">
-                    <Image src={post.image} alt={post.title} title={post.title} fill className="object-cover" />
-                  </div>
-                  <div className="p-5">
-                    <span className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-                      <Clock size={12} /> {post.readTime}
-                    </span>
-                    <h3 className="mb-2 text-sm font-bold leading-snug text-slate-900">
-                      {post.title}
-                    </h3>
-                    <span className="text-xs font-semibold text-brand-red">Read More &rarr;</span>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* Testimonials */}

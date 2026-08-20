@@ -198,7 +198,7 @@ export default function BookTestDrivePage() {
               View All Cars
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-5 sm:gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
             {popularCars.map((car) => (
               <div
                 key={car.id}
@@ -238,7 +238,7 @@ export default function BookTestDrivePage() {
               Schedule your test drive at a time that suits you best. We&apos;ll make it happen!
             </p>
           </div>
-          <ScrollToTopButton className="btn btn-primary w-full sm:w-auto">
+          <ScrollToTopButton className="btn btn-primary w-full whitespace-nowrap sm:w-auto">
             Schedule Test Drive
           </ScrollToTopButton>
         </div>

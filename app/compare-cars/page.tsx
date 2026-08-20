@@ -12,7 +12,6 @@ const SLOTS = 4;
 const popularPairs: [string, string][] = [
   ['kia-sonet-gtx-plus', 'hyundai-venue-turbo-sxo'],
   ['tata-nexon-ev-xz-plus', 'mg-zs-ev-exclusive'],
-  ['maruti-ignis-zeta-ags', 'honda-amaze-v-cvt'],
 ];
 
 type Row = {
