@@ -38,7 +38,7 @@ export const cars: Car[] = [
     price: 450000,
     emi: 8125,
     image:
-      '/images/cars/mg-comet-ev.jpg',
+      '/images/cars/mg-comet-ev-v2.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'Hatchback',
@@ -75,7 +75,7 @@ export const cars: Car[] = [
     price: 1375000,
     emi: 24665,
     image:
-      '/images/cars/kia-sonet.jpg',
+      '/images/cars/kia-sonet-v2.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -112,7 +112,7 @@ export const cars: Car[] = [
     price: 625000,
     emi: 11210,
     image:
-      '/images/cars/maruti-ignis.jpg',
+      '/images/cars/maruti-ignis-v2.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'Hatchback',
@@ -149,7 +149,7 @@ export const cars: Car[] = [
     price: 975000,
     emi: 17070,
     image:
-      '/images/cars/hyundai-venue-dct.jpg',
+      '/images/cars/hyundai-venue-dct-v2.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -186,7 +186,7 @@ export const cars: Car[] = [
     price: 1295000,
     emi: 22140,
     image:
-      '/images/cars/tata-nexon-ev.jpg',
+      '/images/cars/tata-nexon-ev-v2.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -223,7 +223,7 @@ export const cars: Car[] = [
     price: 895000,
     emi: 15420,
     image:
-      '/images/cars/mg-zs-astor.jpg',
+      '/images/cars/mg-zs-astor-v2.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -260,7 +260,7 @@ export const cars: Car[] = [
     price: 695000,
     emi: 12520,
     image:
-      '/images/cars/hyundai-venue-mt.jpg',
+      '/images/cars/hyundai-venue-mt-v2.jpg',
     transmission: 'Manual',
     bodyType: 'SUV',
     owners: 2,
@@ -296,7 +296,7 @@ export const cars: Car[] = [
     price: 1550000,
     emi: 27930,
     image:
-      '/images/cars/mg-zs-ev.jpg',
+      '/images/cars/mg-zs-ev-v2.jpg',
     certified: true,
     transmission: 'Automatic',
     bodyType: 'SUV',
@@ -333,7 +333,7 @@ export const cars: Car[] = [
     price: 1125000,
     emi: 20270,
     image:
-      '/images/cars/kia-seltos.jpg',
+      '/images/cars/kia-seltos-v2.jpg',
     transmission: 'Automatic',
     bodyType: 'SUV',
     owners: 2,
@@ -369,7 +369,7 @@ export const cars: Car[] = [
     price: 745000,
     emi: 13420,
     image:
-      '/images/cars/honda-amaze.jpg',
+      '/images/cars/honda-amaze-v2.jpg',
     transmission: 'Automatic',
     bodyType: 'Sedan',
     owners: 1,

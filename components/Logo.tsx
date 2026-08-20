@@ -1,23 +1,17 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
-export default function Logo({ dark = false }: { dark?: boolean }) {
+export default function Logo() {
   return (
-    <Link href="/" className="flex flex-col leading-none shrink-0">
-      <span
-        className={`text-2xl font-extrabold tracking-tight ${dark ? 'text-white' : 'text-slate-900'}`}
-      >
-        THIN<span className="text-brand-red text-[1.18em]">K</span>ARZ
-      </span>
-      <span
-        className={`mt-0.5 text-[10px] font-semibold tracking-wide ${dark ? 'text-slate-300' : 'text-slate-500'}`}
-      >
-        YOUR ULTIMATE CAR DESTINATION
-      </span>
-      <span
-        className="text-[8px] font-medium tracking-wide text-slate-400"
-      >
-        BY GAUTAM MODI GROUP
-      </span>
+    <Link href="/" className="flex shrink-0 items-center">
+      <Image
+        src="/images/thinkarz-logo.png"
+        alt="THINKARZ - Your Ultimate Car Destination"
+        width={768}
+        height={326}
+        priority
+        className="h-12 w-auto sm:h-16"
+      />
     </Link>
   );
 }

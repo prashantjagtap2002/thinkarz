@@ -175,6 +175,7 @@ export default function FilterSidebar({
                 key={option}
                 label={option}
                 icon={<BrandLogo brand={option} size={18} />}
+                hideVisibleLabel
                 checked={state.make.includes(option)}
                 count={countsFor('make').get(option) ?? 0}
                 onToggle={() => onToggle('make', option)}

@@ -23,7 +23,7 @@ export default function ContactUsPage() {
       <section className="relative overflow-hidden bg-brand-navy">
         <div className="absolute inset-0">
           <Image
-            src="/images/cars/mg-zs-ev.jpg"
+            src="/images/cars/mg-zs-ev-v2.jpg"
             alt="MG ZS EV - THINKARZ showroom"
             title="THINKARZ Pre-Owned Car Showroom"
             fill

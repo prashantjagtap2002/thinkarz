@@ -90,7 +90,7 @@ export default function SellYourCarPage() {
             </p>
             <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="/images/cars/mg-zs-ev.jpg"
+                src="/images/cars/mg-zs-ev-v2.jpg"
                 alt="Sell your car with THINKARZ"
                 title="Sell Your Car with THINKARZ"
                 fill
@@ -172,7 +172,7 @@ export default function SellYourCarPage() {
         <div className="relative overflow-hidden rounded-2xl bg-brand-navy">
           <div className="absolute inset-0">
             <Image
-              src="/images/cars/tata-nexon-ev.jpg"
+              src="/images/cars/tata-nexon-ev-v2.jpg"
               alt="Sell Your Car with THINKARZ"
               title="Sell Your Car with THINKARZ"
               fill

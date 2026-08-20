@@ -30,7 +30,7 @@ export const blogs: Blog[] = [
     readTime: '4 min read',
     excerpt:
       'Simple steps that can significantly boost your car resale value before you sell it.',
-    image: '/images/cars/mg-zs-ev.jpg',
+    image: '/images/cars/mg-zs-ev-v2.jpg',
     content:
       "Clean inside and out: First impressions matter more than most sellers realise. A thorough interior detailing and exterior wash can add thousands to the perceived value of your car.\n\nFix minor issues: Small dents, a cracked tail light or a warning light on the dash signal neglect to buyers. Spending a few hundred rupees on touch-ups often returns much more at resale.\n\nGather paperwork: A complete file with all service invoices, insurance documents, original bill, and duplicate keys tells the buyer you maintained the car well — and helps you command a premium price.",
   },
@@ -54,7 +54,7 @@ export const blogs: Blog[] = [
     readTime: '5 min read',
     excerpt:
       'Keep your car running smoothly with these easy and essential maintenance tips.',
-    image: '/images/cars/hyundai-venue-dct.jpg',
+    image: '/images/cars/hyundai-venue-dct-v2.jpg',
     content:
       "Regular oil changes: Engine oil lubricates, cools, and cleans the engine. Follow the manufacturer's interval — typically every 10,000 km or 12 months — and use the recommended grade.\n\nCheck tyre pressure monthly: Under-inflated tyres reduce fuel efficiency, wear unevenly, and compromise braking. Check pressure when the tyres are cold and don't forget the spare.\n\nBrake fluid and coolant: These fluids degrade over time. Brake fluid absorbs moisture which lowers its boiling point; coolant loses anti-corrosion properties. Flush and replace every two years.\n\nAir and cabin filters: A clogged engine air filter reduces power and economy. A dirty cabin filter hurts AC performance and air quality. Both are inexpensive and easy to replace.\n\nBattery care: Clean the terminals with a wire brush if you see white/green corrosion. If the car sits unused for weeks, consider a trickle charger — especially for cars with keyless entry and multiple ECUs.",
   },
@@ -76,7 +76,7 @@ export const blogs: Blog[] = [
     date: 'Apr 25, 2024',
     readTime: '5 min read',
     excerpt: 'A look at the most anticipated car launches coming to India this year.',
-    image: '/images/cars/tata-nexon-ev.jpg',
+    image: '/images/cars/tata-nexon-ev-v2.jpg',
     content:
       "The Indian automotive market is buzzing with launches spanning affordable hatchbacks, feature-loaded SUVs, and a new wave of electric vehicles. Key debuts expected this year include the Mahindra Thar 5-door, Tata Curvv, Hyundai Creta facelift, and Maruti Suzuki eVX electric concept.\n\nUsed-car implications: New launches often push down prices of the outgoing model in the pre-owned market. If you're flexible on timing, waiting for a launch window can land you a better deal on a lightly used car.\n\nAt THINKARZ, we track these trends closely so our inventory reflects fair market value. Browse our pre-owned collection to spot cars whose prices may soon be influenced by upcoming launches.",
   },
@@ -99,7 +99,7 @@ export const blogs: Blog[] = [
     readTime: '6 min read',
     excerpt:
       'A practical shortlist of safe, spacious and budget-friendly family cars worth considering.',
-    image: '/images/cars/kia-seltos.jpg',
+    image: '/images/cars/kia-seltos-v2.jpg',
     content:
       "Maruti Suzuki Brezza: Compact SUV with a peppy 1.5L engine, good mileage and Maruti's extensive service network. Used examples from 2021-2023 fit comfortably under Rs. 10 Lakh.\n\nHyundai Venue: Well-appointed cabin, feature-rich (sunroof, connected car tech), and available with both turbo-petrol and diesel options. A 2022 Venue SX is excellent value.\n\nHonda Amaze: The only compact sedan on this list — but the CVT automatic is butter-smooth for city traffic, and the 1.2L petrol is frugal. A 2021-2022 top variant comes well under Rs. 8 Lakh.\n\nTata Nexon: 5-star GNCAP safety rating, solid build, and available in petrol, diesel and EV. A used 2022 Nexon XZ+ is a safe, stylish family pick under Rs. 10 Lakh.",
   },
@@ -111,7 +111,7 @@ export const blogs: Blog[] = [
     readTime: '4 min read',
     excerpt:
       'A simple service schedule to keep your used car reliable without overspending on maintenance.',
-    image: '/images/cars/maruti-ignis.jpg',
+    image: '/images/cars/maruti-ignis-v2.jpg',
     content:
       "Every 10,000 km or 12 months: Oil and oil filter change, air filter inspection, brake pad thickness check, tyre rotation, and a general underbody inspection.\n\nEvery 20,000 km: Replace cabin air filter, inspect and clean spark plugs (petrol), check timing belt condition (over 60,000 km), and flush brake fluid if older than two years.\n\nEvery 40,000 km: Replace fuel filter (diesel cars especially), change transmission fluid (automatic gearboxes), replace spark plugs (petrol), and inspect suspension bushings.\n\nStick to the manufacturer's schedule but use your judgment — if a car sits mostly in Mumbai traffic, follow the 'severe' maintenance schedule which calls for shorter intervals.",
   },
@@ -135,7 +135,7 @@ export const blogs: Blog[] = [
     readTime: '3 min read',
     excerpt:
       'Watch for these common warning signs before a weak battery leaves you stranded.',
-    image: '/images/cars/hyundai-venue-mt.jpg',
+    image: '/images/cars/hyundai-venue-mt-v2.jpg',
     content:
       "Slow crank: The most obvious sign — the engine turns over sluggishly when you start. Don't wait for it to fail completely.\n\nDim headlights: If headlights dim noticeably at idle and brighten when you rev, the battery or alternator may be weak.\n\nSwollen battery case: Heat causes the battery case to bulge. A swollen battery is dangerous and must be replaced immediately.\n\nCorroded terminals: White or bluish powder on the terminals restricts current flow. Clean it off, but if it keeps coming back, the battery is leaking acid.\n\nElectrical gremlins: Flickering dashboard lights, erratic infotainment reboot or power windows moving slower than usual often trace back to a dying battery.\n\nCheck engine light: Some cars illuminate the check-engine light when battery voltage drops below a threshold.\n\nAge: Most car batteries last 3-5 years in Indian conditions. If yours is older, replace it proactively before a breakdown.",
   },
@@ -159,7 +159,7 @@ export const blogs: Blog[] = [
     readTime: '5 min read',
     excerpt:
       'Use this inspection checklist to avoid hidden electrical and mechanical damage after heavy rains.',
-    image: '/images/cars/honda-amaze.jpg',
+    image: '/images/cars/honda-amaze-v2.jpg',
     content:
       "Musty smell: A persistent damp odour, especially when the AC is turned on, suggests water ingress. Sellers may mask it with strong air fresheners — be suspicious if the car smells overly perfumed.\n\nRust in unusual places: Surface rust underneath is normal, but rust on seat frames, under the dashboard, around the spare wheel well, or on door hinges points to submersion.\n\nCheck electronics: Test every electrical component — power windows, central locking, infotainment screen (look for fogging behind the glass), and all warning lights on the dash. Intermittent faults are a big red flag.\n\nPull back carpets: Lift the floor mats and press firmly on the carpet. If it feels damp, crunchy or leaves a water stain, walk away. Also check the boot floor and under the rear seats.\n\nSilt and debris: Look for fine silt in crevices — under the spare tyre, inside door pockets, behind the glove box, and around seat rails. Water carries silt; a vacuum can't reach everywhere.",
   },
@@ -183,7 +183,7 @@ export const blogs: Blog[] = [
     readTime: '4 min read',
     excerpt:
       'Keep the transfer process smooth by preparing the right ownership, insurance and loan paperwork.',
-    image: '/images/cars/kia-sonet.jpg',
+    image: '/images/cars/kia-sonet-v2.jpg',
     content:
       "Registration Certificate (RC): The most critical document. Ensure the RC is in your name, has the correct chassis and engine numbers, and isn't hypothecated (if your loan is closed, get the hypothecation removed).\n\nInsurance: The policy must be transferred to the new owner within 14 days of sale. Keep the current policy document ready and inform your insurer of the pending transfer.\n\nPollution Under Control (PUC) certificate: A valid PUC is mandatory for transfer. Get a fresh one before listing your car — it costs under Rs. 100 and removes one friction point from the negotiation.\n\nForm 29 & 30: These RTO forms are used for ownership transfer. Form 29 is the notice of transfer (signed by seller and buyer), and Form 30 is the report of transfer to the registering authority.\n\nAt THINKARZ, we handle the complete paperwork for you — from valuation to RC transfer — so you walk out with payment and peace of mind.",
   },

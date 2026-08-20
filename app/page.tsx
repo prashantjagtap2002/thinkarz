@@ -113,7 +113,7 @@ export default function HomePage() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="/images/cars/kia-seltos.jpg"
+            src="/images/cars/kia-seltos-v2.jpg"
             alt="Premium Pre-Owned Cars"
             title="Premium Pre-Owned Cars at THINKARZ"
             fill

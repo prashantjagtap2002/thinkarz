@@ -87,7 +87,7 @@ function getBaseColor(color: string): string {
   return 'Other';
 }
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 6;
 
 const colorLabels = ['White', 'Grey', 'Red', 'Silver', 'Black', 'Blue', 'Other'] as const;
 
@@ -323,19 +323,16 @@ export default function PreOwnedCarsBrowser() {
 
         {/* Desktop Sort Control */}
         <div className="hidden lg:flex items-center gap-3">
-          <div className="relative">
-            <select
-              className="field-input w-auto appearance-none pr-9 cursor-pointer text-xs font-semibold bg-white"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="newest">Sort By: Newest First</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="kms-low">Kilometers: Low to High</option>
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
-          </div>
+          <select
+            className="field-input w-auto cursor-pointer text-xs font-semibold bg-white"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="newest">Sort By: Newest First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="kms-low">Kilometers: Low to High</option>
+          </select>
         </div>
       </div>
 
