@@ -7,8 +7,8 @@ export default function Logo() {
       <Image
         src="/images/thinkarz-logo.png"
         alt="THINKARZ - Your Ultimate Car Destination"
-        width={768}
-        height={326}
+        width={1998}
+        height={666}
         priority
         className="h-12 w-auto sm:h-16"
       />

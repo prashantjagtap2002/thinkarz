@@ -44,15 +44,17 @@ export default function TestimonialCarousel({ testimonials }: { testimonials: Te
         {testimonials.map((t) => (
           <div
             key={t.name}
-            className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-red/25 hover:shadow-md"
+            className="flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-red/25 hover:shadow-md"
           >
             <p className="mb-4 text-sm leading-relaxed text-slate-600">{t.quote}</p>
-            <div className="mb-2 flex gap-0.5 text-brand-red">
-              {Array.from({ length: t.rating }).map((_, s) => (
-                <Star key={s} size={14} fill="currentColor" />
-              ))}
+            <div className="mt-auto">
+              <div className="mb-2 flex gap-0.5 text-brand-red">
+                {Array.from({ length: t.rating }).map((_, s) => (
+                  <Star key={s} size={14} fill="currentColor" />
+                ))}
+              </div>
+              <p className="text-sm font-semibold text-slate-900">{t.name}</p>
             </div>
-            <p className="text-sm font-semibold text-slate-900">{t.name}</p>
           </div>
         ))}
       </div>
