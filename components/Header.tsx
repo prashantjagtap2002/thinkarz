@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Phone } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
-import { navLinks, contactInfo } from '@/lib/content';
+import { navLinks } from '@/lib/content';
 
 export default function Header() {
   const pathname = usePathname();
@@ -54,13 +54,6 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
-            href={`tel:${contactInfo.landlinePhone}`}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-red text-white transition-[transform,background-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:bg-[#cc181f] hover:shadow-md sm:h-10 sm:w-10"
-            aria-label="Call THINKARZ"
-          >
-            <Phone size={18} />
-          </a>
           <button
             className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-300 transition-[transform,border-color,background-color,color] duration-300 hover:-translate-y-0.5 hover:border-brand-red hover:text-brand-red lg:hidden"
             onClick={() => setOpen((v) => !v)}
