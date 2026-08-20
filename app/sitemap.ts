@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl, lastModified: SITE_LAST_UPDATED, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${baseUrl}/about-us`, lastModified: new Date('2026-07-01'), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/pre-owned-cars`, lastModified: SITE_LAST_UPDATED, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${baseUrl}/compare-cars`, lastModified: SITE_LAST_UPDATED, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${baseUrl}/sell-your-car`, lastModified: SITE_LAST_UPDATED, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/book-a-test-drive`, lastModified: SITE_LAST_UPDATED, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/contact-us`, lastModified: new Date('2026-07-01'), changeFrequency: 'monthly', priority: 0.8 },

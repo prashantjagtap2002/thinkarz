@@ -23,7 +23,6 @@ export const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'About Us', href: '/about-us' },
   { name: 'Pre Owned Cars', href: '/pre-owned-cars' },
-  { name: 'Compare Cars', href: '/compare-cars' },
   { name: 'Sell Your Car', href: '/sell-your-car' },
   { name: 'Book a Test Drive', href: '/book-a-test-drive' },
   { name: 'Contact Us', href: '/contact-us' },
@@ -31,16 +30,16 @@ export const navLinks = [
 
 export const contactInfo = {
   address: [
-    'Dheeraj Sagar Building, New Link Rd,',
-    'Opp. Goregaon Sports Club,',
-    'Malad, Ekta Nagar, Malad West,',
+    'Dheeraj Sagar Building, New Link Rd',
+    'Opp. Goregaon Sports Club',
+    'Malad, Ekta Nagar, Malad West',
     'Mumbai, Maharashtra 400064',
   ],
   phone: '+91 80974 44826',
   landlinePhone: '08097444826',
   whatsappPhone: '918655830118',
   email: 'info.thinkarz@gmail.com',
-  hours: ['Mon - Sun: 10:00 AM - 6:30 PM (All Days)'],
+  hours: ['Mon - Sun: 10:00 AM - 6:30 PM'],
 };
 
 export const faqs = [

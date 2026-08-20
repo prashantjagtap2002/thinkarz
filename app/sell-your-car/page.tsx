@@ -119,7 +119,7 @@ export default function SellYourCarPage() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8">
             {steps.map(({ icon: Icon, title, desc }, i) => (
               <div key={title} className="relative text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-blueLight text-brand-blue">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
                   <Icon size={26} />
                 </div>
                 <h3 className="mb-1 font-bold text-slate-900">{title}</h3>

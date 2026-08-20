@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/compare-cars',
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function CompareCarsLayout({ children }: { children: React.ReactNode }) {

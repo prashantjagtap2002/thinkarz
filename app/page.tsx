@@ -15,7 +15,6 @@ import {
   CalendarCheck,
   FileCheck,
   Star,
-  Scale,
   MoveRight,
   ChevronDown,
 } from 'lucide-react';
@@ -327,8 +326,8 @@ export default function HomePage() {
       </section>
 
       {/* Promo banners */}
-      <section className="container-page grid grid-cols-1 gap-6 py-16 sm:py-20 lg:grid-cols-2">
-        <Reveal className="flex flex-col items-center justify-between text-center rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]">
+      <section className="container-page py-16 sm:py-20">
+        <Reveal className="mx-auto flex max-w-xl flex-col items-center justify-between text-center rounded-2xl bg-brand-navy p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]">
           <div className="flex flex-col items-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
               <Tag size={22} />
@@ -346,26 +345,6 @@ export default function HomePage() {
               Sell Your Car
             </Link>
           </div>
-        </Reveal>
-
-        <Reveal
-          delay={90}
-          className="flex flex-col items-center justify-between text-center rounded-2xl border border-slate-200 bg-white p-8 transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-2xl sm:p-10 min-h-[280px]"
-        >
-          <div className="flex flex-col items-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-800">
-              <Scale size={22} />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 sm:text-2xl">
-              Not sure which car to pick?
-            </h3>
-            <p className="mt-2 max-w-md text-sm text-slate-600">
-              Compare price, mileage, power and features side by side before you decide.
-            </p>
-          </div>
-          <Link href="/compare-cars" className="btn btn-primary mt-6 w-full sm:w-auto">
-            Compare Cars
-          </Link>
         </Reveal>
       </section>
 

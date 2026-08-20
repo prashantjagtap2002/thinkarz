@@ -23,7 +23,6 @@ import { generateCarSchema, generateBreadcrumbSchema, generateFAQSchema } from '
 import CarCard from '@/components/CarCard';
 import CarGallery from '@/components/car-detail/CarGallery';
 import CarComparison from '@/components/car-detail/CarComparison';
-import EmiCalculator from '@/components/car-detail/EmiCalculator';
 import InspectionReport from '@/components/car-detail/InspectionReport';
 import FaqAccordion from '@/components/FaqAccordion';
 
@@ -393,11 +392,6 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
             </div>
           </div>
         </div>
-      </div>
-
-      {/* EMI calculator */}
-      <div className="mt-10">
-        <EmiCalculator price={car.price} />
       </div>
 
       {/* Compare with similar cars */}

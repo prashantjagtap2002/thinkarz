@@ -420,8 +420,8 @@ export default function PreOwnedCarsBrowser() {
                   onClick={() => handlePageChange(i + 1)}
                   className={`flex h-9 w-9 items-center justify-center rounded-md text-sm font-semibold ${
                     page === i + 1
-                      ? 'bg-brand-blue text-white'
-                      : 'border border-slate-300 text-slate-600 hover:border-brand-blue'
+                      ? 'bg-brand-red text-white'
+                      : 'border border-slate-300 text-slate-600 hover:border-brand-red'
                   }`}
                 >
                   {i + 1}
