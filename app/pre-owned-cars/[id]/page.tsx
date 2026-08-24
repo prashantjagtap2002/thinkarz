@@ -16,13 +16,16 @@ import {
   RotateCcw,
   FileCheck2,
   MessageCircle,
+  FileSignature,
+  KeyRound,
+  ReceiptText,
+  ClipboardCheck,
 } from 'lucide-react';
 import { cars, formatKms, formatPrice, getHighlights } from '@/lib/cars';
 import { carFaqs, contactInfo } from '@/lib/content';
 import { generateCarSchema, generateBreadcrumbSchema, generateFAQSchema } from '@/lib/structuredData';
 import CarCard from '@/components/CarCard';
 import CarGallery from '@/components/car-detail/CarGallery';
-import CarComparison from '@/components/car-detail/CarComparison';
 import InspectionReport from '@/components/car-detail/InspectionReport';
 import FaqAccordion from '@/components/FaqAccordion';
 
@@ -32,6 +35,29 @@ const trustBadges = [
   { icon: ShieldCheck, label: '140-Point Inspection' },
   { icon: RotateCcw, label: '7-Day Money Back' },
   { icon: FileCheck2, label: 'Free RC Transfer' },
+];
+
+const paperworkItems = [
+  {
+    icon: FileSignature,
+    title: 'Insurance Transfer',
+    desc: 'We help you transfer the existing policy into your name, or set up a fresh one.',
+  },
+  {
+    icon: KeyRound,
+    title: 'Duplicate Key & Manual',
+    desc: "Original keys, service booklet and owner's manual are handed over at delivery.",
+  },
+  {
+    icon: ReceiptText,
+    title: 'Service History Records',
+    desc: 'Full maintenance and service history shared upfront for complete transparency.',
+  },
+  {
+    icon: ClipboardCheck,
+    title: 'Loan Closure & NOC',
+    desc: 'Our team assists with loan closure and No Objection Certificate paperwork, if applicable.',
+  },
 ];
 
 export function generateStaticParams() {
@@ -394,9 +420,21 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
         </div>
       </div>
 
-      {/* Compare with similar cars */}
-      <div className="mt-16">
-        <CarComparison current={car} similar={similar} allCars={cars} />
+      {/* Documents & paperwork */}
+      <div className="mt-16 rounded-2xl border border-slate-200 p-6 sm:p-8">
+        <div className="mb-6 flex items-center gap-2">
+          <FileSignature className="text-brand-red" size={22} />
+          <h2 className="text-xl font-extrabold text-slate-900">Documents & Paperwork We Handle</h2>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {paperworkItems.map(({ icon: Icon, title, desc }) => (
+            <div key={title} className="rounded-xl bg-slate-50 p-4">
+              <Icon className="mb-3 text-brand-red" size={22} />
+              <h3 className="text-sm font-bold text-slate-900">{title}</h3>
+              <p className="mt-1 text-xs leading-relaxed text-slate-600">{desc}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Similar cars */}

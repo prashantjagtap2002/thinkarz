@@ -143,7 +143,7 @@ export default function BookTestDrivePage() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
             {steps.map(({ title, desc }, index) => (
               <div key={title} className="relative text-center">
-                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-slate-50 text-lg font-black text-slate-400 border-2 border-slate-100">
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-brand-red to-brand-redDark text-lg font-black text-white shadow-md shadow-brand-red/25">
                   {index + 1}
                 </div>
                 <h3 className="mb-2 font-bold text-slate-900">{title}</h3>
