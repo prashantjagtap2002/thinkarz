@@ -24,14 +24,14 @@ import Reveal from '@/components/Reveal';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'THINKARZ | Certified Pre-Owned Cars | Gautam Modi Group',
+  title: 'Certified Pre-Owned Cars in Mumbai | THINKARZ',
   description:
-    'Buy, sell & exchange 140-point quality checked pre-owned cars at THINKARZ by Gautam Modi Group. Enjoy 35+ years of trust, instant valuation, transparent pricing, and hassle-free paper transfer.',
+    'Buy, sell & exchange 140-point quality checked pre-owned cars in Mumbai. THINKARZ by Gautam Modi Group offers 35+ years of trust and transparent pricing.',
   keywords: [
-    'used cars',
-    'pre-owned cars',
+    'used cars mumbai',
+    'pre-owned cars mumbai',
     'certified used cars',
-    'buy used car',
+    'buy used car mumbai',
     'sell car online',
     'car valuation',
     'Gautam Modi Group',
@@ -133,7 +133,8 @@ export default function HomePage() {
               <h1 className="text-[clamp(2rem,6vw,3.4rem)] font-extrabold leading-[1.15] tracking-tight text-white">
                 Find Your Perfect
                 <br className="hidden sm:inline" />{' '}
-                <span className="bg-gradient-to-r from-brand-red via-[#FF4D52] to-brand-red bg-clip-text text-transparent">Pre-Owned Car</span>
+                <span className="bg-gradient-to-r from-brand-red via-[#FF4D52] to-brand-red bg-clip-text text-transparent">Pre-Owned Car</span>{' '}
+                in Mumbai
               </h1>
 
               <p className="mt-4 max-w-md text-base leading-relaxed text-slate-300/90">

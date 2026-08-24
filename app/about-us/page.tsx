@@ -14,6 +14,7 @@ export const metadata = {
   title: 'About Us',
   description:
     'THINKARZ is the pre-owned car venture of Gautam Modi Group. 35+ years of trust, 50,000+ cars sold, 140-point inspection. Learn about our story, values, and commitment.',
+  alternates: { canonical: '/about-us' },
 };
 
 const stats = [

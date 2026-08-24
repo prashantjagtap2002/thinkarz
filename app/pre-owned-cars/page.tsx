@@ -2,8 +2,9 @@ import { Suspense } from 'react';
 import PreOwnedCarsBrowser from '@/components/PreOwnedCarsBrowser';
 
 export const metadata = {
-  title: 'Pre Owned Cars',
+  title: 'Pre Owned Cars in Mumbai',
   description: 'Browse quality certified pre-owned cars in Mumbai. Filter by budget, body type, age and more to find your perfect car.',
+  alternates: { canonical: '/pre-owned-cars' },
 };
 
 export default function PreOwnedCarsPage() {

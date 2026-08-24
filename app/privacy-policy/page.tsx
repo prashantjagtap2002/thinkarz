@@ -6,6 +6,7 @@ import { contactInfo } from '@/lib/content';
 export const metadata = {
   title: 'Privacy Policy',
   description: 'Learn how THINKARZ collects, uses, and protects your personal data.',
+  alternates: { canonical: '/privacy-policy' },
 };
 
 export default function PrivacyPage() {

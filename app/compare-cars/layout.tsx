@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Compare Cars | THINKARZ',
+  title: 'Compare Cars',
   description:
     'Compare specifications, price, mileage, power and features of pre-owned cars side by side to make an informed decision.',
   alternates: {

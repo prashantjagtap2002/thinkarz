@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { cars } from '@/lib/cars';
+import { blogs } from '@/lib/blogs';
 
 const SITE_LAST_UPDATED = new Date('2026-07-30T00:00:00.000Z');
 
@@ -10,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl, lastModified: SITE_LAST_UPDATED, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${baseUrl}/about-us`, lastModified: new Date('2026-07-01'), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/pre-owned-cars`, lastModified: SITE_LAST_UPDATED, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/blogs`, lastModified: SITE_LAST_UPDATED, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${baseUrl}/sell-your-car`, lastModified: SITE_LAST_UPDATED, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/book-a-test-drive`, lastModified: SITE_LAST_UPDATED, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/contact-us`, lastModified: new Date('2026-07-01'), changeFrequency: 'monthly', priority: 0.8 },
@@ -24,5 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...carRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = blogs.map((post) => ({
+    url: `${baseUrl}/blogs/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...carRoutes, ...blogRoutes];
 }

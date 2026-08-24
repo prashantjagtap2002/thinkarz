@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import PageTransition from '@/components/PageTransition';
 import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/structuredData';
+import { testimonials } from '@/lib/content';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 
@@ -74,7 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} font-sans`} suppressHydrationWarning>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema()) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema(testimonials)) }}
         />
         <script
           type="application/ld+json"

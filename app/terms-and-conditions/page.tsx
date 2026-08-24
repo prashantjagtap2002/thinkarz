@@ -5,6 +5,7 @@ import BackButton from '@/components/BackButton';
 export const metadata = {
   title: 'Terms & Conditions',
   description: 'Review the terms and conditions for using the THINKARZ platform and services.',
+  alternates: { canonical: '/terms-and-conditions' },
 };
 
 export default function TermsPage() {

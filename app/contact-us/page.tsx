@@ -8,6 +8,7 @@ import { contactInfo } from '@/lib/content';
 export const metadata = {
   title: 'Contact Us',
   description: 'Get in touch with THINKARZ for pre-owned car inquiries, test drives, and expert guidance. Visit our Malad West showroom or call us today.',
+  alternates: { canonical: '/contact-us' },
 };
 
 const touchPoints = [

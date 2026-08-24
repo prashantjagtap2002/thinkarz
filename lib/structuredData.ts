@@ -1,4 +1,25 @@
-export function generateOrganizationSchema() {
+export function generateOrganizationSchema(reviews?: { name: string; quote: string; rating: number }[]) {
+  const aggregateRating =
+    reviews && reviews.length > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1),
+            reviewCount: reviews.length,
+          },
+          review: reviews.map((r) => ({
+            '@type': 'Review',
+            author: { '@type': 'Person', name: r.name },
+            reviewBody: r.quote,
+            reviewRating: {
+              '@type': 'Rating',
+              ratingValue: r.rating,
+              bestRating: 5,
+            },
+          })),
+        }
+      : {};
+
   return {
     '@context': 'https://schema.org',
     '@type': 'AutoDealer',
@@ -40,6 +61,7 @@ export function generateOrganizationSchema() {
       '@type': 'Organization',
       name: 'Gautam Modi Group',
     },
+    ...aggregateRating,
   };
 }
 
@@ -82,7 +104,11 @@ export function generateCarSchema(car: {
     },
     fuelType: car.fuel,
     vehicleTransmission: car.transmission,
-    mileageFromOdometer: car.kms,
+    mileageFromOdometer: {
+      '@type': 'QuantitativeValue',
+      value: car.kms,
+      unitCode: 'KMT',
+    },
     color: car.color,
     vehicleConfiguration: car.model,
   };
@@ -115,6 +141,41 @@ export function generateFAQSchema(
         text: faq.answer,
       },
     })),
+  };
+}
+
+export function generateBlogPostingSchema(post: {
+  slug: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  date: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    image: `https://thinkarz.com${post.image}`,
+    url: `https://thinkarz.com/blogs/${post.slug}`,
+    datePublished: new Date(post.date).toISOString(),
+    author: {
+      '@type': 'Organization',
+      name: 'THINKARZ',
+      url: 'https://thinkarz.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'THINKARZ',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://thinkarz.com/icon.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://thinkarz.com/blogs/${post.slug}`,
+    },
   };
 }
 

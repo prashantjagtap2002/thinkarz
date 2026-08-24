@@ -25,6 +25,7 @@ export const navLinks = [
   { name: 'Pre Owned Cars', href: '/pre-owned-cars' },
   { name: 'Sell Your Car', href: '/sell-your-car' },
   { name: 'Book a Test Drive', href: '/book-a-test-drive' },
+  { name: 'Blogs', href: '/blogs' },
   { name: 'Contact Us', href: '/contact-us' },
 ];
 
@@ -114,7 +115,7 @@ export const carFaqs = [
   {
     question: 'Can I get a loan for this car?',
     answer:
-      'Yes, we work with leading banks and NBFCs to arrange financing with quick approvals. Use the EMI calculator on this page for an estimate, or talk to our team for the best rate.',
+      'Yes, we work with leading banks and NBFCs to arrange financing with quick approvals. Talk to our team for an EMI estimate and the best available rate.',
   },
   {
     question: 'Can I exchange my current car against this one?',

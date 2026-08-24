@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CalendarDays, Clock, ArrowLeft } from 'lucide-react';
 import { blogs } from '@/lib/blogs';
+import { generateBlogPostingSchema } from '@/lib/structuredData';
 
 export function generateStaticParams() {
   return blogs.map((b) => ({ slug: b.slug }));
@@ -40,6 +41,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <article className="container-page py-10 sm:py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(generateBlogPostingSchema(post)) }}
+      />
       <Link
         href="/blogs"
         className="mb-6 flex items-center gap-1.5 text-sm font-semibold text-brand-red hover:underline"
