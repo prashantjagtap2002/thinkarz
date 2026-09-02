@@ -9,7 +9,7 @@ import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/structuredData';
 import { testimonials } from '@/lib/content';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://thinkarz.com'),

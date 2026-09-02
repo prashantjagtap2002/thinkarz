@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import PreOwnedCarsBrowser from '@/components/PreOwnedCarsBrowser';
+import { getCars } from '@/lib/carsData';
 
 export const metadata = {
   title: 'Pre Owned Cars in Mumbai',
@@ -7,7 +8,11 @@ export const metadata = {
   alternates: { canonical: '/pre-owned-cars' },
 };
 
-export default function PreOwnedCarsPage() {
+export const revalidate = 60;
+
+export default async function PreOwnedCarsPage() {
+  const cars = await getCars();
+
   return (
     <Suspense fallback={
       <div className="container-page py-20 text-center">
@@ -15,7 +20,7 @@ export default function PreOwnedCarsPage() {
         <p className="mt-4 text-sm text-slate-500">Loading cars...</p>
       </div>
     }>
-      <PreOwnedCarsBrowser />
+      <PreOwnedCarsBrowser cars={cars} />
     </Suspense>
   );
 }

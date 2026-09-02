@@ -2,16 +2,18 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ageOptions, bodyTypes, budgetOptions } from '@/lib/cars';
+import { ageOptions, budgetOptions } from '@/lib/cars';
 import { Calendar, ChevronDown, IndianRupee, Car, ArrowRight } from 'lucide-react';
 import BodyTypeIcon from './BodyTypeIcon';
 
 function CarTypeSelect({
   value,
   onChange,
+  bodyTypes,
 }: {
   value: string;
   onChange: (value: string) => void;
+  bodyTypes: string[];
 }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -347,7 +349,7 @@ function AgeSelect({
   );
 }
 
-export default function HeroSearchWidget() {
+export default function HeroSearchWidget({ bodyTypes }: { bodyTypes: string[] }) {
   const router = useRouter();
   const [budget, setBudget] = useState('');
   const [bodyType, setBodyType] = useState('');
@@ -376,7 +378,7 @@ export default function HeroSearchWidget() {
             <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
               Car Type
             </label>
-            <CarTypeSelect value={bodyType} onChange={setBodyType} />
+            <CarTypeSelect value={bodyType} onChange={setBodyType} bodyTypes={bodyTypes} />
           </div>
           <div>
             <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">

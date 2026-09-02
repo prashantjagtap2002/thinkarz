@@ -19,7 +19,6 @@ import {
   Car,
   ageOptions,
   budgetOptions,
-  cars,
   formatPrice,
 } from '@/lib/cars';
 
@@ -43,11 +42,11 @@ const fuelIcons: Record<string, typeof CarIcon> = {
   CNG: FuelIcon,
 };
 
-function uniqueValues<K extends keyof Car>(key: K) {
+function uniqueValues<K extends keyof Car>(cars: Car[], key: K) {
   return Array.from(new Set(cars.map((c) => String(c[key])))).sort();
 }
 
-function countsFor<K extends keyof Car>(key: K) {
+function countsFor<K extends keyof Car>(cars: Car[], key: K) {
   const counts = new Map<string, number>();
   cars.forEach((c) => {
     const value = String(c[key]);
@@ -80,6 +79,7 @@ export interface FilterSidebarCounts {
 }
 
 export default function FilterSidebar({
+  cars,
   state,
   counts,
   maxPrice,
@@ -92,6 +92,7 @@ export default function FilterSidebar({
   onPriceRangeChange,
   onClose,
 }: {
+  cars: Car[];
   state: FilterSidebarState;
   counts: FilterSidebarCounts;
   maxPrice: number;
@@ -157,11 +158,11 @@ export default function FilterSidebar({
         {/* Body Type */}
         <FilterSection title="Body Type" defaultOpen={true}>
           <FilterIconGrid
-            options={uniqueValues('bodyType')}
+            options={uniqueValues(cars, 'bodyType')}
             icons={bodyTypeIcons}
             fallbackIcon={CarIcon}
             selected={state.bodyType}
-            counts={countsFor('bodyType')}
+            counts={countsFor(cars, 'bodyType')}
             onToggle={(option) => onToggle('bodyType', option)}
             isBodyType={true}
           />
@@ -170,14 +171,14 @@ export default function FilterSidebar({
         {/* Brand / Make */}
         <FilterSection title="Make / Brand" defaultOpen={true}>
           <div className="space-y-2">
-            {uniqueValues('make').map((option) => (
+            {uniqueValues(cars, 'make').map((option) => (
               <FilterCheckbox
                 key={option}
                 label={option}
                 icon={<BrandLogo brand={option} size={18} />}
                 hideVisibleLabel
                 checked={state.make.includes(option)}
-                count={countsFor('make').get(option) ?? 0}
+                count={countsFor(cars, 'make').get(option) ?? 0}
                 onToggle={() => onToggle('make', option)}
               />
             ))}
@@ -187,11 +188,11 @@ export default function FilterSidebar({
         {/* Fuel Type */}
         <FilterSection title="Fuel Type">
           <FilterIconGrid
-            options={uniqueValues('fuel')}
+            options={uniqueValues(cars, 'fuel')}
             icons={fuelIcons}
             fallbackIcon={FuelIcon}
             selected={state.fuel}
-            counts={countsFor('fuel')}
+            counts={countsFor(cars, 'fuel')}
             onToggle={(option) => onToggle('fuel', option)}
           />
         </FilterSection>
@@ -199,11 +200,11 @@ export default function FilterSidebar({
         {/* Transmission */}
         <FilterSection title="Transmission">
           <FilterIconGrid
-            options={uniqueValues('transmission')}
+            options={uniqueValues(cars, 'transmission')}
             icons={transmissionIcons}
             fallbackIcon={Cog}
             selected={state.transmission}
-            counts={countsFor('transmission')}
+            counts={countsFor(cars, 'transmission')}
             onToggle={(option) => onToggle('transmission', option)}
           />
         </FilterSection>
@@ -226,12 +227,12 @@ export default function FilterSidebar({
         {/* Owners */}
         <FilterSection title="Owners">
           <div className="space-y-2">
-            {uniqueValues('owners').map((option) => (
+            {uniqueValues(cars, 'owners').map((option) => (
               <FilterCheckbox
                 key={option}
                 label={option}
                 checked={state.owners.includes(option)}
-                count={countsFor('owners').get(option) ?? 0}
+                count={countsFor(cars, 'owners').get(option) ?? 0}
                 onToggle={() => onToggle('owners', option)}
               />
             ))}
@@ -241,12 +242,12 @@ export default function FilterSidebar({
         {/* Seller Type */}
         <FilterSection title="Seller Type">
           <div className="space-y-2">
-            {uniqueValues('sellerType').map((option) => (
+            {uniqueValues(cars, 'sellerType').map((option) => (
               <FilterCheckbox
                 key={option}
                 label={option}
                 checked={state.sellerType.includes(option)}
-                count={countsFor('sellerType').get(option) ?? 0}
+                count={countsFor(cars, 'sellerType').get(option) ?? 0}
                 onToggle={() => onToggle('sellerType', option)}
               />
             ))}

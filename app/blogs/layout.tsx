@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/blogs',
   },
+  robots: { index: false, follow: false },
 };
 
 export default function BlogsLayout({ children }: { children: React.ReactNode }) {

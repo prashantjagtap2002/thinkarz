@@ -11,7 +11,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import OtpGatedTestDriveForm from '@/components/forms/OtpGatedTestDriveForm';
-import { cars } from '@/lib/cars';
+import { getCars } from '@/lib/carsData';
 
 export const metadata = {
   title: 'Book a Test Drive',
@@ -65,9 +65,13 @@ const reasons = [
   },
 ];
 
-const popularCars = cars.slice(0, 4);
+export const revalidate = 60;
 
-export default function BookTestDrivePage() {
+export default async function BookTestDrivePage() {
+  const cars = await getCars();
+  const popularCars = cars.slice(0, 4);
+  const formCars = cars.slice(0, 5);
+
   return (
     <>
       <section className="relative overflow-hidden bg-brand-navy">
@@ -129,7 +133,7 @@ export default function BookTestDrivePage() {
           <div className="flex items-start justify-center lg:justify-end">
             <div className="w-full max-w-xl lg:max-w-2xl">
               <Suspense fallback={null}>
-                <OtpGatedTestDriveForm />
+                <OtpGatedTestDriveForm popularCars={formCars} />
               </Suspense>
             </div>
           </div>

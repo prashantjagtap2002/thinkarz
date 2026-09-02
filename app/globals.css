@@ -1,6 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand-red: #E31E24;
+  --color-brand-redDark: #C41A1F;
+  --color-brand-navy: #0F1B2E;
+  --color-brand-navyLight: #16233A;
+  --color-brand-blue: #2952CC;
+  --color-brand-blueLight: #EEF2FF;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --max-width-container: 1280px;
+}
 
 @layer base {
   html {
@@ -42,7 +51,7 @@
   }
   .field-input[type="date"]:focus::-webkit-datetime-edit,
   .field-input[type="date"]:valid::-webkit-datetime-edit {
-    color: theme('colors.slate.700');
+    color: var(--color-slate-700);
   }
   select.field-input {
     appearance: none;

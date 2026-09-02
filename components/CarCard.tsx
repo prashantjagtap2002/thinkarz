@@ -37,10 +37,7 @@ export default function CarCard({ car }: { car: Car }) {
         </div>
 
         <div className="mt-3 pt-3 border-t border-slate-100/90 text-center">
-          <p className="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">{formatPrice(car.price)}</p>
-          <p className="mt-0.5 mb-3 text-[11px] sm:text-xs font-medium text-slate-500">
-            EMI at Rs. {car.emi.toLocaleString('en-IN')}
-          </p>
+          <p className="mb-3 text-base sm:text-lg font-extrabold text-slate-900 leading-tight">{formatPrice(car.price)}</p>
           <div className="btn btn-primary w-full !py-2 text-xs pointer-events-none text-center">
             View Details
           </div>

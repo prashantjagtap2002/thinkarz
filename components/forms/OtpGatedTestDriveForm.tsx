@@ -6,13 +6,11 @@ import { PhoneCall, ShieldCheck, X, CheckCircle2, ChevronDown, AlertCircle } fro
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
-import { cars } from '@/lib/cars';
+import type { Car } from '@/lib/cars';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 import { useVerifiedPhone } from '@/lib/verifiedPhone';
 
-const popularCars = cars.slice(0, 5);
-
-export default function OtpGatedTestDriveForm() {
+export default function OtpGatedTestDriveForm({ popularCars }: { popularCars: Car[] }) {
   const { verifiedData, isVerified, saveVerification, resetVerification } = useVerifiedPhone();
   const [step, setStep] = useState<'phone' | 'form' | 'success'>('phone');
   const [showOtpPopup, setShowOtpPopup] = useState(false);

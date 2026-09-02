@@ -43,7 +43,6 @@ import {
   Car,
   ageOptions,
   budgetOptions,
-  cars,
   kmOptions,
   matchesAgeLabel,
   matchesBudgetLabel,
@@ -51,11 +50,11 @@ import {
   formatPrice,
 } from '@/lib/cars';
 
-function uniqueValues<K extends keyof Car>(key: K) {
+function uniqueValues<K extends keyof Car>(cars: Car[], key: K) {
   return Array.from(new Set(cars.map((c) => String(c[key])))).sort();
 }
 
-function countsFor<K extends keyof Car>(key: K) {
+function countsFor<K extends keyof Car>(cars: Car[], key: K) {
   const counts = new Map<string, number>();
   cars.forEach((c) => {
     const value = String(c[key]);
@@ -64,7 +63,7 @@ function countsFor<K extends keyof Car>(key: K) {
   return counts;
 }
 
-function countsForOptions(options: readonly string[], matcher: (car: Car, option: string) => boolean) {
+function countsForOptions(cars: Car[], options: readonly string[], matcher: (car: Car, option: string) => boolean) {
   const counts = new Map<string, number>();
   options.forEach((option) => {
     counts.set(option, cars.filter((car) => matcher(car, option)).length);
@@ -95,11 +94,11 @@ const MIN_PRICE = 0;
 const PRICE_STEP = 50000;
 
 
-export default function PreOwnedCarsBrowser() {
+export default function PreOwnedCarsBrowser({ cars }: { cars: Car[] }) {
   const searchParams = useSearchParams();
-  const maxPrice = useMemo(() => Math.ceil(Math.max(...cars.map((c) => c.price), 0) / PRICE_STEP) * PRICE_STEP, []);
-  const bodyTypeOptions = useMemo(() => uniqueValues('bodyType'), []);
-  const makeOptions = useMemo(() => uniqueValues('make'), []);
+  const maxPrice = useMemo(() => Math.ceil(Math.max(...cars.map((c) => c.price), 0) / PRICE_STEP) * PRICE_STEP, [cars]);
+  const bodyTypeOptions = useMemo(() => uniqueValues(cars, 'bodyType'), [cars]);
+  const makeOptions = useMemo(() => uniqueValues(cars, 'make'), [cars]);
   const budgetLabels = useMemo(() => budgetOptions.map((option) => option.label), []);
   const ageLabels = useMemo(() => [...ageOptions], []);
   const kmLabels = useMemo(() => [...kmOptions], []);
@@ -126,20 +125,20 @@ export default function PreOwnedCarsBrowser() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [filterVersion, setFilterVersion] = useState(0);
   const budgetCounts = useMemo(
-    () => countsForOptions(budgetLabels, (car, option) => matchesBudgetLabel(car, option)),
-    [budgetLabels],
+    () => countsForOptions(cars, budgetLabels, (car, option) => matchesBudgetLabel(car, option)),
+    [cars, budgetLabels],
   );
   const ageCounts = useMemo(
-    () => countsForOptions(ageLabels, (car, option) => matchesAgeLabel(car, option)),
-    [ageLabels],
+    () => countsForOptions(cars, ageLabels, (car, option) => matchesAgeLabel(car, option)),
+    [cars, ageLabels],
   );
   const kmCounts = useMemo(
-    () => countsForOptions(kmLabels, (car, option) => matchesKmLabel(car, option)),
-    [kmLabels],
+    () => countsForOptions(cars, kmLabels, (car, option) => matchesKmLabel(car, option)),
+    [cars, kmLabels],
   );
   const colorCounts = useMemo(
-    () => countsForOptions(colorLabels, (car, option) => getBaseColor(car.color) === option),
-    [],
+    () => countsForOptions(cars, colorLabels, (car, option) => getBaseColor(car.color) === option),
+    [cars],
   );
 
   const priceSliderActive = priceMax !== maxPrice;
@@ -169,7 +168,7 @@ export default function PreOwnedCarsBrowser() {
     });
 
     return result;
-  }, [make, budget, sellerType, fuel, transmission, bodyType, age, owners, kms, color, certifiedOnly, priceMin, priceMax, sortBy]);
+  }, [cars, make, budget, sellerType, fuel, transmission, bodyType, age, owners, kms, color, certifiedOnly, priceMin, priceMax, sortBy]);
 
   const prevFilteredLength = useRef(filtered.length);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -277,6 +276,7 @@ export default function PreOwnedCarsBrowser() {
 
   const sidebar = (
     <FilterSidebar
+      cars={cars}
       state={{
         make,
         budget,

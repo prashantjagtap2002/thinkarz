@@ -21,7 +21,8 @@ import {
   ReceiptText,
   ClipboardCheck,
 } from 'lucide-react';
-import { cars, formatKms, formatPrice, getHighlights } from '@/lib/cars';
+import { formatKms, formatPrice, getHighlights } from '@/lib/cars';
+import { getCars } from '@/lib/carsData';
 import { carFaqs, contactInfo } from '@/lib/content';
 import { generateCarSchema, generateBreadcrumbSchema, generateFAQSchema } from '@/lib/structuredData';
 import CarCard from '@/components/CarCard';
@@ -60,12 +61,16 @@ const paperworkItems = [
   },
 ];
 
-export function generateStaticParams() {
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const cars = await getCars();
   return cars.map((car) => ({ id: car.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const cars = await getCars();
   const car = cars.find((c) => c.id === id);
   if (!car) return { title: 'Car Not Found | THINKARZ' };
   const desc = `Buy ${car.year} ${car.make} ${car.model} ${car.variant} - ${formatKms(car.kms)} driven, ${car.fuel}, ${car.transmission}. THINKARZ certified pre-owned. Book test drive now.`;
@@ -89,6 +94,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const cars = await getCars();
   const car = cars.find((c) => c.id === id);
   if (!car) notFound();
 
@@ -254,9 +260,6 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
         <div className="lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-2xl border border-slate-200 p-6">
             <p className="text-3xl font-extrabold text-slate-900">{formatPrice(car.price)}</p>
-            <p className="mt-1 text-sm text-slate-500">
-              EMI starts at Rs. {car.emi.toLocaleString('en-IN')}/month
-            </p>
 
             <div className="mt-6 flex flex-col gap-3">
               <Link href="/book-a-test-drive" className="btn btn-primary w-full">

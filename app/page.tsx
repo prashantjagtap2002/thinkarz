@@ -41,18 +41,18 @@ export const metadata: Metadata = {
 import BrandLogo from '@/components/BrandLogo';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import TestimonialCarousel from '@/components/TestimonialCarousel';
-import { bodyTypes, budgetOptions, cars, formatPrice } from '@/lib/cars';
+import { budgetOptions, formatPrice, getBodyTypes, type Car } from '@/lib/cars';
+import { getCars } from '@/lib/carsData';
 import { testimonials } from '@/lib/content';
 import BodyTypeIcon from '@/components/BodyTypeIcon';
 
-const brands = Array.from(new Set(cars.map((c) => c.make))).sort();
+export const revalidate = 60;
 
-
-function countByBodyType(type: string) {
+function countByBodyType(cars: Car[], type: string) {
   return cars.filter((c) => c.bodyType === type).length;
 }
 
-function countByBudget(label: string) {
+function countByBudget(cars: Car[], label: string) {
   return cars.filter((c) => {
     const option = budgetOptions.find((o) => o.label === label);
     if (!option) return false;
@@ -99,7 +99,11 @@ const howItWorks = [
   { icon: FileCheck, step: '4. Buy', desc: 'Hassle-free paperwork and instant delivery.' },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const cars = await getCars();
+  const brands = Array.from(new Set(cars.map((c) => c.make))).sort();
+  const bodyTypes = getBodyTypes(cars);
+
   return (
     <>
       {/* Hero */}
@@ -177,7 +181,7 @@ export default function HomePage() {
                 <div className="h-1 w-12 rounded-full bg-brand-red mb-5" />
                 <h2 className="text-xl font-extrabold text-slate-900 mb-1">Find Your Car</h2>
                 <p className="text-sm text-slate-500 mb-6">Search from our curated collection</p>
-                <HeroSearchWidget />
+                <HeroSearchWidget bodyTypes={bodyTypes} />
                 {/* Sell CTA */}
                 <div className="mt-5 pt-5 border-t border-slate-100 text-center">
                   <p className="text-xs text-slate-400 mb-2">Want to sell instead?</p>
