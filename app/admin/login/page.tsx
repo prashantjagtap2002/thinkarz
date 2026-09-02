@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -18,13 +19,13 @@ function LoginForm() {
     const res = await fetch('/api/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ username, password }),
     });
 
     setIsLoading(false);
 
     if (!res.ok) {
-      setError('Incorrect password.');
+      setError('Incorrect username or password.');
       return;
     }
 
@@ -38,6 +39,20 @@ function LoginForm() {
       <h1 className="text-lg font-extrabold uppercase text-slate-900">Admin Login</h1>
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <div>
+          <label htmlFor="username" className="mb-1 block text-xs font-semibold text-slate-600">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            className="field-input"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            autoFocus
+            required
+          />
+        </div>
+        <div>
           <label htmlFor="password" className="mb-1 block text-xs font-semibold text-slate-600">
             Password
           </label>
@@ -47,7 +62,6 @@ function LoginForm() {
             className="field-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoFocus
             required
           />
         </div>

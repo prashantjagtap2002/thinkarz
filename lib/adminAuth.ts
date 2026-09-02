@@ -11,13 +11,17 @@ function getSecret(): string {
   return secret;
 }
 
-export function checkAdminPassword(password: string): boolean {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) {
-    throw new Error('ADMIN_PASSWORD is not set. Add it to .env.local.');
+export function checkAdminCredentials(username: string, password: string): boolean {
+  const expectedUser = process.env.ADMIN_USERNAME;
+  const expectedPass = process.env.ADMIN_PASSWORD;
+  if (!expectedUser || !expectedPass) {
+    throw new Error('ADMIN_USERNAME and ADMIN_PASSWORD must be set in .env.local.');
   }
+  
+  if (username !== expectedUser) return false;
+
   const a = Buffer.from(password);
-  const b = Buffer.from(expected);
+  const b = Buffer.from(expectedPass);
   if (a.length !== b.length) return false;
   return timingSafeEqual(a, b);
 }
