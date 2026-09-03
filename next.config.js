@@ -1,9 +1,15 @@
 /** @type {import('next').NextConfig} */
 
-const remotePatterns = [];
+const remotePatterns = [
+  { protocol: 'https', hostname: 'pub-c26fb34125954ad8a10f0112c7f10cfa.r2.dev' },
+];
 if (process.env.R2_PUBLIC_URL) {
-  const { protocol, hostname } = new URL(process.env.R2_PUBLIC_URL);
-  remotePatterns.push({ protocol: protocol.replace(':', ''), hostname });
+  try {
+    const { protocol, hostname } = new URL(process.env.R2_PUBLIC_URL);
+    if (!remotePatterns.some((p) => p.hostname === hostname)) {
+      remotePatterns.push({ protocol: protocol.replace(':', ''), hostname });
+    }
+  } catch {}
 }
 
 const nextConfig = {
