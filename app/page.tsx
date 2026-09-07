@@ -101,6 +101,12 @@ const howItWorks = [
 
 export default async function HomePage() {
   const cars = await getCars();
+
+  // Vehicles flagged "Featured" in the admin panel drive this strip. If nobody
+  // has flagged any yet, fall back to the most recently added cars so the
+  // homepage is never empty.
+  const flaggedFeatured = cars.filter((car) => car.featured);
+  const featuredCars = (flaggedFeatured.length > 0 ? flaggedFeatured : cars).slice(0, 4);
   const brands = Array.from(new Set(cars.map((c) => c.make))).sort();
   const bodyTypes = getBodyTypes(cars);
 
@@ -261,7 +267,7 @@ export default async function HomePage() {
             </Link>
           </Reveal>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
-            {cars.slice(0, 4).map((car, i) => (
+            {featuredCars.map((car, i) => (
               <Reveal key={car.id} delay={i * 80}>
                 <CarCard car={car} />
               </Reveal>

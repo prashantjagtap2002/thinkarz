@@ -16,23 +16,34 @@ import {
   SlidersHorizontal,
   Car as CarIcon,
   AlertTriangle,
+  Star,
 } from 'lucide-react';
 import type { Car } from '@/lib/cars';
 import { formatPrice } from '@/lib/cars';
 
 type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'year-desc' | 'kms-asc';
 
-export default function AdminCarTable({ cars }: { cars: Car[] }) {
+export default function AdminCarTable({ cars: initialCars }: { cars: Car[] }) {
   const router = useRouter();
+  const [cars, setCars] = useState<Car[]>(initialCars);
+  const [lastServerCars, setLastServerCars] = useState<Car[]>(initialCars);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFuel, setSelectedFuel] = useState<string>('All');
   const [onlyCertified, setOnlyCertified] = useState(false);
+  const [onlyFeatured, setOnlyFeatured] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   // Delete modal state
   const [deleteCar, setDeleteCar] = useState<Car | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState('');
+
+  // Re-sync when the server sends a fresh list (after router.refresh()).
+  if (lastServerCars !== initialCars) {
+    setLastServerCars(initialCars);
+    setCars(initialCars);
+  }
 
   // Fuel options
   const fuelOptions = useMemo(() => {
@@ -60,6 +71,10 @@ export default function AdminCarTable({ cars }: { cars: Car[] }) {
         if (onlyCertified && !car.certified) {
           return false;
         }
+        // Featured filter
+        if (onlyFeatured && !car.featured) {
+          return false;
+        }
         return true;
       })
       .sort((a, b) => {
@@ -69,7 +84,34 @@ export default function AdminCarTable({ cars }: { cars: Car[] }) {
         if (sortBy === 'kms-asc') return a.kms - b.kms;
         return 0; // default order
       });
-  }, [cars, searchQuery, selectedFuel, onlyCertified, sortBy]);
+  }, [cars, searchQuery, selectedFuel, onlyCertified, onlyFeatured, sortBy]);
+
+  // Inline homepage-feature toggle, so the "Featured Cars" strip can be curated
+  // without opening each vehicle's edit form.
+  async function toggleFeatured(car: Car) {
+    setError('');
+    setTogglingId(car.id);
+    try {
+      const res = await fetch(`/api/admin/cars/${car.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ featured: !car.featured }),
+      });
+      const data = await res.json();
+      setTogglingId(null);
+
+      if (!res.ok) {
+        setError(data.error || 'Could not update the featured status.');
+        return;
+      }
+
+      setCars((prev) => prev.map((c) => (c.id === car.id ? data.car : c)));
+      router.refresh();
+    } catch {
+      setTogglingId(null);
+      setError('Network error while updating the featured status.');
+    }
+  }
 
   async function confirmDelete() {
     if (!deleteCar) return;
@@ -85,6 +127,7 @@ export default function AdminCarTable({ cars }: { cars: Car[] }) {
         return;
       }
 
+      setCars((prev) => prev.filter((c) => c.id !== deleteCar.id));
       setDeleteCar(null);
       router.refresh();
     } catch {
@@ -164,6 +207,19 @@ export default function AdminCarTable({ cars }: { cars: Car[] }) {
             <span>Certified</span>
           </button>
 
+          {/* Featured Only Toggle */}
+          <button
+            onClick={() => setOnlyFeatured(!onlyFeatured)}
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition ${
+              onlyFeatured
+                ? 'border-amber-300 bg-amber-50 text-amber-800'
+                : 'border-slate-200 bg-slate-50/70 text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            <Star className={`h-3.5 w-3.5 ${onlyFeatured ? 'fill-current' : ''}`} />
+            <span>Featured</span>
+          </button>
+
           {/* Sort Dropdown */}
           <div className="relative inline-flex items-center">
             <SlidersHorizontal className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -201,16 +257,17 @@ export default function AdminCarTable({ cars }: { cars: Car[] }) {
             </div>
             <h3 className="mt-4 text-base font-bold text-slate-900">No vehicles found</h3>
             <p className="mt-1 text-sm text-slate-500 max-w-sm">
-              {searchQuery || selectedFuel !== 'All' || onlyCertified
+              {searchQuery || selectedFuel !== 'All' || onlyCertified || onlyFeatured
                 ? 'No cars match your current search or filter criteria. Try resetting them.'
                 : 'No cars in inventory yet. Click "Add New Vehicle" to get started.'}
             </p>
-            {(searchQuery || selectedFuel !== 'All' || onlyCertified) && (
+            {(searchQuery || selectedFuel !== 'All' || onlyCertified || onlyFeatured) && (
               <button
                 onClick={() => {
                   setSearchQuery('');
                   setSelectedFuel('All');
                   setOnlyCertified(false);
+                  setOnlyFeatured(false);
                 }}
                 className="mt-4 text-xs font-bold text-brand-red hover:underline"
               >
@@ -228,6 +285,7 @@ export default function AdminCarTable({ cars }: { cars: Car[] }) {
                   <th className="px-4 py-3.5">Price</th>
                   <th className="px-4 py-3.5">Fuel & Transmission</th>
                   <th className="px-4 py-3.5">Quality</th>
+                  <th className="px-4 py-3.5">Homepage</th>
                   <th className="px-5 py-3.5 text-right">Actions</th>
                 </tr>
               </thead>
@@ -323,6 +381,27 @@ export default function AdminCarTable({ cars }: { cars: Car[] }) {
                           Inspected
                         </span>
                       )}
+                    </td>
+
+                    {/* Featured on homepage */}
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => toggleFeatured(car)}
+                        disabled={togglingId === car.id}
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold transition disabled:opacity-50 ${
+                          car.featured
+                            ? 'border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100'
+                            : 'border-slate-200 bg-slate-50 text-slate-500 hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700'
+                        }`}
+                        title={
+                          car.featured
+                            ? 'Remove from the homepage Featured Cars strip'
+                            : 'Show in the homepage Featured Cars strip'
+                        }
+                      >
+                        <Star className={`h-3.5 w-3.5 ${car.featured ? 'fill-current' : ''}`} />
+                        <span>{car.featured ? 'Featured' : 'Not featured'}</span>
+                      </button>
                     </td>
 
                     {/* Actions */}

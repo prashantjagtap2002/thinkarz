@@ -1,4 +1,5 @@
 import type { Car } from '@/lib/cars';
+import { validatePrice } from '@/lib/cars';
 import { createAdminClient } from '@/lib/supabaseAdmin';
 import { mapRowToCar, mapCarToRow } from '@/lib/carsMapper';
 
@@ -107,6 +108,25 @@ export function validateCarInput(input: Record<string, unknown>): string[] {
     errors.push('"features" must be a list.');
   }
 
+  // Indian-market price sanity check (mirrors the client-side guard in CarForm).
+  if (typeof input.price === 'number' && !Number.isNaN(input.price)) {
+    const priceError = validatePrice(input.price);
+    if (priceError) errors.push(priceError);
+  }
+
+  if (typeof input.year === 'number' && !Number.isNaN(input.year)) {
+    const maxYear = new Date().getFullYear() + 1;
+    if (input.year < 1980 || input.year > maxYear) {
+      errors.push(`"year" must be between 1980 and ${maxYear}.`);
+    }
+  }
+
+  if (typeof input.kms === 'number' && !Number.isNaN(input.kms)) {
+    if (input.kms < 0 || input.kms > 1000000) {
+      errors.push('"kms" must be between 0 and 10,00,000.');
+    }
+  }
+
   return errors;
 }
 
@@ -137,5 +157,6 @@ export function sanitizeCarInput(input: Record<string, unknown>): Omit<Car, 'id'
       ? input.features.map((f) => String(f).trim()).filter(Boolean)
       : undefined,
     description: typeof input.description === 'string' ? input.description.trim() : undefined,
+    featured: Boolean(input.featured),
   };
 }

@@ -18,9 +18,11 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
+  Star,
+  CalendarDays,
 } from 'lucide-react';
 import type { Car } from '@/lib/cars';
-import { formatPrice } from '@/lib/cars';
+import { formatPrice, formatPriceExact, validatePrice, MAX_CAR_PRICE, MIN_CAR_PRICE } from '@/lib/cars';
 
 type FormState = {
   make: string;
@@ -41,12 +43,63 @@ type FormState = {
   color: string;
   seats: string;
   engine: string;
-  power: string;
-  mileage: string;
-  insuranceValidTill: string;
+  power: string; // stored as a bare number; the "bhp" unit is appended on save
+  mileageValue: string;
+  mileageUnit: string;
+  insuranceValidTill: string; // stored as "YYYY-MM" for the month picker
   features: string;
   description: string;
+  featured: boolean;
 };
+
+const MONTHS = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
+// "118.36 bhp" -> "118.36". Keeps the form numeric-only while the stored value
+// keeps its human-readable unit.
+function numericPart(value?: string): string {
+  if (!value) return '';
+  const match = value.replace(/,/g, '').match(/-?\d+(\.\d+)?/);
+  return match ? match[0] : '';
+}
+
+const MILEAGE_UNITS = ['kmpl', 'km/kg', 'km'] as const;
+
+function mileageUnitOf(value: string | undefined, fuel: string | undefined): string {
+  const lower = (value ?? '').toLowerCase();
+  if (lower.includes('kmpl')) return 'kmpl';
+  if (lower.includes('km/kg')) return 'km/kg';
+  if (lower.includes('km')) return 'km';
+  // Sensible default for a brand new listing.
+  if (fuel === 'EV') return 'km';
+  if (fuel === 'CNG') return 'km/kg';
+  return 'kmpl';
+}
+
+// "Dec 2028" <-> "2028-12" so <input type="month"> can drive the value while
+// the database keeps the display format the rest of the site already renders.
+function toMonthInput(value?: string): string {
+  if (!value) return '';
+  const trimmed = value.trim();
+  if (/^\d{4}-\d{2}$/.test(trimmed)) return trimmed;
+
+  const match = trimmed.match(/^([A-Za-z]+)\s+(\d{4})$/);
+  if (match) {
+    const index = MONTHS.findIndex((m) => m.toLowerCase() === match[1].slice(0, 3).toLowerCase());
+    if (index >= 0) return `${match[2]}-${String(index + 1).padStart(2, '0')}`;
+  }
+  return '';
+}
+
+function fromMonthInput(value: string): string {
+  const match = value.match(/^(\d{4})-(\d{2})$/);
+  if (!match) return '';
+  const monthIndex = Number(match[2]) - 1;
+  if (monthIndex < 0 || monthIndex > 11) return '';
+  return `${MONTHS[monthIndex]} ${match[1]}`;
+}
 
 function carToFormState(car?: Car): FormState {
   return {
@@ -68,11 +121,13 @@ function carToFormState(car?: Car): FormState {
     color: car?.color ?? '',
     seats: car ? String(car.seats) : '5',
     engine: car?.engine ?? '',
-    power: car?.power ?? '',
-    mileage: car?.mileage ?? '',
-    insuranceValidTill: car?.insuranceValidTill ?? '',
+    power: numericPart(car?.power),
+    mileageValue: numericPart(car?.mileage),
+    mileageUnit: mileageUnitOf(car?.mileage, car?.fuel),
+    insuranceValidTill: toMonthInput(car?.insuranceValidTill),
     features: car?.features?.join('\n') ?? '',
     description: car?.description ?? '',
+    featured: car?.featured ?? false,
   };
 }
 
@@ -96,14 +151,15 @@ function formStateToPayload(form: FormState) {
     color: form.color,
     seats: Number(form.seats),
     engine: form.engine,
-    power: form.power,
-    mileage: form.mileage,
-    insuranceValidTill: form.insuranceValidTill,
+    power: form.power ? `${form.power} bhp` : '',
+    mileage: form.mileageValue ? `${form.mileageValue} ${form.mileageUnit}` : '',
+    insuranceValidTill: fromMonthInput(form.insuranceValidTill),
     features: form.features
       .split('\n')
       .map((f) => f.trim())
       .filter(Boolean),
     description: form.description,
+    featured: form.featured,
   };
 }
 
@@ -145,14 +201,14 @@ export default function CarForm({ car }: { car?: Car }) {
       setIsUploading(false);
 
       if (!res.ok) {
-        setErrors([data.error || 'Failed to upload photo to Cloudflare R2']);
+        setErrors([data.error || 'Failed to upload the photo. Please try again.']);
         return;
       }
 
       set('image', data.path);
     } catch {
       setIsUploading(false);
-      setErrors(['Network error while uploading photo to Cloudflare R2.']);
+      setErrors(['Network error while uploading the photo.']);
     }
   }
 
@@ -181,8 +237,31 @@ export default function CarForm({ car }: { car?: Car }) {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+
+    const validationErrors: string[] = [];
+
     if (!form.image) {
-      setErrors(['Please upload or provide a vehicle photo.']);
+      validationErrors.push('Please upload or provide a vehicle photo.');
+    }
+
+    const priceValue = Number(form.price);
+    const priceMessage = validatePrice(priceValue);
+    if (priceMessage) validationErrors.push(priceMessage);
+
+    if (!form.power || Number(form.power) <= 0) {
+      validationErrors.push('Max power must be a number greater than zero.');
+    }
+
+    if (!form.mileageValue || Number(form.mileageValue) <= 0) {
+      validationErrors.push('Mileage / range must be a number greater than zero.');
+    }
+
+    if (!fromMonthInput(form.insuranceValidTill)) {
+      validationErrors.push('Please choose the month and year the insurance is valid till.');
+    }
+
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -218,6 +297,7 @@ export default function CarForm({ car }: { car?: Car }) {
   }
 
   const featureList = form.features.split('\n').map((f) => f.trim()).filter(Boolean);
+  const priceError = form.price === '' ? null : validatePrice(Number(form.price));
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
@@ -233,14 +313,14 @@ export default function CarForm({ car }: { car?: Car }) {
         </div>
       )}
 
-      {/* SECTION 1: PHOTO & CLOUDFLARE R2 UPLOAD */}
+      {/* SECTION 1: PHOTO & MEDIA UPLOAD */}
       <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
             <UploadCloud className="h-5 w-5 text-brand-red" />
             <h2>Vehicle Photo & Media</h2>
           </div>
-          <span className="text-xs text-slate-500 font-medium">Cloudflare R2 CDN Storage</span>
+          <span className="text-xs text-slate-500 font-medium">JPG, PNG or WEBP &bull; up to 8MB</span>
         </div>
 
         {/* Hidden file input */}
@@ -268,7 +348,7 @@ export default function CarForm({ car }: { car?: Car }) {
               />
               <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-emerald-900/80 px-2.5 py-1 text-[11px] font-semibold text-emerald-100 backdrop-blur-md">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                <span>Uploaded to Cloudflare R2</span>
+                <span>Photo uploaded</span>
               </div>
             </div>
 
@@ -327,7 +407,7 @@ export default function CarForm({ car }: { car?: Car }) {
             {isUploading ? (
               <div className="mt-4">
                 <p className="text-sm font-bold text-brand-red animate-pulse">
-                  Uploading image to Cloudflare R2…
+                  Uploading vehicle photo…
                 </p>
                 <p className="mt-1 text-xs text-slate-400">Optimizing and storing on global CDN</p>
               </div>
@@ -337,7 +417,7 @@ export default function CarForm({ car }: { car?: Car }) {
                   Drag and drop vehicle photo here, or <span className="text-brand-red underline">browse</span>
                 </p>
                 <p className="mt-1 text-xs text-slate-400">
-                  Supports JPG, PNG, WEBP (Max 8MB). Automatically synced to Cloudflare CDN.
+                  Supports JPG, PNG and WEBP files up to 8MB.
                 </p>
               </div>
             )}
@@ -361,7 +441,7 @@ export default function CarForm({ car }: { car?: Car }) {
                 className="field-input text-xs font-mono"
                 value={form.image}
                 onChange={(e) => set('image', e.target.value)}
-                placeholder="https://pub-....r2.dev/cars/my-car.jpg"
+                placeholder="https://example.com/cars/my-car.jpg"
               />
             </div>
           )}
@@ -475,28 +555,47 @@ export default function CarForm({ car }: { car?: Car }) {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Field label="Price (₹ INR) *">
-            <input
-              type="number"
-              className="field-input"
-              value={form.price}
-              onChange={(e) => set('price', e.target.value)}
-              placeholder="1375000"
-              required
-            />
-            {form.price && !isNaN(Number(form.price)) && (
-              <span className="mt-1 block text-xs font-bold text-emerald-600">
-                {formatPrice(Number(form.price))}
+            <div className="relative">
+              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400">
+                ₹
               </span>
-            )}
+              <input
+                type="number"
+                inputMode="numeric"
+                className="field-input pl-7"
+                value={form.price}
+                onChange={(e) => set('price', e.target.value)}
+                placeholder="1375000"
+                min={MIN_CAR_PRICE}
+                max={MAX_CAR_PRICE}
+                step="1"
+                required
+              />
+            </div>
+            {form.price !== '' &&
+              (priceError ? (
+                <span className="mt-1 block text-xs font-semibold text-rose-600">{priceError}</span>
+              ) : (
+                <span className="mt-1 block text-xs font-bold text-emerald-600">
+                  {formatPrice(Number(form.price))}
+                  <span className="ml-1.5 font-medium text-slate-400">
+                    ({formatPriceExact(Number(form.price))})
+                  </span>
+                </span>
+              ))}
           </Field>
 
           <Field label="Kilometers Driven *">
             <input
               type="number"
+              inputMode="numeric"
               className="field-input"
               value={form.kms}
               onChange={(e) => set('kms', e.target.value)}
               placeholder="14500"
+              min="0"
+              max="1000000"
+              step="1"
               required
             />
             {form.kms && !isNaN(Number(form.kms)) && (
@@ -569,6 +668,44 @@ export default function CarForm({ car }: { car?: Car }) {
             />
           </div>
         </div>
+
+        {/* Featured on Homepage Toggle Card */}
+        <div
+          onClick={() => set('featured', !form.featured)}
+          className={`mt-3 cursor-pointer rounded-2xl border p-4 flex items-center justify-between transition ${
+            form.featured
+              ? 'border-amber-300 bg-amber-50/70'
+              : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-xl ${
+                form.featured ? 'bg-amber-500 text-white' : 'bg-slate-200 text-slate-500'
+              }`}
+            >
+              <Star className={`h-5 w-5 ${form.featured ? 'fill-current' : ''}`} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-900">Show in Featured Cars on the homepage</p>
+              <p className="text-xs text-slate-500">
+                Featured vehicles appear in the &ldquo;Featured Cars&rdquo; strip on the homepage.
+                Up to 4 are shown, newest first.
+              </p>
+            </div>
+          </div>
+          <div
+            className={`h-6 w-11 rounded-full transition-colors flex items-center p-1 ${
+              form.featured ? 'bg-amber-500' : 'bg-slate-300'
+            }`}
+          >
+            <div
+              className={`h-4 w-4 rounded-full bg-white transition-transform ${
+                form.featured ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            />
+          </div>
+        </div>
       </section>
 
       {/* SECTION 4: ENGINE, PERFORMANCE & SPECS */}
@@ -628,34 +765,79 @@ export default function CarForm({ car }: { car?: Car }) {
             />
           </Field>
 
-          <Field label="Max Power (bhp) *">
-            <input
-              className="field-input"
-              value={form.power}
-              onChange={(e) => set('power', e.target.value)}
-              placeholder="e.g. 118.36 bhp"
-              required
-            />
+          <Field label="Max Power *">
+            <div className="relative">
+              <input
+                type="number"
+                inputMode="decimal"
+                className="field-input pr-14"
+                value={form.power}
+                onChange={(e) => set('power', e.target.value)}
+                placeholder="118.36"
+                min="1"
+                max="2000"
+                step="0.01"
+                required
+              />
+              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 rounded-md bg-slate-100 px-1.5 py-0.5 text-xs font-bold text-slate-500">
+                bhp
+              </span>
+            </div>
+            <span className="mt-1 block text-xs text-slate-400">
+              Enter the number only — &ldquo;bhp&rdquo; is added automatically.
+            </span>
           </Field>
 
           <Field label="Mileage / Range *">
-            <input
-              className="field-input"
-              value={form.mileage}
-              onChange={(e) => set('mileage', e.target.value)}
-              placeholder="e.g. 18.4 kmpl or 419 km"
-              required
-            />
+            <div className="flex gap-2">
+              <input
+                type="number"
+                inputMode="decimal"
+                className="field-input"
+                value={form.mileageValue}
+                onChange={(e) => set('mileageValue', e.target.value)}
+                placeholder="18.4"
+                min="0"
+                max="2000"
+                step="0.1"
+                required
+              />
+              <select
+                className="field-input w-32 shrink-0"
+                value={form.mileageUnit}
+                onChange={(e) => set('mileageUnit', e.target.value)}
+                aria-label="Mileage unit"
+              >
+                {MILEAGE_UNITS.map((unit) => (
+                  <option key={unit} value={unit}>
+                    {unit}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <span className="mt-1 block text-xs text-slate-400">
+              {form.fuel === 'EV' ? 'Certified range per full charge.' : 'Number only — pick the unit alongside.'}
+            </span>
           </Field>
 
           <Field label="Insurance Valid Till *">
-            <input
-              className="field-input"
-              value={form.insuranceValidTill}
-              onChange={(e) => set('insuranceValidTill', e.target.value)}
-              placeholder="e.g. Dec 2028"
-              required
-            />
+            <div className="relative">
+              <input
+                type="month"
+                className="field-input pr-10"
+                value={form.insuranceValidTill}
+                onChange={(e) => set('insuranceValidTill', e.target.value)}
+                min={`${new Date().getFullYear() - 1}-01`}
+                max={`${new Date().getFullYear() + 15}-12`}
+                required
+              />
+              <CalendarDays className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            </div>
+            <span className="mt-1 block text-xs text-slate-400">
+              {form.insuranceValidTill
+                ? `Shown on the site as “${fromMonthInput(form.insuranceValidTill)}”`
+                : 'Pick the month and year from the calendar.'}
+            </span>
           </Field>
         </div>
       </section>

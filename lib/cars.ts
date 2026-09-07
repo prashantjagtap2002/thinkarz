@@ -23,6 +23,7 @@ export type Car = {
   insuranceValidTill: string;
   features?: string[];
   description?: string;
+  featured?: boolean;
 };
 
 export function getBodyTypes(cars: Car[]) {
@@ -70,9 +71,45 @@ export function matchesKmLabel(car: Car, label: string) {
   return true;
 }
 
+// Indian numbering system: 1 Lakh = 1,00,000 and 1 Crore = 1,00,00,000.
+export const LAKH = 100000;
+export const CRORE = 10000000;
+
+// Guard rails for admin-entered prices, in rupees.
+export const MIN_CAR_PRICE = 10000; // Rs. 10,000
+export const MAX_CAR_PRICE = 1000000000; // Rs. 100 Crore
+
 export function formatPrice(price: number) {
-  const lakh = price / 100000;
-  return `Rs. ${lakh.toFixed(2)} Lakh`;
+  if (!Number.isFinite(price) || price <= 0) return 'Rs. 0';
+
+  // The `>= 100` check catches values like 99,99,999 that would otherwise
+  // round to a nonsensical "100.00 Lakh" instead of "1.00 Crore".
+  if (price >= CRORE || Number((price / LAKH).toFixed(2)) >= 100) {
+    return `Rs. ${(price / CRORE).toFixed(2)} Crore`;
+  }
+  if (price >= LAKH) {
+    return `Rs. ${(price / LAKH).toFixed(2)} Lakh`;
+  }
+  return `Rs. ${Math.round(price).toLocaleString('en-IN')}`;
+}
+
+// Full rupee value with Indian digit grouping, e.g. 1,50,00,000.
+export function formatPriceExact(price: number) {
+  if (!Number.isFinite(price)) return 'Rs. 0';
+  return `Rs. ${Math.round(price).toLocaleString('en-IN')}`;
+}
+
+// Shared by the admin form and the API so both reject the same values.
+export function validatePrice(price: number): string | null {
+  if (!Number.isFinite(price) || Number.isNaN(price)) return 'Price must be a valid number.';
+  if (!Number.isInteger(price)) return 'Price must be a whole rupee amount (no paise).';
+  if (price < MIN_CAR_PRICE) {
+    return `Price must be at least ${formatPriceExact(MIN_CAR_PRICE)}.`;
+  }
+  if (price > MAX_CAR_PRICE) {
+    return `Price cannot exceed ${formatPrice(MAX_CAR_PRICE)}.`;
+  }
+  return null;
 }
 
 export function formatKms(kms: number) {

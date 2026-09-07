@@ -2,9 +2,15 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ExternalLink, LogOut, User, Cloud } from 'lucide-react';
+import { Car, ExternalLink, LogOut, User, Users } from 'lucide-react';
 
-export default function AdminHeaderActions() {
+export default function AdminHeaderActions({
+  username,
+  role,
+}: {
+  username: string;
+  role: 'admin' | 'editor';
+}) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -16,17 +22,34 @@ export default function AdminHeaderActions() {
     router.refresh();
   }
 
+  const onUsers = pathname.startsWith('/admin/users');
+
   return (
-    <div className="flex items-center gap-3 sm:gap-4">
-      {/* Live System Status Pill */}
-      <div className="hidden lg:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-3 py-1 text-xs font-medium text-emerald-800">
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-        </span>
-        <Cloud className="h-3 w-3 text-emerald-600" />
-        <span>R2 & Supabase Connected</span>
-      </div>
+    <div className="flex items-center gap-2 sm:gap-3">
+      {/* Primary navigation */}
+      <nav className="hidden items-center gap-1 rounded-xl border border-slate-200 bg-slate-50/70 p-1 text-xs font-semibold md:flex">
+        <Link
+          href="/admin"
+          className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 transition ${
+            onUsers ? 'text-slate-500 hover:text-slate-900' : 'bg-white text-slate-900 shadow-xs'
+          }`}
+        >
+          <Car className="h-3.5 w-3.5" />
+          <span>Inventory</span>
+        </Link>
+
+        {role === 'admin' && (
+          <Link
+            href="/admin/users"
+            className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 transition ${
+              onUsers ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Users className="h-3.5 w-3.5" />
+            <span>Users</span>
+          </Link>
+        )}
+      </nav>
 
       {/* View Live Showroom */}
       <Link
@@ -35,16 +58,20 @@ export default function AdminHeaderActions() {
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
       >
-        <span>Live Showroom</span>
+        <span className="hidden sm:inline">Live Showroom</span>
+        <span className="sm:hidden">Site</span>
         <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
       </Link>
 
-      {/* User Badge */}
-      <div className="hidden sm:flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700">
-        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-navy text-white text-[10px]">
+      {/* Signed-in user badge */}
+      <div className="hidden items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700 sm:flex">
+        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-navy text-[10px] text-white">
           <User className="h-3 w-3" />
         </div>
-        <span>admin</span>
+        <span>{username}</span>
+        <span className="rounded bg-slate-200/80 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-600">
+          {role === 'admin' ? 'Admin' : 'Editor'}
+        </span>
       </div>
 
       {/* Log Out */}

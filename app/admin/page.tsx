@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Car, TrendingUp, ShieldCheck, Zap, Plus } from 'lucide-react';
+import { Car, TrendingUp, ShieldCheck, Zap, Plus, Star } from 'lucide-react';
 import { getAllCarsAdmin } from '@/lib/carsStore';
 import AdminCarTable from '@/components/admin/AdminCarTable';
 
@@ -19,6 +19,7 @@ export default async function AdminDashboardPage() {
   const totalValuation = cars.reduce((sum, c) => sum + (c.price || 0), 0);
   const certifiedCount = cars.filter((c) => c.certified).length;
   const ecoCount = cars.filter((c) => c.fuel === 'EV' || c.fuel === 'Hybrid').length;
+  const featuredCount = cars.filter((c) => c.featured).length;
   const certifiedPct = totalCars > 0 ? Math.round((certifiedCount / totalCars) * 100) : 0;
 
   return (
@@ -30,7 +31,7 @@ export default async function AdminDashboardPage() {
             Inventory Management
           </h1>
           <p className="mt-1 text-sm text-slate-500">
-            Real-time control over vehicles, pricing, Cloudflare R2 photos, and showroom availability.
+            Real-time control over vehicles, pricing, photos, and showroom availability.
           </p>
         </div>
         <Link
@@ -43,7 +44,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* KPI Metric Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {/* Total Inventory */}
         <div className="group rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs transition hover:border-slate-300 hover:shadow-sm">
           <div className="flex items-center justify-between">
@@ -101,6 +102,24 @@ export default async function AdminDashboardPage() {
           <div className="mt-3">
             <div className="text-2xl font-black tracking-tight text-slate-900">{ecoCount}</div>
             <div className="mt-1 text-xs text-slate-500">Electric & Hybrid models</div>
+          </div>
+        </div>
+
+        {/* Featured on Homepage */}
+        <div className="group rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs transition hover:border-slate-300 hover:shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Featured</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-500 transition group-hover:bg-amber-500 group-hover:text-white">
+              <Star className="h-4 w-4" />
+            </div>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-black tracking-tight text-slate-900">{featuredCount}</div>
+            <div className="mt-1 text-xs text-slate-500">
+              {featuredCount === 0
+                ? 'Homepage shows latest 4'
+                : `Shown on the homepage${featuredCount > 4 ? ' (top 4)' : ''}`}
+            </div>
           </div>
         </div>
       </div>

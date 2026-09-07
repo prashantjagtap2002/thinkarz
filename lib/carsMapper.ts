@@ -26,6 +26,7 @@ export function mapRowToCar(row: Record<string, any>): Car {
     insuranceValidTill: row.insurance_valid_till,
     features: row.features && row.features.length > 0 ? row.features : undefined,
     description: row.description || undefined,
+    featured: row.featured ?? false,
   };
 }
 
@@ -54,5 +55,6 @@ export function mapCarToRow(car: Omit<Car, 'id'>): Record<string, any> {
     insurance_valid_till: car.insuranceValidTill,
     features: car.features ?? [],
     description: car.description ?? null,
+    featured: car.featured ?? false,
   };
 }

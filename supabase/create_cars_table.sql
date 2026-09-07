@@ -25,6 +25,7 @@ create table if not exists public.cars (
   insurance_valid_till text not null,
   features text[] not null default '{}',
   description text,
+  featured boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

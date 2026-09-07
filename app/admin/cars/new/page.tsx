@@ -17,7 +17,7 @@ export default function NewCarPage() {
           Add New Vehicle
         </h1>
         <p className="mt-1 text-sm text-slate-500">
-          Upload photo to Cloudflare R2, specify pricing and features, and publish directly to the live showroom.
+          Upload a photo, specify pricing and features, and publish directly to the live showroom.
         </p>
       </div>
 
