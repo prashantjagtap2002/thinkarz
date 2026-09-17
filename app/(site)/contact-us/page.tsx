@@ -89,7 +89,7 @@ export default function ContactUsPage() {
       {/* Map + showroom */}
       <section className="container-page pb-14 sm:pb-20">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="hidden sm:block aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200">
+          <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200">
             <iframe
               title="THINKARZ showroom location"
               src="https://maps.google.com/maps?q=19.182148,72.836216&z=15&output=embed"
@@ -102,7 +102,7 @@ export default function ContactUsPage() {
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
             <div className="relative aspect-[16/10] w-full">
               <Image
-                src="/showroom.jpeg"
+                src="/images/showroom.jpg"
                 alt="THINKARZ showroom"
                 title="THINKARZ Showroom - Malad West, Mumbai"
                 fill

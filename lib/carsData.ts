@@ -16,6 +16,15 @@ export async function getCars(): Promise<Car[]> {
   const supabase = createClient(url, anonKey, { auth: { persistSession: false } });
 
   const { data, error } = await supabase.from('cars').select('*').order('created_at', { ascending: false });
-  if (error) throw new Error(error.message);
+
+  // Throwing here failed the entire production build during page-data
+  // collection (generateStaticParams, sitemap and every listing page call this).
+  // A transient outage should not block a deploy: log loudly and degrade to an
+  // empty inventory, which ISR refills on the next successful revalidation.
+  if (error) {
+    console.error('[getCars] Supabase read failed, returning an empty inventory:', error.message);
+    return [];
+  }
+
   return (data ?? []).map(mapRowToCar);
 }

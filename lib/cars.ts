@@ -24,6 +24,8 @@ export type Car = {
   features?: string[];
   description?: string;
   featured?: boolean;
+  /** ISO timestamp from Supabase; used for sitemap lastModified. */
+  updatedAt?: string;
 };
 
 export function getBodyTypes(cars: Car[]) {

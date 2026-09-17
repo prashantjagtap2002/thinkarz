@@ -2,8 +2,14 @@ export const GOOGLE_SHEETS_WEB_APP_URL =
   process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEB_APP_URL || '';
 
 export async function submitToGoogleSheets(payload: Record<string, any>): Promise<boolean> {
+  // Without a configured endpoint `fetch('')` would resolve against the current
+  // page and look like a success, which would hide a genuinely failed lead.
+  if (!GOOGLE_SHEETS_WEB_APP_URL) {
+    console.warn('NEXT_PUBLIC_GOOGLE_SHEETS_WEB_APP_URL is not set; skipping Sheets dispatch.');
+    return false;
+  }
+
   try {
-    console.log('Sending payload to Google Sheets:', payload);
 
     const params = new URLSearchParams();
     Object.keys(payload).forEach((key) => {

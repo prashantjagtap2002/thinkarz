@@ -195,11 +195,16 @@ export default async function BookTestDrivePage() {
 
       <section className="py-16 sm:py-20">
         <div className="container-page">
-          <div className="mb-8 flex items-center justify-between">
+          {/* Other sections stack this header on phones; this one did not, so the
+              heading and link fought for room at 360px. */}
+          <div className="mb-8 flex flex-col items-center justify-between gap-2 text-center sm:flex-row sm:text-left">
             <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
               Popular Cars for Test Drive
             </h2>
-            <Link href="/pre-owned-cars" className="text-sm font-semibold text-brand-red hover:underline">
+            <Link
+              href="/pre-owned-cars"
+              className="shrink-0 text-sm font-semibold text-brand-red hover:underline"
+            >
               View All Cars
             </Link>
           </div>

@@ -20,6 +20,7 @@ import OtpGatedSellValuationForm from '@/components/forms/OtpGatedSellValuationF
 export const metadata = {
   title: 'Sell Your Car',
   description: 'Get the best value for your car with THINKARZ. Free inspection, instant valuation, and hassle-free paperwork.',
+  alternates: { canonical: '/sell-your-car' },
 };
 
 const steps = [

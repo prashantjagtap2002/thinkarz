@@ -1,13 +1,6 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import PageTransition from '@/components/PageTransition';
-import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton';
-import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/structuredData';
-import { testimonials } from '@/lib/content';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 
@@ -53,12 +46,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/icon.png', type: 'image/png' },
-      { url: '/favicon.png', type: 'image/png' },
+      { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
+      { url: '/favicon.png', sizes: '96x96', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
     ],
-    shortcut: '/icon.png',
+    shortcut: '/favicon.ico',
     apple: [
-      { url: '/icon.png', sizes: '180x180', type: 'image/png' },
+      // Genuinely 180x180 now; this previously served the full-size icon.
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
 };
@@ -69,28 +64,13 @@ export const viewport = {
   themeColor: '#0F1B2E',
 };
 
+// Document shell only. Public-site chrome lives in app/(site)/layout.tsx so it
+// does not leak into the admin console.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`} suppressHydrationWarning>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema(testimonials)) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateWebSiteSchema()) }}
-        />
-        <Header />
-        <PageTransition>
-          <main>{children}</main>
-        </PageTransition>
-        <Suspense fallback={null}>
-          <Footer />
-        </Suspense>
-        <Suspense fallback={null}>
-          <FloatingWhatsAppButton />
-        </Suspense>
+        {children}
       </body>
     </html>
   );

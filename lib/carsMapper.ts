@@ -27,6 +27,7 @@ export function mapRowToCar(row: Record<string, any>): Car {
     features: row.features && row.features.length > 0 ? row.features : undefined,
     description: row.description || undefined,
     featured: row.featured ?? false,
+    updatedAt: row.updated_at || row.created_at || undefined,
   };
 }
 

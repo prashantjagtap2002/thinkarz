@@ -58,7 +58,7 @@ export default function Footer() {
               { icon: Instagram, href: 'https://www.instagram.com/thinkarz/reels/', label: 'Instagram' },
               { icon: Linkedin, href: 'https://www.linkedin.com/company/thinkarz/', label: 'LinkedIn' },
             ].map(({ icon: Icon, href, label }) => (
-              <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red" aria-label={label}>
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-colors hover:border-brand-red hover:text-brand-red" aria-label={label}>
                 <Icon size={16} />
               </a>
             ))}
@@ -67,13 +67,13 @@ export default function Footer() {
 
         <div>
           <h4 className="mb-4 text-sm font-semibold text-white sm:text-base">Quick Links</h4>
-          <ul className="space-y-2.5">
+          <ul className="space-y-1">
             {quickLinks.map((link) => (
               <li key={link.name}>
                 <Link
                   href={link.href}
                   onClick={link.name === 'Home' ? handleHomeClick : undefined}
-                  className="text-xs text-slate-400 hover:text-brand-red sm:text-sm"
+                  className="inline-block py-2 text-sm text-slate-400 transition-colors hover:text-brand-red"
                 >
                   {link.name}
                 </Link>
@@ -84,10 +84,13 @@ export default function Footer() {
 
         <div>
           <h4 className="mb-4 text-sm font-semibold text-white sm:text-base">Our Services</h4>
-          <ul className="space-y-2.5">
+          <ul className="space-y-1">
             {services.map((service) => (
               <li key={service.name}>
-                <Link href={service.href} className="text-xs text-slate-400 hover:text-brand-red sm:text-sm">
+                <Link
+                  href={service.href}
+                  className="inline-block py-2 text-sm text-slate-400 transition-colors hover:text-brand-red"
+                >
                   {service.name}
                 </Link>
               </li>
@@ -97,10 +100,13 @@ export default function Footer() {
 
         <div>
           <h4 className="mb-4 text-sm font-semibold text-white sm:text-base">Company</h4>
-          <ul className="space-y-2.5">
+          <ul className="space-y-1">
             {company.map((item) => (
               <li key={item.name}>
-                <Link href={item.href} className="text-xs text-slate-400 hover:text-brand-red sm:text-sm">
+                <Link
+                  href={item.href}
+                  className="inline-block py-2 text-sm text-slate-400 transition-colors hover:text-brand-red"
+                >
                   {item.name}
                 </Link>
               </li>
@@ -117,13 +123,19 @@ export default function Footer() {
             </li>
             <li className="flex items-center justify-center sm:justify-start gap-2.5 text-left">
               <Phone size={16} className="shrink-0 text-brand-red" />
-              <a href={`tel:${contactInfo.phone}`} className="min-w-0 break-words hover:text-white transition-colors">
+              <a
+                href={`tel:${contactInfo.phone}`}
+                className="min-w-0 break-words py-1.5 hover:text-white transition-colors"
+              >
                 {contactInfo.phone}
               </a>
             </li>
             <li className="flex items-center justify-center sm:justify-start gap-2.5 text-left">
               <Mail size={16} className="shrink-0 text-brand-red" />
-              <a href={`mailto:${contactInfo.email}`} className="min-w-0 break-words hover:text-white transition-colors">
+              <a
+                href={`mailto:${contactInfo.email}`}
+                className="min-w-0 break-words py-1.5 hover:text-white transition-colors"
+              >
                 {contactInfo.email}
               </a>
             </li>

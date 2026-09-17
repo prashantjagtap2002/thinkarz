@@ -27,26 +27,28 @@ export default function AdminHeaderActions({
   return (
     <div className="flex items-center gap-2 sm:gap-3">
       {/* Primary navigation */}
-      <nav className="hidden items-center gap-1 rounded-xl border border-slate-200 bg-slate-50/70 p-1 text-xs font-semibold md:flex">
+      <nav className="flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50/70 p-1 text-xs font-semibold">
         <Link
           href="/admin"
-          className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 transition ${
+          aria-label="Inventory"
+          className={`inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 py-1.5 transition ${
             onUsers ? 'text-slate-500 hover:text-slate-900' : 'bg-white text-slate-900 shadow-xs'
           }`}
         >
-          <Car className="h-3.5 w-3.5" />
-          <span>Inventory</span>
+          <Car className="h-3.5 w-3.5 shrink-0" />
+          <span className="hidden sm:inline">Inventory</span>
         </Link>
 
         {role === 'admin' && (
           <Link
             href="/admin/users"
-            className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 transition ${
+            aria-label="Users"
+            className={`inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 py-1.5 transition ${
               onUsers ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
             }`}
           >
-            <Users className="h-3.5 w-3.5" />
-            <span>Users</span>
+            <Users className="h-3.5 w-3.5 shrink-0" />
+            <span className="hidden sm:inline">Users</span>
           </Link>
         )}
       </nav>
@@ -56,7 +58,7 @@ export default function AdminHeaderActions({
         href="/pre-owned-cars"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+        className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
       >
         <span className="hidden sm:inline">Live Showroom</span>
         <span className="sm:hidden">Site</span>
@@ -77,8 +79,9 @@ export default function AdminHeaderActions({
       {/* Log Out */}
       <button
         onClick={logout}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-transparent px-2.5 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-rose-100 hover:bg-rose-50 hover:text-rose-600"
+        className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg border border-transparent px-2.5 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-rose-100 hover:bg-rose-50 hover:text-rose-600"
         title="Sign out of admin console"
+        aria-label="Log out"
       >
         <LogOut className="h-3.5 w-3.5" />
         <span className="hidden sm:inline">Logout</span>

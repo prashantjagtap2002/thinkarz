@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
 import { navLinks } from '@/lib/content';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
 export default function Header() {
   const pathname = usePathname();
@@ -17,17 +18,24 @@ export default function Header() {
     setMounted(true);
   }, []);
 
-  // Prevent background scrolling when mobile menu is open
+  // Close on route change, so tapping the active link does not leave the panel
+  // open over the page it just navigated to.
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
     };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
   }, [open]);
+
+  // Shared counter-based lock; the previous inline version reset overflow to
+  // 'unset' on close, which released any other open overlay's lock too.
+  useBodyScrollLock(open);
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -55,7 +63,7 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-300 transition-[transform,border-color,background-color,color] duration-300 hover:-translate-y-0.5 hover:border-brand-red hover:text-brand-red lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-md border border-slate-300 transition-[transform,border-color,background-color,color] duration-300 hover:-translate-y-0.5 hover:border-brand-red hover:text-brand-red lg:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={open}
@@ -82,7 +90,7 @@ export default function Header() {
               <Logo />
               <button
                 onClick={() => setOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 hover:bg-brand-red hover:text-white transition-colors"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-700 hover:bg-brand-red hover:text-white transition-colors"
                 aria-label="Close menu"
               >
                 <X size={20} />

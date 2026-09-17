@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
+// global-error replaces the root layout entirely, so the stylesheet it imports
+// does not apply here. Import it directly or this page renders unstyled.
+import './globals.css';
 
 export default function GlobalError({
   error,
@@ -15,7 +18,13 @@ export default function GlobalError({
 
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans text-slate-900">
+      <head>
+        {/* The root layout's viewport export does not reach this page either;
+            without this the phone renders it at 980px wide, zoomed out. */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Application Error | THINKARZ</title>
+      </head>
+      <body className="flex min-h-screen items-center justify-center bg-slate-50 p-4 font-sans text-slate-900">
         <div className="w-full max-w-md rounded-2xl bg-white border border-slate-200 p-8 shadow-xl text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-[#e31e24]">
             <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">

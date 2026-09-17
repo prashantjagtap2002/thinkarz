@@ -7,6 +7,7 @@ import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm'
 import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 import { useVerifiedPhone } from '@/lib/verifiedPhone';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
 export default function OtpGatedContactForm() {
   const { verifiedData, saveVerification, resetVerification } = useVerifiedPhone();
@@ -27,6 +28,9 @@ export default function OtpGatedContactForm() {
   const [isResending, setIsResending] = useState(false);
   const [resendSuccessMsg, setResendSuccessMsg] = useState('');
   const isMountedRef = useRef(true);
+
+  // Keep the page behind the OTP / re-verify overlays from scrolling away.
+  useBodyScrollLock(showOtpPopup || showReverifyModal);
 
   useEffect(() => {
     return () => {
@@ -363,9 +367,9 @@ export default function OtpGatedContactForm() {
 
       {/* OTP Popup */}
       {showOtpPopup && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto overscroll-contain p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeOtpPopup} />
-          <div className="relative mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-fade-up sm:p-8">
+          <div className="relative my-auto w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-fade-up sm:p-8">
             <button
               type="button"
               onClick={closeOtpPopup}
@@ -453,7 +457,7 @@ export default function OtpGatedContactForm() {
 
       {/* Reverify Confirmation Modal */}
       {showReverifyModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overscroll-contain bg-slate-900/60 p-4 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl text-center border border-slate-100">
             <button
               type="button"
