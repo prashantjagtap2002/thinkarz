@@ -64,35 +64,71 @@ export default function SubmittableForm({
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function validate(form: HTMLFormElement): boolean {
     const newErrors: Record<string, string> = {};
+    let firstInvalid: HTMLElement | null = null;
 
     for (const field of form.querySelectorAll('input, select, textarea')) {
       const el = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-      if (!el.name) continue;
+      if (!el.name || el.disabled) continue;
 
-      if (el.hasAttribute('required') && !el.value.trim()) {
-        newErrors[el.name] = 'This field is required';
+      const isTickbox =
+        el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio');
+
+      if (el.hasAttribute('required')) {
+        // A checkbox always reports value "on"; only `checked` means anything.
+        const missing = isTickbox ? !(el as HTMLInputElement).checked : !el.value.trim();
+        if (missing) {
+          newErrors[el.name] = isTickbox ? 'Please tick this to continue' : 'This field is required';
+          firstInvalid = firstInvalid ?? el;
+          continue;
+        }
+      }
+
+      if (isTickbox || !el.value.trim()) continue;
+
+      const rule = validations?.find((v) => v.name === el.name);
+      if (rule?.pattern && !new RegExp(rule.pattern).test(el.value)) {
+        newErrors[el.name] = rule.message;
+        firstInvalid = firstInvalid ?? el;
         continue;
       }
 
-      if (el.value.trim() && validations) {
-        const rule = validations.find((v) => v.name === el.name);
-        if (rule?.pattern && !new RegExp(rule.pattern).test(el.value)) {
-          newErrors[el.name] = rule.message;
-        }
+      // `noValidate` turns off the browser's own type=email check, so cover it
+      // here for any email field without an explicit rule.
+      if (!rule && el instanceof HTMLInputElement && el.type === 'email' && !EMAIL_PATTERN.test(el.value)) {
+        newErrors[el.name] = 'Enter a valid email address';
+        firstInvalid = firstInvalid ?? el;
       }
     }
 
     setErrors(newErrors);
+
+    // On a phone the offending field is often well off-screen; bring it up.
+    if (firstInvalid) {
+      firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstInvalid.focus({ preventScroll: true });
+    }
+
     return Object.keys(newErrors).length === 0;
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // Guard against a second tap while the first request is still in flight —
+    // on a slow mobile connection that was producing duplicate leads.
+    if (isSubmitting) return;
+
     const formElement = e.currentTarget;
     if (!validate(formElement)) return;
+
+    setIsSubmitting(true);
+    setSubmitError('');
 
     // Collect all form data including UTMs and formType
     const formData = new FormData(formElement);
@@ -104,16 +140,32 @@ export default function SubmittableForm({
       payload[key] = value;
     });
 
-    // Await form dispatch via Promise.allSettled so neither call blocks or swallows errors
-    await Promise.allSettled([
+    // Both sinks are attempted independently; one failing must not lose the lead.
+    const [sheetsResult, supabaseResult] = await Promise.allSettled([
       submitToGoogleSheets(payload),
       submitToSupabase(payload),
     ]);
+
+    const delivered = (result: PromiseSettledResult<boolean>) =>
+      result.status === 'fulfilled' && result.value !== false;
+
+    // Only claim success if the lead actually landed somewhere. Previously any
+    // outcome showed the success screen, so failed submissions vanished
+    // silently.
+    if (!delivered(sheetsResult) && !delivered(supabaseResult)) {
+      console.error('Lead dispatch failed', { sheetsResult, supabaseResult });
+      setIsSubmitting(false);
+      setSubmitError(
+        "We couldn't send your details just now. Please check your connection and try again.",
+      );
+      return;
+    }
 
     onSubmit?.();
     setSubmitted(true);
     formElement.reset();
     setErrors({});
+    setIsSubmitting(false);
   }
 
   if (submitted) {
@@ -128,7 +180,10 @@ export default function SubmittableForm({
         <div className="mt-8 flex w-full max-w-xs flex-col items-center gap-3">
           <button
             type="button"
-            onClick={() => setSubmitted(false)}
+            onClick={() => {
+              setSubmitted(false);
+              setSubmitError('');
+            }}
             className="btn btn-primary w-full py-3 text-sm font-bold shadow-lg shadow-brand-red/20 transition-all hover:shadow-xl"
           >
             Done
@@ -140,7 +195,10 @@ export default function SubmittableForm({
 
   return (
     <FormContext.Provider value={{ errors }}>
-      <form onSubmit={handleSubmit} className={className}>
+      {/* noValidate hands validation to `validate()` below. Without it the
+          browser's own bubbles fire first and the inline <FieldError> messages
+          are never reachable. */}
+      <form onSubmit={handleSubmit} className={className} noValidate>
         {children}
         <Suspense fallback={null}>
           <UtmHiddenFields />
@@ -166,8 +224,21 @@ export default function SubmittableForm({
             </span>
           </label>
         )}
-        <button type="submit" className="btn btn-primary mt-2 w-full">
-          {submitLabel}
+        {submitError && (
+          <p
+            role="alert"
+            className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-xs font-semibold text-red-700"
+          >
+            {submitError}
+          </p>
+        )}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          aria-busy={isSubmitting}
+          className="btn btn-primary mt-2 w-full disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isSubmitting ? 'Submitting...' : submitLabel}
         </button>
       </form>
     </FormContext.Provider>

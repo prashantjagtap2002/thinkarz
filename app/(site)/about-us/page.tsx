@@ -97,7 +97,7 @@ export default function AboutPage() {
       <section className="relative flex min-h-[320px] sm:min-h-[400px] flex-col justify-end overflow-hidden bg-brand-navy py-12 sm:py-16">
         <div className="absolute inset-0">
           <Image
-            src="/showroom_image/about-hero.png"
+            src="/images/about-hero.jpg"
             alt="THINKARZ showroom in Malad West, Mumbai"
             title="THINKARZ Showroom - Malad West, Mumbai"
             fill
@@ -148,12 +148,11 @@ export default function AboutPage() {
             <Reveal delay={150}>
               <div className="relative min-h-[260px] overflow-hidden rounded-lg">
                 <Image
-                  src="/images/our-story.png"
+                  src="/images/our-story.jpg"
                   alt="THINKARZ team and showroom"
                   title="THINKARZ Team & Showroom"
                   fill
-            className="object-cover"
-            unoptimized
+                  className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 540px"
                 />
               </div>
@@ -188,7 +187,7 @@ export default function AboutPage() {
             </div>
           </Reveal>
 
-          <div className="mt-8 sm:mt-10 grid grid-cols-2 gap-3.5 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
+          <div className="mt-8 sm:mt-10 grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-4 sm:gap-6">
             {values.map(({ icon: Icon, title, desc }, i) => (
               <Reveal
                 key={title}

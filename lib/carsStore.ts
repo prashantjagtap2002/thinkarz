@@ -3,6 +3,23 @@ import { validatePrice } from '@/lib/cars';
 import { createAdminClient } from '@/lib/supabaseAdmin';
 import { mapRowToCar, mapCarToRow } from '@/lib/carsMapper';
 
+/**
+ * True when Supabase rejected a write because a column is not in its schema
+ * cache — i.e. supabase/add_car_gallery_images.sql has not been run yet.
+ * Lets a deploy that lands ahead of the migration keep saving cars instead of
+ * failing outright; the gallery simply stays empty until the SQL is applied.
+ */
+function isUnknownColumnError(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false;
+  const message = error.message ?? '';
+  return error.code === 'PGRST204' || /column .* does not exist|schema cache/i.test(message);
+}
+
+function withoutGalleryImages(row: Record<string, unknown>) {
+  const { images, ...rest } = row;
+  return rest;
+}
+
 export async function getAllCarsAdmin(): Promise<Car[]> {
   const supabase = createAdminClient();
   const { data, error } = await supabase.from('cars').select('*').order('created_at', { ascending: false });
@@ -19,23 +36,39 @@ export async function getCarByIdAdmin(id: string): Promise<Car | null> {
 
 export async function insertCarAdmin(id: string, car: Omit<Car, 'id'>): Promise<Car> {
   const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from('cars')
-    .insert({ id, ...mapCarToRow(car) })
-    .select('*')
-    .single();
+  const row = { id, ...mapCarToRow(car) };
+
+  const { data, error } = await supabase.from('cars').insert(row).select('*').single();
+
+  if (error && isUnknownColumnError(error)) {
+    console.warn('[insertCarAdmin] gallery column missing; run add_car_gallery_images.sql');
+    const retry = await supabase.from('cars').insert(withoutGalleryImages(row)).select('*').single();
+    if (retry.error) throw new Error(retry.error.message);
+    return mapRowToCar(retry.data);
+  }
+
   if (error) throw new Error(error.message);
   return mapRowToCar(data);
 }
 
 export async function updateCarAdmin(id: string, car: Omit<Car, 'id'>): Promise<Car> {
   const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from('cars')
-    .update(mapCarToRow(car))
-    .eq('id', id)
-    .select('*')
-    .single();
+  const row = mapCarToRow(car);
+
+  const { data, error } = await supabase.from('cars').update(row).eq('id', id).select('*').single();
+
+  if (error && isUnknownColumnError(error)) {
+    console.warn('[updateCarAdmin] gallery column missing; run add_car_gallery_images.sql');
+    const retry = await supabase
+      .from('cars')
+      .update(withoutGalleryImages(row))
+      .eq('id', id)
+      .select('*')
+      .single();
+    if (retry.error) throw new Error(retry.error.message);
+    return mapRowToCar(retry.data);
+  }
+
   if (error) throw new Error(error.message);
   return mapRowToCar(data);
 }

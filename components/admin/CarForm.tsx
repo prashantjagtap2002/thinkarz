@@ -33,6 +33,7 @@ type FormState = {
   kms: string;
   price: string;
   image: string;
+  images: string[];
   certified: boolean;
   transmission: Car['transmission'];
   bodyType: string;
@@ -111,6 +112,7 @@ function carToFormState(car?: Car): FormState {
     kms: car ? String(car.kms) : '',
     price: car ? String(car.price) : '',
     image: car?.image ?? '',
+    images: car?.images ?? [],
     certified: car?.certified ?? false,
     transmission: car?.transmission ?? 'Automatic',
     bodyType: car?.bodyType ?? 'SUV',
@@ -141,6 +143,7 @@ function formStateToPayload(form: FormState) {
     kms: Number(form.kms),
     price: Number(form.price),
     image: form.image,
+    images: form.images,
     certified: form.certified,
     transmission: form.transmission,
     bodyType: form.bodyType,
@@ -168,6 +171,7 @@ export default function CarForm({ car }: { car?: Car }) {
   const isEdit = Boolean(car);
   const [form, setForm] = useState<FormState>(carToFormState(car));
   const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingGallery, setIsUploadingGallery] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
@@ -175,41 +179,81 @@ export default function CarForm({ car }: { car?: Car }) {
   const [newFeatureInput, setNewFeatureInput] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  async function handleImageUpload(file: File) {
+  /** Uploads one file to R2 and returns its public path, or null on failure. */
+  async function uploadOne(file: File): Promise<string | null> {
     if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
       setErrors(['Please upload a valid JPG, PNG, or WEBP image.']);
-      return;
+      return null;
     }
     if (file.size > 8 * 1024 * 1024) {
-      setErrors(['Image size must be under 8MB.']);
-      return;
+      setErrors([`"${file.name}" is over 8MB. Please compress it and try again.`]);
+      return null;
     }
-
-    setIsUploading(true);
-    setErrors([]);
 
     try {
       const body = new FormData();
       body.append('file', file);
       const res = await fetch('/api/admin/upload', { method: 'POST', body });
       const data = await res.json();
-      setIsUploading(false);
 
       if (!res.ok) {
         setErrors([data.error || 'Failed to upload the photo. Please try again.']);
-        return;
+        return null;
       }
-
-      set('image', data.path);
+      return data.path as string;
     } catch {
-      setIsUploading(false);
       setErrors(['Network error while uploading the photo.']);
+      return null;
     }
+  }
+
+  async function handleImageUpload(file: File) {
+    setIsUploading(true);
+    setErrors([]);
+    const path = await uploadOne(file);
+    setIsUploading(false);
+    if (path) set('image', path);
+  }
+
+  async function handleGalleryUpload(files: FileList | File[]) {
+    const list = Array.from(files);
+    if (list.length === 0) return;
+
+    setIsUploadingGallery(true);
+    setErrors([]);
+
+    const uploaded: string[] = [];
+    // Sequential rather than parallel: the R2 route handles one file per
+    // request, and this keeps the order the admin picked.
+    for (const file of list) {
+      const path = await uploadOne(file);
+      if (path) uploaded.push(path);
+    }
+
+    setIsUploadingGallery(false);
+    if (uploaded.length > 0) {
+      setForm((prev) => ({ ...prev, images: [...prev.images, ...uploaded] }));
+    }
+  }
+
+  function removeGalleryImage(index: number) {
+    setForm((prev) => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
+  }
+
+  function moveGalleryImage(index: number, delta: number) {
+    setForm((prev) => {
+      const next = [...prev.images];
+      const target = index + delta;
+      if (target < 0 || target >= next.length) return prev;
+      [next[index], next[target]] = [next[target], next[index]];
+      return { ...prev, images: next };
+    });
   }
 
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
@@ -425,6 +469,92 @@ export default function CarForm({ car }: { car?: Car }) {
         )}
 
         {/* Advanced URL accordion */}
+        {/* Additional gallery photos ------------------------------------ */}
+        <div className="mt-5 border-t border-slate-100 pt-5">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Additional Photos</h3>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Shown in the gallery after the cover photo. Drag order with the arrows.
+              </p>
+            </div>
+            <span className="text-xs font-semibold text-slate-400">
+              {form.images.length} added
+            </span>
+          </div>
+
+          <input
+            ref={galleryInputRef}
+            type="file"
+            multiple
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(e) => {
+              if (e.target.files) handleGalleryUpload(e.target.files);
+              e.target.value = '';
+            }}
+            className="hidden"
+          />
+
+          {form.images.length > 0 && (
+            <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+              {form.images.map((src, i) => (
+                <div
+                  key={src + i}
+                  className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-slate-200 bg-slate-100"
+                >
+                  <Image
+                    src={src}
+                    alt={`Gallery photo ${i + 1}`}
+                    fill
+                    sizes="200px"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-1 bg-slate-900/70 px-1.5 py-1 backdrop-blur-sm">
+                    <div className="flex gap-0.5">
+                      <button
+                        type="button"
+                        onClick={() => moveGalleryImage(i, -1)}
+                        disabled={i === 0}
+                        aria-label={`Move photo ${i + 1} earlier`}
+                        className="rounded p-1 text-white/90 hover:bg-white/20 disabled:opacity-30"
+                      >
+                        <ChevronUp className="h-3.5 w-3.5 -rotate-90" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveGalleryImage(i, 1)}
+                        disabled={i === form.images.length - 1}
+                        aria-label={`Move photo ${i + 1} later`}
+                        className="rounded p-1 text-white/90 hover:bg-white/20 disabled:opacity-30"
+                      >
+                        <ChevronDown className="h-3.5 w-3.5 -rotate-90" />
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeGalleryImage(i)}
+                      aria-label={`Remove photo ${i + 1}`}
+                      className="rounded p-1 text-rose-200 hover:bg-rose-500/30"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={() => galleryInputRef.current?.click()}
+            disabled={isUploadingGallery}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 disabled:opacity-60"
+          >
+            <UploadCloud className={`h-3.5 w-3.5 text-slate-500 ${isUploadingGallery ? 'animate-bounce' : ''}`} />
+            <span>{isUploadingGallery ? 'Uploading…' : 'Add Photos'}</span>
+          </button>
+        </div>
+
         <div className="mt-3 border-t border-slate-100 pt-2">
           <button
             type="button"

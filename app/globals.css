@@ -4,7 +4,6 @@
   --color-brand-red: #E31E24;
   --color-brand-redDark: #C41A1F;
   --color-brand-navy: #0F1B2E;
-  --color-brand-navyLight: #16233A;
   --color-brand-blue: #2952CC;
   --color-brand-blueLight: #EEF2FF;
   --font-sans: var(--font-inter), system-ui, sans-serif;
@@ -61,12 +60,6 @@
     background-size: 1rem;
     padding-right: 2.75rem;
   }
-  .glassmorphism {
-    @apply bg-white/10 backdrop-blur-md border border-white/20;
-  }
-  .hero-field {
-    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-400 transition-all duration-200 hover:bg-white/10 hover:border-white/20;
-  }
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -77,22 +70,27 @@
 }
 
 @layer utilities {
+  /* Route transitions run as a CSS animation, not a JS-toggled class, so the
+     server-rendered HTML is painted immediately instead of sitting at
+     opacity:0 until hydration (or forever, if the bundle never loads). */
   .page-transition {
-    opacity: 0;
-    transform: translateY(14px);
-    transition:
-      opacity 450ms ease,
-      transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+    animation: page-enter 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .page-transition.is-ready {
-    opacity: 1;
-    transform: none;
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
+  /* Scroll reveals are opt-IN: the element ships visible and only `is-hidden`
+     (added client-side, before paint) takes it away. No JS, no blank sections. */
   .reveal-motion {
-    opacity: 0;
-    transform: translateY(20px);
     transition:
       opacity 650ms ease,
       transform 650ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -101,58 +99,9 @@
       background-color 220ms ease;
   }
 
-  .reveal-motion.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Micro-Animations for Mobile & Desktop */
-  .hover-lift {
-    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 280ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px -8px rgba(227, 30, 36, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.05);
-  }
-  .hover-lift:active {
-    transform: translateY(-1px) scale(0.99);
-  }
-
-  .interactive-tap {
-    transition: transform 150ms ease, opacity 150ms ease;
-  }
-  .interactive-tap:active {
-    transform: scale(0.96);
-  }
-
-  .badge-pulse {
-    animation: badge-pulse-anim 2s infinite;
-  }
-
-  @keyframes badge-pulse-anim {
-    0%, 100% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-    }
-    50% {
-      transform: scale(1.03);
-      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
-    }
-  }
-
-  .animate-slide-up-mobile {
-    animation: slideUpMobile 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  @keyframes slideUpMobile {
-    from {
-      opacity: 0;
-      transform: translateY(100%);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .reveal-motion.is-hidden {
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .animate-soft-pulse {
@@ -163,38 +112,14 @@
     animation: fade-up 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .animate-filter-card {
-    animation: filterCardFade 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
-    will-change: transform, opacity;
+  .animate-fade-in {
+    animation: fade-in 260ms ease-out both;
   }
 
   .hero-image-drift {
     animation: hero-drift 14s ease-in-out infinite alternate;
     transform-origin: center;
     will-change: transform;
-  }
-
-  .menu-panel {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition:
-      grid-template-rows 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 220ms ease,
-      border-color 220ms ease;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .menu-panel.is-open {
-    grid-template-rows: 1fr;
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .menu-panel > div {
-    overflow: hidden;
-    overflow-y: auto;
-    max-height: calc(100vh - 64px);
   }
 
   @keyframes soft-pulse {
@@ -218,14 +143,12 @@
     }
   }
 
-  @keyframes filterCardFade {
+  @keyframes fade-in {
     from {
       opacity: 0;
-      transform: translateY(12px) scale(0.985);
     }
     to {
       opacity: 1;
-      transform: translateY(0) scale(1);
     }
   }
 
@@ -254,24 +177,24 @@
     pointer-events: auto;
     appearance: none;
     -webkit-appearance: none;
-    height: 18px;
-    width: 18px;
+    height: 22px;
+    width: 22px;
     border-radius: 9999px;
     background: #ffffff;
     border: 2px solid #e31e24;
     box-shadow: 0 1px 4px rgb(15 27 46 / 0.25);
     cursor: pointer;
-    margin-top: -6px;
+    margin-top: -8px;
     transition: transform 150ms ease, box-shadow 150ms ease;
   }
   .range-thumb::-webkit-slider-thumb:hover {
-    transform: scale(1.18);
+    transform: scale(1.15);
     box-shadow: 0 2px 8px rgb(227 30 36 / 0.4);
   }
   .range-thumb::-moz-range-thumb {
     pointer-events: auto;
-    height: 18px;
-    width: 18px;
+    height: 22px;
+    width: 22px;
     border-radius: 9999px;
     background: #ffffff;
     border: 2px solid #e31e24;
@@ -280,7 +203,7 @@
     transition: transform 150ms ease, box-shadow 150ms ease;
   }
   .range-thumb::-moz-range-thumb:hover {
-    transform: scale(1.18);
+    transform: scale(1.15);
     box-shadow: 0 2px 8px rgb(227 30 36 / 0.4);
   }
   .range-thumb::-webkit-slider-runnable-track {
@@ -295,53 +218,46 @@
     border: 0;
   }
 
-  @keyframes shimmer {
-    from {
-      background-position: 200% 0;
-    }
-    to {
-      background-position: -200% 0;
-    }
-  }
-
-  .animate-shimmer {
-    animation: shimmer 8s ease-in-out infinite;
-    background-size: 200% auto;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .page-transition {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
-
-    .reveal-motion {
-      opacity: 1;
-      transform: none;
-      transition: none;
-      will-change: auto;
-    }
-
-    .animate-soft-pulse {
       animation: none;
     }
 
+    .reveal-motion,
+    .reveal-motion.is-hidden {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .animate-soft-pulse,
     .animate-fade-up,
+    .animate-fade-in,
     .hero-image-drift {
       animation: none;
     }
+  }
+}
 
-    .menu-panel {
-      transition: none;
-    }
+/* ---------------------------------------------------------------------------
+   iOS Safari zooms the viewport whenever a focused field's font-size is under
+   16px, and never zooms back out. Enforce a 16px floor on phone-width screens.
+   Deliberately unlayered so it outranks Tailwind's `text-sm`/`text-xs`
+   utilities, which would otherwise win on layer order regardless of
+   specificity. Checkbox/radio/range are excluded: they have no text and the
+   sizing utilities on them are load-bearing.
+--------------------------------------------------------------------------- */
+@media (max-width: 639.98px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
 
-    .hover-lift,
-    .badge-pulse,
-    .animate-slide-up-mobile {
-      animation: none;
-      transform: none;
-      transition: none;
-    }
+  /* Fields that intentionally render larger than the floor keep their size. */
+  input.text-lg,
+  select.text-lg,
+  textarea.text-lg {
+    font-size: 1.125rem;
   }
 }

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Clock, CalendarDays } from 'lucide-react';
+import Pagination from '@/components/Pagination';
 import { blogs, blogCategories } from '@/lib/blogs';
 
 const PAGE_SIZE = 6;
@@ -55,6 +56,54 @@ export default function BlogsPage() {
     setPage(1);
   }
 
+  // Search and categories are the only way to navigate the archive, so on a
+  // phone they render above the post list rather than below it and the pager.
+  const discoveryWidgets = (
+    <>
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 className="mb-3 text-xs font-extrabold uppercase tracking-wider text-slate-900">Search Articles</h3>
+        <div className="relative">
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            value={search}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search blogs..."
+            aria-label="Search blogs"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none transition-colors focus:border-brand-red focus:bg-white focus:ring-1 focus:ring-brand-red"
+          />
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 className="mb-3.5 text-xs font-extrabold uppercase tracking-wider text-slate-900">Categories</h3>
+        <div className="flex flex-col gap-2">
+          {blogCategories.map((c) => {
+            const isActive = category === c.name;
+            return (
+              <button
+                key={c.name}
+                onClick={() => handleCategoryClick(c.name)}
+                aria-pressed={isActive}
+                className={`flex min-h-11 items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
+                  isActive
+                    ? 'bg-brand-red text-white shadow-md'
+                    : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-brand-red'
+                }`}
+              >
+                <span>{c.name}</span>
+                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                  isActive ? 'bg-white/20 text-white' : 'bg-slate-200/70 text-slate-500'
+                }`}>
+                  {c.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+
   return (
     <>
       <section className="relative overflow-hidden bg-brand-navy">
@@ -85,6 +134,8 @@ export default function BlogsPage() {
       <section className="container-page py-14 sm:py-20">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
           <div>
+            <div className="mb-8 space-y-4 lg:hidden">{discoveryWidgets}</div>
+
             {showFeatured && (
               <>
                 <div className="mb-3">
@@ -147,7 +198,7 @@ export default function BlogsPage() {
                 No blogs match your search. Try a different keyword or category.
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-3">
                 {paginated.map((post) => (
                   <Link
                     key={post.slug}
@@ -187,81 +238,11 @@ export default function BlogsPage() {
               </div>
             )}
 
-            {totalPages > 1 && (
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
-                <button
-                  onClick={() => setPage((current) => Math.max(1, current - 1))}
-                  disabled={page === 1}
-                  className="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:border-brand-blue hover:text-brand-blue disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Previous
-                </button>
-                {Array.from({ length: totalPages }).map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setPage(i + 1)}
-                    className={`flex h-9 w-9 items-center justify-center rounded-md text-sm font-semibold ${
-                      page === i + 1
-                        ? 'bg-brand-blue text-white'
-                        : 'border border-slate-300 text-slate-600 hover:border-brand-blue'
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-                <button
-                  onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
-                  disabled={page === totalPages}
-                  className="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:border-brand-blue hover:text-brand-blue disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Next
-                </button>
-              </div>
-            )}
+            <Pagination page={page} totalPages={totalPages} onChange={setPage} accent="blue" />
           </div>
 
           <aside className="space-y-6">
-            {/* Search Widget */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="mb-3 text-xs font-extrabold uppercase tracking-wider text-slate-900">Search Articles</h3>
-              <div className="relative">
-                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  value={search}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  placeholder="Search blogs..."
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none transition-colors focus:border-brand-red focus:bg-white focus:ring-1 focus:ring-brand-red"
-                />
-              </div>
-            </div>
-
-            {/* Categories Widget */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="mb-3.5 text-xs font-extrabold uppercase tracking-wider text-slate-900">Categories</h3>
-              <div className="flex flex-col gap-2">
-                {blogCategories.map((c) => {
-                  const isActive = category === c.name;
-                  return (
-                    <button
-                      key={c.name}
-                      onClick={() => handleCategoryClick(c.name)}
-                      className={`flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-all ${
-                        isActive
-                          ? 'bg-brand-red text-white shadow-md'
-                          : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-brand-red'
-                      }`}
-                    >
-                      <span>{c.name}</span>
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                        isActive ? 'bg-white/20 text-white' : 'bg-slate-200/70 text-slate-500'
-                      }`}>
-                        {c.count}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <div className="hidden space-y-6 lg:block">{discoveryWidgets}</div>
 
             {/* Popular Posts Widget */}
             <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

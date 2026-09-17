@@ -11,6 +11,8 @@ export function mapRowToCar(row: Record<string, any>): Car {
     kms: row.kms,
     price: row.price,
     image: row.image,
+    // Absent until add_car_gallery_images.sql has been run; treat as empty.
+    images: Array.isArray(row.images) ? row.images.filter(Boolean) : [],
     certified: row.certified || undefined,
     transmission: row.transmission,
     bodyType: row.body_type,
@@ -27,6 +29,7 @@ export function mapRowToCar(row: Record<string, any>): Car {
     features: row.features && row.features.length > 0 ? row.features : undefined,
     description: row.description || undefined,
     featured: row.featured ?? false,
+    updatedAt: row.updated_at || row.created_at || undefined,
   };
 }
 
@@ -40,6 +43,7 @@ export function mapCarToRow(car: Omit<Car, 'id'>): Record<string, any> {
     kms: car.kms,
     price: car.price,
     image: car.image,
+    images: car.images ?? [],
     certified: car.certified ?? false,
     transmission: car.transmission,
     body_type: car.bodyType,

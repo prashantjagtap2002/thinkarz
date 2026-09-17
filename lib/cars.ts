@@ -7,7 +7,10 @@ export type Car = {
   fuel: string;
   kms: number;
   price: number; // in rupees
+  /** Cover photo: listing cards, OG tags, and the first gallery slide. */
   image: string;
+  /** Additional gallery photos, in display order. */
+  images?: string[];
   certified?: boolean;
   transmission: 'Manual' | 'Automatic';
   bodyType: string;
@@ -24,6 +27,8 @@ export type Car = {
   features?: string[];
   description?: string;
   featured?: boolean;
+  /** ISO timestamp from Supabase; used for sitemap lastModified. */
+  updatedAt?: string;
 };
 
 export function getBodyTypes(cars: Car[]) {

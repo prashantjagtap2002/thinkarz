@@ -219,7 +219,12 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
           </h1>
           <p className="mb-6 mt-1 text-sm font-medium text-slate-500">{car.variant}</p>
 
-          <CarGallery images={[car.image]} alt={`${car.make} ${car.model}`} certified={car.certified} />
+          {/* Cover photo first, then any additional gallery photos. */}
+          <CarGallery
+            images={[car.image, ...(car.images ?? [])].filter(Boolean)}
+            alt={`${car.year} ${car.make} ${car.model} ${car.variant}`}
+            certified={car.certified}
+          />
 
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {quickSpecs.map(({ icon: Icon, label, value }) => (
@@ -262,7 +267,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
             <p className="text-3xl font-extrabold text-slate-900">{formatPrice(car.price)}</p>
 
             <div className="mt-6 flex flex-col gap-3">
-              <Link href="/book-a-test-drive" className="btn btn-primary w-full">
+              <Link href={`/book-a-test-drive?car=${car.id}`} className="btn btn-primary w-full">
                 Book Test Drive
               </Link>
               <a
@@ -444,7 +449,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
       {similar.length > 0 && (
         <div className="mt-16">
           <h2 className="mb-6 text-xl font-extrabold text-slate-900">Similar Cars</h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
             {similar.map((c) => (
               <CarCard key={c.id} car={c} />
             ))}
@@ -492,7 +497,10 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
           </p>
         </div>
         <div className="flex flex-col w-full sm:w-auto gap-3 sm:flex-row sm:flex-wrap">
-          <Link href="/book-a-test-drive" className="btn btn-primary w-full sm:w-auto text-center justify-center">
+          <Link
+            href={`/book-a-test-drive?car=${car.id}`}
+            className="btn btn-primary w-full sm:w-auto text-center justify-center"
+          >
             Book Test Drive
           </Link>
           <Link href="/contact-us" className="btn btn-outline-white w-full sm:w-auto text-center justify-center">

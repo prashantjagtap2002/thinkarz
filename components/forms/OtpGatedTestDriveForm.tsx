@@ -1,7 +1,8 @@
 'use client';
 
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { PhoneCall, ShieldCheck, X, CheckCircle2, ChevronDown, AlertCircle } from 'lucide-react';
 import SubmittableForm, { FieldError } from '@/components/forms/SubmittableForm';
 import AppointmentFields from '@/components/forms/AppointmentFields';
@@ -9,9 +10,30 @@ import CountryCodeSelect from '@/components/forms/CountryCodeSelect';
 import type { Car } from '@/lib/cars';
 import { sendWhatsAppOtp, verifyWhatsAppOtp } from '@/app/actions/otp';
 import { useVerifiedPhone } from '@/lib/verifiedPhone';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
-export default function OtpGatedTestDriveForm({ popularCars }: { popularCars: Car[] }) {
+export default function OtpGatedTestDriveForm({ cars }: { cars: Car[] }) {
   const { verifiedData, isVerified, saveVerification, resetVerification } = useVerifiedPhone();
+
+  // Read on the client so the page itself stays statically rendered; taking
+  // searchParams as a server prop would make the whole route dynamic.
+  const searchParams = useSearchParams();
+  const requestedCarId = searchParams.get('car');
+
+  const carLabel = (car: Car) => `${car.make} ${car.model}`;
+
+  const requestedCar = useMemo(
+    () => cars.find((car) => car.id === requestedCarId) ?? null,
+    [cars, requestedCarId],
+  );
+
+  const [selectedCar, setSelectedCar] = useState('');
+
+  // Follows ?car= as it changes, so the "Book Test Drive" buttons further down
+  // the page swap the selection without a full reload.
+  useEffect(() => {
+    if (requestedCar) setSelectedCar(carLabel(requestedCar));
+  }, [requestedCar]);
   const [step, setStep] = useState<'phone' | 'form' | 'success'>('phone');
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [showReverifyModal, setShowReverifyModal] = useState(false);
@@ -29,6 +51,9 @@ export default function OtpGatedTestDriveForm({ popularCars }: { popularCars: Ca
   const [isResending, setIsResending] = useState(false);
   const [resendSuccessMsg, setResendSuccessMsg] = useState('');
   const isMountedRef = useRef(true);
+
+  // Keep the page behind the OTP / re-verify overlays from scrolling away.
+  useBodyScrollLock(showOtpPopup || showReverifyModal);
 
   useEffect(() => {
     return () => {
@@ -330,10 +355,19 @@ export default function OtpGatedTestDriveForm({ popularCars }: { popularCars: Ca
               <div>
                 <label htmlFor="car" className="field-label text-left">Select Car</label>
                 <div className="relative">
-                  <select id="car" name="car" required className="field-input appearance-none pr-10 cursor-pointer text-left" defaultValue="">
+                  <select
+                    id="car"
+                    name="car"
+                    required
+                    className="field-input appearance-none pr-10 cursor-pointer text-left"
+                    value={selectedCar}
+                    onChange={(e) => setSelectedCar(e.target.value)}
+                  >
                     <option value="" disabled>Select Car Model</option>
-                    {popularCars.map((car) => (
-                      <option key={car.id} value={`${car.make} ${car.model}`}>{car.make} {car.model}</option>
+                    {cars.map((car) => (
+                      <option key={car.id} value={carLabel(car)}>
+                        {car.year} {carLabel(car)} &middot; {car.variant}
+                      </option>
                     ))}
                   </select>
                   <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
@@ -387,9 +421,9 @@ export default function OtpGatedTestDriveForm({ popularCars }: { popularCars: Ca
 
       {/* OTP Popup */}
       {showOtpPopup && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto overscroll-contain p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeOtpPopup} />
-          <div className="relative mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-fade-up sm:p-8">
+          <div className="relative my-auto w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-fade-up sm:p-8">
             <button
               type="button"
               onClick={closeOtpPopup}
@@ -475,7 +509,7 @@ export default function OtpGatedTestDriveForm({ popularCars }: { popularCars: Ca
 
       {/* Reverify Confirmation Modal */}
       {showReverifyModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overscroll-contain bg-slate-900/60 p-4 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl text-center border border-slate-100">
             <button
               type="button"

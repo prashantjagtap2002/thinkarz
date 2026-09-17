@@ -256,7 +256,7 @@ export default function FilterSidebar({
 
         {/* Certification */}
         <FilterSection title="Certification">
-          <label className="flex items-center gap-2 py-1.5 text-sm text-slate-700">
+          <label className="flex min-h-10 cursor-pointer items-center gap-2 py-1.5 text-sm text-slate-700">
             <input
               type="checkbox"
               checked={state.certifiedOnly}
@@ -297,8 +297,10 @@ function FilterSection({
   return (
     <div className="border-b border-slate-100 py-4 last:border-0 last:pb-2">
       <button
+        type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between text-left"
+        aria-expanded={open}
+        className="flex min-h-11 w-full items-center justify-between text-left"
       >
         <span className="text-sm font-bold text-slate-900">{title}</span>
         <ChevronDown
@@ -306,9 +308,10 @@ function FilterSection({
           className={`text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
       </button>
-      <div className={`overflow-hidden transition-all duration-200 overflow-y-auto ${open ? 'mt-3 max-h-[60vh]' : 'max-h-0'}`}>
-        {children}
-      </div>
+      {/* Collapsed content used to stay in the tab order behind max-h-0, and an
+          open section became its own scroll area nested inside the mobile
+          drawer. `hidden` removes it properly and the section just grows. */}
+      <div className={open ? 'mt-3' : 'hidden'}>{children}</div>
     </div>
   );
 }
@@ -329,7 +332,7 @@ function FilterCheckbox({
   onToggle: () => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between gap-2 py-1 text-sm text-slate-700">
+    <label className="flex min-h-10 cursor-pointer items-center justify-between gap-2 py-1.5 text-sm text-slate-700">
       <span className="flex items-center gap-2">
         <input
           type="checkbox"

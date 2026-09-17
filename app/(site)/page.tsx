@@ -14,7 +14,6 @@ import {
   CarFront as CarIcon,
   CalendarCheck,
   FileCheck,
-  Star,
   MoveRight,
   ChevronDown,
 } from 'lucide-react';
@@ -39,28 +38,12 @@ export const metadata: Metadata = {
   ],
 };
 import BrandLogo from '@/components/BrandLogo';
-import NewsletterSignup from '@/components/NewsletterSignup';
 import TestimonialCarousel from '@/components/TestimonialCarousel';
-import { budgetOptions, formatPrice, getBodyTypes, type Car } from '@/lib/cars';
+import { getBodyTypes } from '@/lib/cars';
 import { getCars } from '@/lib/carsData';
 import { testimonials } from '@/lib/content';
-import BodyTypeIcon from '@/components/BodyTypeIcon';
 
 export const revalidate = 60;
-
-function countByBodyType(cars: Car[], type: string) {
-  return cars.filter((c) => c.bodyType === type).length;
-}
-
-function countByBudget(cars: Car[], label: string) {
-  return cars.filter((c) => {
-    const option = budgetOptions.find((o) => o.label === label);
-    if (!option) return false;
-    const aboveMin = !('min' in option) || c.price >= option.min;
-    const belowMax = !('max' in option) || c.price <= option.max;
-    return aboveMin && belowMax;
-  }).length;
-}
 
 const trustBadges = [
   { icon: Wrench, value: '140+', label: 'Quality Checks' },
@@ -113,10 +96,9 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section
-        className="relative flex flex-col justify-center overflow-hidden bg-brand-navy"
-        style={{ minHeight: 'calc(100dvh - 80px)' }}
-      >
+      {/* Header is h-16 (64px) below `sm` and h-20 (80px) above it; a flat
+          80px offset made the hero overflow the viewport on every phone. */}
+      <section className="relative flex min-h-[calc(100dvh-64px)] flex-col justify-center overflow-hidden bg-brand-navy sm:min-h-[calc(100dvh-80px)]">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -266,7 +248,7 @@ export default async function HomePage() {
               View All Cars <ArrowRight size={16} />
             </Link>
           </Reveal>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-6">
             {featuredCars.map((car, i) => (
               <Reveal key={car.id} delay={i * 80}>
                 <CarCard car={car} />
@@ -312,7 +294,7 @@ export default async function HomePage() {
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             How It Works
           </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 sm:gap-8">
             {howItWorks.map(({ icon: Icon, step, desc }, i) => (
               <Reveal key={step} className="relative text-center" delay={i * 100}>
                 {i < howItWorks.length - 1 && (

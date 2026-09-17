@@ -1,44 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, useLayoutEffect as useIsomorphicLayoutEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import {
-  Car as CarIcon,
-  CarFront,
-  Truck,
-  Cog,
-  Settings,
-  Fuel as FuelIcon,
-  Zap,
-  SlidersHorizontal,
-  RotateCcw,
-  X,
-  ChevronDown,
-} from 'lucide-react';
+import { Car as CarIcon, SlidersHorizontal, X, ChevronDown } from 'lucide-react';
 import CarCard from './CarCard';
-import BrandLogo from './BrandLogo';
-import BodyTypeIcon from './BodyTypeIcon';
+import Pagination from './Pagination';
 import FilterSidebar from './inventory/FilterSidebar';
-
-const bodyTypeIcons: Record<string, typeof CarIcon> = {
-  Hatchback: CarFront,
-  Sedan: CarIcon,
-  SUV: Truck,
-  MUV: Truck,
-};
-
-const transmissionIcons: Record<string, typeof CarIcon> = {
-  Automatic: Cog,
-  Manual: Settings,
-};
-
-const fuelIcons: Record<string, typeof CarIcon> = {
-  Petrol: FuelIcon,
-  Diesel: FuelIcon,
-  EV: Zap,
-  Hybrid: Zap,
-  CNG: FuelIcon,
-};
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import {
   Car,
   ageOptions,
@@ -52,15 +20,6 @@ import {
 
 function uniqueValues<K extends keyof Car>(cars: Car[], key: K) {
   return Array.from(new Set(cars.map((c) => String(c[key])))).sort();
-}
-
-function countsFor<K extends keyof Car>(cars: Car[], key: K) {
-  const counts = new Map<string, number>();
-  cars.forEach((c) => {
-    const value = String(c[key]);
-    counts.set(value, (counts.get(value) ?? 0) + 1);
-  });
-  return counts;
 }
 
 function countsForOptions(cars: Car[], options: readonly string[], matcher: (car: Car, option: string) => boolean) {
@@ -123,7 +82,17 @@ export default function PreOwnedCarsBrowser({ cars }: { cars: Car[] }) {
   const [sortBy, setSortBy] = useState('newest');
   const [page, setPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [filterVersion, setFilterVersion] = useState(0);
+
+  useBodyScrollLock(showMobileFilters);
+
+  useEffect(() => {
+    if (!showMobileFilters) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowMobileFilters(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [showMobileFilters]);
   const budgetCounts = useMemo(
     () => countsForOptions(cars, budgetLabels, (car, option) => matchesBudgetLabel(car, option)),
     [cars, budgetLabels],
@@ -142,6 +111,23 @@ export default function PreOwnedCarsBrowser({ cars }: { cars: Car[] }) {
   );
 
   const priceSliderActive = priceMax !== maxPrice;
+
+  // The params above only seed useState on mount. Without this, Back/Forward
+  // between filtered URLs — or a client-side nav into /pre-owned-cars?make=X
+  // while this component is already mounted — left the previous filters applied.
+  const paramsKey = searchParams.toString();
+  const isFirstParamsSync = useRef(true);
+  useEffect(() => {
+    if (isFirstParamsSync.current) {
+      isFirstParamsSync.current = false;
+      return;
+    }
+    setBudget(initialSelection(searchParams.get('budget'), budgetLabels));
+    setBodyType(initialSelection(searchParams.get('bodyType'), bodyTypeOptions));
+    setAge(initialSelection(searchParams.get('age'), ageLabels));
+    setMake(initialSelection(searchParams.get('make'), makeOptions));
+    setPage(1);
+  }, [paramsKey, searchParams, budgetLabels, bodyTypeOptions, ageLabels, makeOptions]);
 
   const filtered = useMemo(() => {
     let result = cars.filter((c) => {
@@ -170,7 +156,6 @@ export default function PreOwnedCarsBrowser({ cars }: { cars: Car[] }) {
     return result;
   }, [cars, make, budget, sellerType, fuel, transmission, bodyType, age, owners, kms, color, certifiedOnly, priceMin, priceMax, sortBy]);
 
-  const prevFilteredLength = useRef(filtered.length);
   const containerRef = useRef<HTMLDivElement>(null);
 
   function handlePageChange(newPage: number) {
@@ -376,13 +361,16 @@ export default function PreOwnedCarsBrowser({ cars }: { cars: Car[] }) {
             <button
               key={chip.label}
               onClick={chip.clear}
-              className="flex items-center gap-1.5 rounded-full bg-brand-blueLight px-3 py-1.5 text-xs font-semibold text-brand-blue transition-colors hover:bg-brand-red/10 hover:text-brand-red"
+              className="flex items-center gap-1.5 rounded-full bg-brand-blueLight px-3.5 py-2.5 text-xs font-semibold text-brand-blue transition-colors hover:bg-brand-red/10 hover:text-brand-red"
             >
               {chip.label}
               <X size={12} strokeWidth={2.5} />
             </button>
           ))}
-          <button onClick={resetFilters} className="ml-1 text-xs font-semibold text-brand-blue hover:underline">
+          <button
+            onClick={resetFilters}
+            className="ml-1 px-2 py-2.5 text-xs font-semibold text-brand-blue hover:underline"
+          >
             Clear all
           </button>
         </div>
@@ -412,23 +400,7 @@ export default function PreOwnedCarsBrowser({ cars }: { cars: Car[] }) {
             </div>
           )}
 
-          {totalPages > 1 && (
-            <div className="mt-10 flex justify-center gap-2">
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => handlePageChange(i + 1)}
-                  className={`flex h-9 w-9 items-center justify-center rounded-md text-sm font-semibold ${
-                    page === i + 1
-                      ? 'bg-brand-red text-white'
-                      : 'border border-slate-300 text-slate-600 hover:border-brand-red'
-                  }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-          )}
+          <Pagination page={page} totalPages={totalPages} onChange={handlePageChange} />
         </div>
       </div>
 
@@ -441,7 +413,7 @@ export default function PreOwnedCarsBrowser({ cars }: { cars: Car[] }) {
               <h2 className="text-lg font-extrabold text-slate-900">Filters</h2>
               <button
                 onClick={() => setShowMobileFilters(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100"
+                className="flex h-11 w-11 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100"
                 aria-label="Close filters"
               >
                 <X size={20} />
@@ -458,22 +430,5 @@ export default function PreOwnedCarsBrowser({ cars }: { cars: Car[] }) {
   );
 }
 
-/* ----------------------------- Filter sidebar ----------------------------- */
-
-type FilterState = {
-  make: string[];
-  budget: string[];
-  sellerType: string[];
-  fuel: string[];
-  transmission: string[];
-  bodyType: string[];
-  age: string[];
-  owners: string[];
-  kms: string[];
-  certifiedOnly: boolean;
-  priceMin: number;
-  priceMax: number;
-  color: string[];
-};
 
 

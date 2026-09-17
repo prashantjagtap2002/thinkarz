@@ -19,14 +19,16 @@ function CarTypeSelect({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handlePointerDown(event: MouseEvent) {
+    function handlePointerDown(event: PointerEvent) {
       if (!containerRef.current?.contains(event.target as Node)) {
         setOpen(false);
       }
     }
 
-    document.addEventListener('mousedown', handlePointerDown);
-    return () => document.removeEventListener('mousedown', handlePointerDown);
+    // pointerdown covers mouse, touch and pen; mousedown alone relied on
+    // mobile browsers emulating it after a tap.
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
   }, []);
 
   return (
@@ -127,14 +129,16 @@ function BudgetSelect({
   const budgetIndex = value === '' ? 0 : budgetSteps.indexOf(value);
 
   useEffect(() => {
-    function handlePointerDown(event: MouseEvent) {
+    function handlePointerDown(event: PointerEvent) {
       if (!containerRef.current?.contains(event.target as Node)) {
         setOpen(false);
       }
     }
 
-    document.addEventListener('mousedown', handlePointerDown);
-    return () => document.removeEventListener('mousedown', handlePointerDown);
+    // pointerdown covers mouse, touch and pen; mousedown alone relied on
+    // mobile browsers emulating it after a tap.
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
   }, []);
 
   const handleSliderChange = (val: number) => {
@@ -245,14 +249,16 @@ function AgeSelect({
   const ageIndex = value === '' ? 0 : ageSteps.indexOf(value);
 
   useEffect(() => {
-    function handlePointerDown(event: MouseEvent) {
+    function handlePointerDown(event: PointerEvent) {
       if (!containerRef.current?.contains(event.target as Node)) {
         setOpen(false);
       }
     }
 
-    document.addEventListener('mousedown', handlePointerDown);
-    return () => document.removeEventListener('mousedown', handlePointerDown);
+    // pointerdown covers mouse, touch and pen; mousedown alone relied on
+    // mobile browsers emulating it after a tap.
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
   }, []);
 
   const handleSliderChange = (val: number) => {
