@@ -187,7 +187,7 @@ export default function AboutPage() {
             </div>
           </Reveal>
 
-          <div className="mt-8 sm:mt-10 grid grid-cols-2 gap-3.5 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
+          <div className="mt-8 sm:mt-10 grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-4 sm:gap-6">
             {values.map(({ icon: Icon, title, desc }, i) => (
               <Reveal
                 key={title}

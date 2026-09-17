@@ -198,7 +198,7 @@ export default function BlogsPage() {
                 No blogs match your search. Try a different keyword or category.
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-3">
                 {paginated.map((post) => (
                   <Link
                     key={post.slug}

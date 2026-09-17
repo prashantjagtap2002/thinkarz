@@ -248,7 +248,7 @@ export default async function HomePage() {
               View All Cars <ArrowRight size={16} />
             </Link>
           </Reveal>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-6">
             {featuredCars.map((car, i) => (
               <Reveal key={car.id} delay={i * 80}>
                 <CarCard car={car} />
@@ -294,7 +294,7 @@ export default async function HomePage() {
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             How It Works
           </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 sm:gap-8">
             {howItWorks.map(({ icon: Icon, step, desc }, i) => (
               <Reveal key={step} className="relative text-center" delay={i * 100}>
                 {i < howItWorks.length - 1 && (

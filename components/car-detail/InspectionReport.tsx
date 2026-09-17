@@ -31,7 +31,7 @@ export default function InspectionReport({ certified }: { certified?: boolean })
       <p className="mb-6 text-sm text-slate-500">
         This car has passed THINKARZ&apos;s full quality certification across every category.
       </p>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {categories.map((c) => (
           <div key={c} className="flex items-center gap-3 rounded-xl bg-slate-50 p-4">
             <CheckCircle2 className="shrink-0 text-green-600" size={20} />

@@ -70,7 +70,6 @@ export const revalidate = 60;
 export default async function BookTestDrivePage() {
   const cars = await getCars();
   const popularCars = cars.slice(0, 4);
-  const formCars = cars.slice(0, 5);
 
   return (
     <>
@@ -131,9 +130,9 @@ export default async function BookTestDrivePage() {
           </div>
 
           <div className="flex items-start justify-center lg:justify-end">
-            <div className="w-full max-w-xl lg:max-w-2xl">
+            <div id="book-form" className="w-full max-w-xl lg:max-w-2xl scroll-mt-24">
               <Suspense fallback={null}>
-                <OtpGatedTestDriveForm popularCars={formCars} />
+                <OtpGatedTestDriveForm cars={cars} />
               </Suspense>
             </div>
           </div>
@@ -174,7 +173,7 @@ export default async function BookTestDrivePage() {
           <h2 className="mb-12 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
             Why Take a Test Drive?
           </h2>
-          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-3 max-w-5xl mx-auto">
             {reasons.map(({ title, desc }) => (
               <div
                 key={title}
@@ -208,7 +207,7 @@ export default async function BookTestDrivePage() {
               View All Cars
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-6">
             {popularCars.map((car) => (
               <div
                 key={car.id}
@@ -230,9 +229,13 @@ export default async function BookTestDrivePage() {
                   <p className="mt-1 mb-3 text-xs text-slate-500">
                     {car.year} • {car.fuel} • {car.transmission}
                   </p>
-                  <ScrollToTopButton className="btn btn-primary w-full !px-3 !py-2 text-xs">
+                  {/* Carries the car into the form instead of just scrolling up. */}
+                  <Link
+                    href={`/book-a-test-drive?car=${car.id}#book-form`}
+                    className="btn btn-primary w-full !px-3 !py-2 text-xs"
+                  >
                     Book Test Drive
-                  </ScrollToTopButton>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -248,9 +251,12 @@ export default async function BookTestDrivePage() {
               Schedule your test drive at a time that suits you best. We&apos;ll make it happen!
             </p>
           </div>
-          <ScrollToTopButton className="btn btn-primary w-full whitespace-nowrap sm:w-auto">
+          <Link
+            href="/book-a-test-drive#book-form"
+            className="btn btn-primary w-full whitespace-nowrap sm:w-auto"
+          >
             Schedule Test Drive
-          </ScrollToTopButton>
+          </Link>
         </div>
       </section>
     </>
